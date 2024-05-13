@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace PillPal.Core.Models;
+﻿namespace PillPal.Core.Identity;
 
 public class ApplicationUser : IdentityUser<Guid>
 {

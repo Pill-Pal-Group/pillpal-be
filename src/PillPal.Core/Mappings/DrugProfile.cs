@@ -1,6 +1,5 @@
 ﻿using PillPal.Core.Dtos.Drug.Commands;
 using PillPal.Core.Dtos.Drug.Queries;
-using PillPal.Core.Models;
 
 namespace PillPal.Core.Mappings;
 

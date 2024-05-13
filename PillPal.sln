@@ -11,11 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PillPal.WebApi", "src\PillP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PillPal.Core.UnitTests", "tests\PillPal.Core.UnitTests\PillPal.Core.UnitTests.csproj", "{935C6E77-C105-40A4-A166-61272C5340A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PillPal.Core", "src\PillPal.Core\PillPal.Core.csproj", "{BEAFB356-BC1F-424D-A1C0-3ACDD7E93CEA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PillPal.Core", "src\PillPal.Core\PillPal.Core.csproj", "{BEAFB356-BC1F-424D-A1C0-3ACDD7E93CEA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PillPal.Infrastructure", "src\PillPal.Infrastructure\PillPal.Infrastructure.csproj", "{370E2CDB-1D6C-43B9-A4CC-BB3BFC124F69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PillPal.Infrastructure", "src\PillPal.Infrastructure\PillPal.Infrastructure.csproj", "{370E2CDB-1D6C-43B9-A4CC-BB3BFC124F69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PillPal.Service", "src\PillPal.Service\PillPal.Service.csproj", "{CD45FB3C-A434-4033-A2C2-AD4FF9396954}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PillPal.Service", "src\PillPal.Service\PillPal.Service.csproj", "{CD45FB3C-A434-4033-A2C2-AD4FF9396954}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

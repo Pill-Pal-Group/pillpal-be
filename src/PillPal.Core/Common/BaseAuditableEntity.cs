@@ -13,11 +13,11 @@ public class BaseAuditableEntity : BaseEntity, ISoftDelete
     protected BaseAuditableEntity()
     {
         Id = Guid.NewGuid();
-        CreatedAt = DateTimeOffset.Now;
-        UpdatedAt = null;
-        CreatedBy = null;
-        UpdatedBy = null;
-        IsDeleted = false;
-        DeletedAt = null;
+        //CreatedAt = DateTimeOffset.Now;
+        //UpdatedAt = null;
+        //CreatedBy = null;
+        //UpdatedBy = null;
+        //IsDeleted = false;
+        //DeletedAt = null;
     }
 }

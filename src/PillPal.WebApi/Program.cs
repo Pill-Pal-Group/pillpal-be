@@ -1,3 +1,5 @@
+using PillPal.WebApi.Configuration;
+
 namespace PillPal.WebApi
 {
     public class Program
@@ -8,7 +10,11 @@ namespace PillPal.WebApi
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerDoc();
+
+            builder.Services.AddHttpContextAccessor();
+
+            builder.Services.AddJwtAuth();
 
             var app = builder.Build();
 
@@ -20,8 +26,9 @@ namespace PillPal.WebApi
 
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
+            app.UseAuthentication();
 
+            app.UseAuthorization();
 
             app.MapControllers();
 

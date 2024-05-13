@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using PillPal.Core.Identity;
 
 namespace PillPal.Infrastructure.Persistence;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
 {
-    public ApplicationDbContext() : base()
-    {
-    }
+    private readonly IConfiguration _configuration;
 
-    //public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-    //    : base(options)
-    //{
-    //}
+    public ApplicationDbContext(IConfiguration configuration) : base()
+    {
+        _configuration = configuration;
+    }
 
     public DbSet<Customer> Customers { get; set; }
     public DbSet<CustomerPackage> CustomerPackages { get; set; }
@@ -29,11 +29,8 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        if (!optionsBuilder.IsConfigured)
-        {
-            //optionsBuilder.UseSqlServer(_config.GetConnectionString("PillPalDb"));
-        }
-        optionsBuilder.UseSqlServer("Server=.;Database=PillPalDb;uid=sa;pwd=12345;TrustServerCertificate=True");
+        optionsBuilder.AddInterceptors(new ApplicationDbContextInterceptor());
+        optionsBuilder.UseSqlServer(_configuration.GetConnectionString("PILLPAL_DB"));
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
