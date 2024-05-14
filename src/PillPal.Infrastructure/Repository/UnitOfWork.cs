@@ -4,7 +4,12 @@ namespace PillPal.Infrastructure.Repository;
 
 public class UnitOfWork : IDisposable
 {
-    private readonly ApplicationDbContext _context = new ApplicationDbContext(null);
+    private readonly ApplicationDbContext _context;
+
+    public UnitOfWork(ApplicationDbContext context)
+    {
+        _context = context;
+    }
 
     private GenericRepository<Drug>? _drug;
     public GenericRepository<Drug> Drug

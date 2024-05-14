@@ -1,7 +1,7 @@
 using AutoMapper;
 using FluentAssertions;
-using PillPal.Core.Dtos.Drug.Commands;
-using PillPal.Core.Dtos.Drug.Queries;
+using PillPal.Core.Dtos.Drugs.Commands;
+using PillPal.Core.Dtos.Drugs.Queries;
 using PillPal.Core.Mappings;
 using PillPal.Core.Models;
 

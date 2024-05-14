@@ -1,6 +1,6 @@
-﻿using FluentValidation;
+﻿using PillPal.Core.Dtos.Ingredients.Queries;
 
-namespace PillPal.Core.Dtos.Drug.Commands;
+namespace PillPal.Core.Dtos.Drugs.Commands;
 
 public record CreateDrugCommand(
     string DrugCode,
@@ -10,7 +10,8 @@ public record CreateDrugCommand(
     string Indication,
     string Contraindication,
     string Warning,
-    string ImageUrl);
+    string ImageUrl,
+    ICollection<GetIngredientQueryId> Ingredients);
 
 public class CreateDrugCommandValidator : AbstractValidator<CreateDrugCommand>
 {

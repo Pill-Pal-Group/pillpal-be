@@ -1,4 +1,5 @@
 ﻿global using AutoMapper;
+global using FluentValidation;
 global using Microsoft.AspNetCore.Identity;
 global using PillPal.Core.Common;
 global using PillPal.Core.Identity;

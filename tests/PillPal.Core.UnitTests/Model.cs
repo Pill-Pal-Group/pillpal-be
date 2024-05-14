@@ -1,8 +1,7 @@
-﻿using PillPal.Core.Models;
+﻿using AutoMapper;
 using FluentAssertions;
-using PillPal.Core.Dtos.Drug.Commands;
-using AutoMapper;
-using PillPal.Core.Common;
+using PillPal.Core.Dtos.Drugs.Commands;
+using PillPal.Core.Models;
 
 namespace PillPal.Core.UnitTests;
 
@@ -44,14 +43,15 @@ public class Model
         TestContext.WriteLine("Drug and DrugDtos models are validated");
         TestContext.WriteLine(model.Id.ToString());
         TestContext.WriteLine("ca:" + model.CreatedAt.ToString());
-        TestContext.WriteLine("ua:"+model.UpdatedAt.ToString());
+        TestContext.WriteLine("ua:" + model.UpdatedAt.ToString());
 
 
 
     }
 
     [Test]
-    public void Test_Base_Prop(){
+    public void Test_Base_Prop()
+    {
 
         Drug drug = new Drug();
 
@@ -69,7 +69,7 @@ public class Model
         TestContext.WriteLine("Drug model is validated");
         TestContext.WriteLine(drug.Id.ToString());
         TestContext.WriteLine(drug.CreatedAt.ToString());
-        
+
 
     }
 }

@@ -14,7 +14,7 @@ public class GenericRepository<TEntity> where TEntity : class
         _dbSet = _context.Set<TEntity>();
     }
 
-    public virtual IQueryable<TEntity> Get(
+    public virtual async Task<IQueryable<TEntity>> Get(
         Expression<Func<TEntity, bool>>? filter = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
         string[]? includeProperties = null)
@@ -59,9 +59,9 @@ public class GenericRepository<TEntity> where TEntity : class
         await _dbSet.AddAsync(entity);
     }
 
-    public virtual void Delete(object id)
+    public virtual async Task Delete(object id)
     {
-        TEntity entityToDelete = _dbSet.Find(id);
+        TEntity entityToDelete = await _dbSet.FindAsync(id);
         Delete(entityToDelete);
     }
 
