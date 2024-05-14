@@ -1,5 +1,4 @@
 ﻿using Microsoft.OpenApi.Models;
-using System.Reflection;
 
 namespace PillPal.WebApi.Configuration;
 
@@ -28,10 +27,10 @@ public static class SwaggerConfigure
                 }
             });
 
-            var xmlFile = Assembly.GetExecutingAssembly().GetName().Name + ".xml";
-            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            //var xmlFile = Assembly.GetExecutingAssembly().GetName().Name + ".xml";
+            //var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
 
-            config.IncludeXmlComments(xmlPath);
+            //config.IncludeXmlComments(xmlPath);
 
             config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
