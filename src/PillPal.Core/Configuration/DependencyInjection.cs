@@ -10,4 +10,9 @@ public static class DependencyInjection
         services.AddAutoMapper(typeof(MapperConfigure).Assembly);
         return services;
     }
+
+    //public static IServiceCollection AddFluentValidator(this IServiceCollection services)
+    //{
+    //    services.AddFluentValidation();
+    //}
 }

@@ -9,5 +9,6 @@ public partial class MapperConfigure : Profile
         PharmacistProfile();
         CustomerProfile();
         DrugInformationProfile();
+        IngredientProfile();
     }
 }
