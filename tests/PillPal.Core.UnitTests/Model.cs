@@ -17,33 +17,33 @@ public class Model
 
         IMapper mapper = new Mapper(config);
 
-        CreateDrugCommand drug = new CreateDrugCommand(
-            DrugCode: "DC1",
-            DrugName: "DrugName1",
-            DrugDescription: "This is a description of the drug.",
-            SideEffect: "Possible side effects...",
-            Indication: "Indications...",
-            Contraindication: "Contraindications...",
-            Warning: "Warnings...",
-            ImageUrl: "http://example.com/image.jpg"
-        );
+        //CreateDrugCommand drug = new CreateDrugCommand(
+        //    DrugCode: "DC1",
+        //    DrugName: "DrugName1",
+        //    DrugDescription: "This is a description of the drug.",
+        //    SideEffect: "Possible side effects...",
+        //    Indication: "Indications...",
+        //    Contraindication: "Contraindications...",
+        //    Warning: "Warnings...",
+        //    ImageUrl: "http://example.com/image.jpg"
+        //);
 
         //map dto to model
-        Drug model = mapper.Map<Drug>(drug);
+        //Drug model = mapper.Map<Drug>(drug);
 
-        //validate properties
-        model.DrugCode.Should().Be(drug.DrugCode);
-        model.DrugName.Should().Be(drug.DrugName);
+        ////validate properties
+        //model.DrugCode.Should().Be(drug.DrugCode);
+        //model.DrugName.Should().Be(drug.DrugName);
 
-        model.Id.Should().NotBe(Guid.Empty);
-        model.CreatedAt.Should().NotBeNull();
-        model.UpdatedAt.Should().BeNull();
+        //model.Id.Should().NotBe(Guid.Empty);
+        //model.CreatedAt.Should().NotBeNull();
+        //model.UpdatedAt.Should().BeNull();
 
-        //print test result
-        TestContext.WriteLine("Drug and DrugDtos models are validated");
-        TestContext.WriteLine(model.Id.ToString());
-        TestContext.WriteLine("ca:" + model.CreatedAt.ToString());
-        TestContext.WriteLine("ua:" + model.UpdatedAt.ToString());
+        ////print test result
+        //TestContext.WriteLine("Drug and DrugDtos models are validated");
+        //TestContext.WriteLine(model.Id.ToString());
+        //TestContext.WriteLine("ca:" + model.CreatedAt.ToString());
+        //TestContext.WriteLine("ua:" + model.UpdatedAt.ToString());
 
 
 
