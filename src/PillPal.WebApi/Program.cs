@@ -1,3 +1,8 @@
+using Microsoft.AspNetCore.Identity;
+using PillPal.Core.Configuration;
+using PillPal.Core.Identity;
+using PillPal.Infrastructure.Persistence;
+using PillPal.Service.Configuration;
 using PillPal.WebApi.Configuration;
 
 namespace PillPal.WebApi
@@ -11,6 +16,22 @@ namespace PillPal.WebApi
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerDoc();
+
+            builder.Services.AddMapper();
+
+            builder.Services.AddServiceApplication();
+
+            builder.Services.AddDbContext<ApplicationDbContext>();
+
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 6;
+            })
+            .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddHttpContextAccessor();
 
