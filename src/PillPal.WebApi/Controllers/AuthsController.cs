@@ -15,6 +15,17 @@ public class AuthsController : ControllerBase
         _userService = userService;
     }
 
+    /// <summary>
+    /// for test purpose
+    /// </summary>
+    /// <returns></returns>
+    [HttpGet]
+    public async Task<IActionResult> Get()
+    {
+        var users = await _userService.GetAll();
+        return Ok(users);
+    }
+
     [HttpPost("firebase/register")]
     public async Task<IActionResult> Register([FromBody] LoginRequest loginRequest)
     {
@@ -29,7 +40,6 @@ public class AuthsController : ControllerBase
         return Ok(result);
     }
 }
-
 
 public class LoginRequest
 {

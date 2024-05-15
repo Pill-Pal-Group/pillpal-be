@@ -54,11 +54,13 @@ public class UserService : IUserService
 
         string email = jsonToken?.Claims.First(claim => claim.Type == "email").Value;
 
+        string username = jsonToken?.Claims.First(claim => claim.Type == "name").Value;
+
         var existedUser = await _userManager.FindByEmailAsync(email);
 
         if (existedUser != null)
         {
-            return new 
+            return new
             {
                 message = "User email already exists"
             };
@@ -67,9 +69,10 @@ public class UserService : IUserService
 
         var user = new ApplicationUser
         {
+            Id = Guid.NewGuid(),
             Email = email,
-            UserName = jsonToken?.Claims.First(claim => claim.Type == "name").Value,
-            EmailConfirmed = true,
+            UserName = email,
+            EmailConfirmed = true
         };
 
         var result = await _userManager.CreateAsync(user);
