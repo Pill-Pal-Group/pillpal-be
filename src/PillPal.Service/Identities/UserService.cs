@@ -90,4 +90,39 @@ public class UserService : IUserService
             message = "User creation failed"
         };
     }
+
+    public async Task<dynamic> RegisterAsync(dynamic request)
+    {
+        var existedUser = await _userManager.FindByEmailAsync(request.email);
+
+        if (existedUser != null)
+        {
+            return new
+            {
+                message = "User email already exists"
+            };
+        }
+
+        var user = new ApplicationUser
+        {
+            Id = Guid.NewGuid(),
+            Email = request.email,
+            UserName = request.email,
+            EmailConfirmed = true,
+        };
+
+        user.PasswordHash = _userManager.PasswordHasher.HashPassword(user, request.password);
+
+        var result = await _userManager.CreateAsync(user);
+
+        if (result.Succeeded)
+        {
+            return true;
+        }
+
+        return new
+        {
+            message = "User creation failed"
+        };
+    }
 }

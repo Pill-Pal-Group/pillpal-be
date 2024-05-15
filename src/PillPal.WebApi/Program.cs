@@ -4,6 +4,7 @@ using PillPal.Core.Identity;
 using PillPal.Infrastructure.Persistence;
 using PillPal.Service.Configuration;
 using PillPal.WebApi.Configuration;
+using PillPal.WebApi.Service;
 
 namespace PillPal.WebApi
 {
@@ -18,6 +19,9 @@ namespace PillPal.WebApi
             builder.Services.AddSwaggerDoc();
 
             builder.Services.AddMapper();
+
+
+            builder.Services.AddScoped<IJWTService<ApplicationUser>, JWTService<ApplicationUser>>();
 
             builder.Services.AddServiceApplication();
 

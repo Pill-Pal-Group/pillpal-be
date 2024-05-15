@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PillPal.Core.Identity;
 using PillPal.Service.Identities;
+using PillPal.WebApi.Service;
 using System.ComponentModel.DataAnnotations;
 
 namespace PillPal.WebApi.Controllers;
@@ -9,10 +11,12 @@ namespace PillPal.WebApi.Controllers;
 public class AuthsController : ControllerBase
 {
     private readonly IUserService _userService;
+    private readonly IJWTService<ApplicationUser> _jwtService;
 
-    public AuthsController(IUserService userService)
+    public AuthsController(IUserService userService, IJWTService<ApplicationUser> jwtService)
     {
         _userService = userService;
+        _jwtService = jwtService;
     }
 
     /// <summary>
@@ -27,9 +31,31 @@ public class AuthsController : ControllerBase
     }
 
     [HttpPost("firebase/register")]
-    public async Task<IActionResult> Register([FromBody] LoginRequest loginRequest)
+    public async Task<IActionResult> FirebaseRegister([FromBody] LoginRequest loginRequest)
     {
         dynamic result = await _userService.RegisterAsync(loginRequest.Token);
+        return Ok(result);
+    }
+
+    [HttpPost("/register")]
+    public async Task<IActionResult> Register([FromBody] Login loginRequest)
+    {
+        dynamic result = await _userService.RegisterAsync(loginRequest);
+
+        //check if the result is a bool
+        if (result is bool && result is true)
+        {
+            var token = _jwtService.CreateToken(new ApplicationUser
+            {
+                Email = loginRequest.email
+            });
+
+            return Ok(new
+            {
+                token = token
+            });
+        }
+
         return Ok(result);
     }
 
@@ -45,4 +71,13 @@ public class LoginRequest
 {
     [Required]
     public string Token { get; set; }
+}
+
+public class Login
+{
+    [Required]
+    public string email { get; set; }
+
+    [Required]
+    public string password { get; set; }
 }
