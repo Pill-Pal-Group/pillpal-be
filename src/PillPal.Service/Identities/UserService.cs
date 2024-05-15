@@ -46,6 +46,31 @@ public class UserService : IUserService
         return user;
     }
 
+    public async Task<dynamic> LoginAsync(dynamic request)
+    {
+        var user = await _userManager.FindByEmailAsync(request.email);
+
+        if (user == null)
+        {
+            return new
+            {
+                message = "User not found"
+            };
+        }
+
+        var result = _userManager.PasswordHasher.VerifyHashedPassword(user, user.PasswordHash, request.password);
+
+        if (result == PasswordVerificationResult.Failed)
+        {
+            return new
+            {
+                message = "Invalid password"
+            };
+        }
+
+        return true;
+    }
+
     public async Task<dynamic> RegisterAsync(string token)
     {
         var handler = new JwtSecurityTokenHandler();

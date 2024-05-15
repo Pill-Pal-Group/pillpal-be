@@ -59,8 +59,30 @@ public class AuthsController : ControllerBase
         return Ok(result);
     }
 
+    [HttpPost("/login")]
+    public async Task<IActionResult> Login([FromBody] Login loginRequest)
+    {
+        dynamic result = await _userService.LoginAsync(loginRequest);
+
+        //check if the result is a bool
+        if (result is bool && result is true)
+        {
+            var token = _jwtService.CreateToken(new ApplicationUser
+            {
+                Email = loginRequest.email
+            });
+
+            return Ok(new
+            {
+                token = token
+            });
+        }
+
+        return Ok(result);
+    }
+
     [HttpPost("firebase/login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
+    public async Task<IActionResult> FirebaseLogin([FromBody] LoginRequest loginRequest)
     {
         dynamic result = await _userService.LoginAsync(loginRequest.Token);
         return Ok(result);
