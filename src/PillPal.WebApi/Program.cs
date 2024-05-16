@@ -20,6 +20,7 @@ namespace PillPal.WebApi
 
             builder.Services.AddMapper();
 
+            builder.Services.AddCors();
 
             builder.Services.AddScoped<IJWTService<ApplicationUser>, JWTService<ApplicationUser>>();
 
@@ -50,6 +51,13 @@ namespace PillPal.WebApi
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseCors(option =>
+            {
+                option.AllowAnyOrigin();
+                option.AllowAnyMethod();
+                option.AllowAnyHeader();
+            });
 
             app.UseHttpsRedirection();
 
