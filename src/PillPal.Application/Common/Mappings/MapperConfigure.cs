@@ -10,6 +10,7 @@ public partial class MapperConfigure : Profile
         CustomerPackageProfile();
         CustomerProfile();
         DosageFormProfile();
+        IdentityProfile();
         MedicineProfile();
         NationProfile();
         PaymentProfile();

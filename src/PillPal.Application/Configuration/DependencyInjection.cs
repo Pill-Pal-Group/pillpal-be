@@ -9,8 +9,8 @@ public static class DependencyInjection
     {
         services.AddScoped<IActiveIngredientService, ActiveIngredientRepository>();
         services.AddScoped<IBrandService, BrandRepository>();
-        //services.AddScoped<ICategoryService, >();
-        //services.AddScoped<ICustomerService, >();
+        services.AddScoped<ICategoryService, CategoryRepository>();
+        services.AddScoped<ICustomerService, CustomerRepository>();
         //services.AddScoped<ICustomerPackageService, >();
         services.AddScoped<IDosageFormService, DosageFormRepository>();
         //services.AddScoped<IMedicationTakeService, >();
@@ -19,7 +19,7 @@ public static class DependencyInjection
         //services.AddScoped<IPackageCategoryService, >();
         //services.AddScoped<IPaymentService, >();
         services.AddScoped<IPharmaceuticalCompanyService, PharmaceuticalCompanyRepository>();
-        //services.AddScoped<IPharmacyStoreService, >();
+        services.AddScoped<IPharmacyStoreService, PharmacyStoreRepository>();
         //services.AddScoped<IPrescriptDetailService, >();
         //services.AddScoped<IPrescriptService, >();
         services.AddScoped<ISpecificationService, SpecificationRepository>();
