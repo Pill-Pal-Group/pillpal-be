@@ -44,6 +44,7 @@ public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMap
     public async Task<IEnumerable<PharmaceuticalCompanyDto>> GetPharmaceuticalCompaniesAsync()
     {
         var pharmaceuticalCompanies = await _context.PharmaceuticalCompanies
+            .Include(b => b.Nation)
             .Where(b => !b.IsDeleted)
             .ToListAsync();
 
@@ -53,6 +54,7 @@ public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMap
     public async Task<PharmaceuticalCompanyDto> GetPharmaceuticalCompanyByIdAsync(Guid nationId)
     {
         var pharmaceuticalCompany = await _context.PharmaceuticalCompanies
+            .Include(b => b.Nation)
             .Where(b => b.Id == nationId && !b.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmaceuticalCompany), nationId);
 
