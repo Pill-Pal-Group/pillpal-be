@@ -81,6 +81,7 @@ public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pha
     ///         "nationId": "Nation Id"
     ///    }
     ///    
+    /// </remarks>
     /// <response code="200">Returns the updated pharmaceutical company</response>
     /// <response code="404">If the pharmaceutical company is not found</response>
     /// <response code="422">If the pharmaceutical company is not valid</response>

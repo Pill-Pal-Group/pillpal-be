@@ -10,7 +10,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
 {
     public async Task<MedicineDto> CreateMedicineAsync(CreateMedicineDto createMedicineDto)
     {
-        var validator = serviceProvider.GetRequiredService<IValidator<CreateMedicineDto>>();
+        var validator = _serviceProvider.GetRequiredService<IValidator<CreateMedicineDto>>();
 
         var validationResult = await validator.ValidateAsync(createMedicineDto);
 
