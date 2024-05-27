@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PillPal.Application.Common.Interfaces;
+using PillPal.Application.Common.Interfaces.Data;
 using PillPal.WebApi.Service;
 
 namespace PillPal.WebApi.Configuration;

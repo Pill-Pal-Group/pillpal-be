@@ -1,4 +1,6 @@
-﻿namespace PillPal.Infrastructure.Identity;
+﻿using PillPal.Application.Common.Interfaces.Data;
+
+namespace PillPal.Infrastructure.Identity;
 
 public class IdentityService : IIdentityService
 {

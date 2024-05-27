@@ -1,4 +1,6 @@
-﻿namespace PillPal.Infrastructure.Persistence;
+﻿using PillPal.Application.Common.Interfaces.Data;
+
+namespace PillPal.Infrastructure.Persistence;
 
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>(options), IApplicationDbContext

@@ -1,4 +1,6 @@
-﻿namespace PillPal.Infrastructure.Persistence.Interceptors;
+﻿using PillPal.Application.Common.Interfaces.Data;
+
+namespace PillPal.Infrastructure.Persistence.Interceptors;
 
 public class AuditableEntityInterceptor(IUser user)
     : SaveChangesInterceptor

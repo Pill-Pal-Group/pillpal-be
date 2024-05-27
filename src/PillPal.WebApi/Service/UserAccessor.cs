@@ -1,4 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces;
+﻿using PillPal.Application.Common.Interfaces.Data;
 using System.Security.Claims;
 
 namespace PillPal.WebApi.Service;
