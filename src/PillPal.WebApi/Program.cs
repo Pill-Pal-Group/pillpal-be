@@ -1,10 +1,7 @@
-using Microsoft.AspNetCore.Identity;
-using PillPal.Core.Configuration;
-using PillPal.Core.Identity;
-using PillPal.Infrastructure.Persistence;
-using PillPal.Service.Configuration;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
+using PillPal.Application.Configuration;
+using PillPal.Infrastructure.Configuration;
 using PillPal.WebApi.Configuration;
-using PillPal.WebApi.Service;
 
 namespace PillPal.WebApi
 {
@@ -14,50 +11,34 @@ namespace PillPal.WebApi
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddControllers();
-            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddControllers(options =>
+            {
+                options.Conventions.Add(new RouteTokenTransformerConvention(
+                    new KebabCaseParameterTransformer()));
+            });
+
             builder.Services.AddSwaggerDoc();
 
-            builder.Services.AddMapper();
+            builder.Services.AddCorsServices();
 
-            builder.Services.AddCors();
+            builder.Services.AddInfrastructureServices(builder.Configuration);
+            builder.Services.AddApplicationServices();
+            builder.Services.AddWebServices();
 
-            builder.Services.AddScoped<IJWTService<ApplicationUser>, JWTService<ApplicationUser>>();
-
-            builder.Services.AddServiceApplication();
-
-            builder.Services.AddDbContext<ApplicationDbContext>();
-
-            builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
-            {
-                options.Password.RequireDigit = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequiredLength = 6;
-
-                options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+()";
-            })
-            .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            builder.Services.AddHttpContextAccessor();
-
-            builder.Services.AddJwtAuth();
+            //builder.Services.AddJwtAuth();
 
             var app = builder.Build();
 
-            if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
+            app.UseExceptionHandler();
+
+            if (app.Environment.IsDevelopment()
+                || app.Environment.IsStaging())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
-            app.UseCors(option =>
-            {
-                option.AllowAnyOrigin();
-                option.AllowAnyMethod();
-                option.AllowAnyHeader();
-            });
+            app.UseCors();
 
             app.UseHttpsRedirection();
 
