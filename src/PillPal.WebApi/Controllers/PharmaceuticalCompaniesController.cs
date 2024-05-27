@@ -75,11 +75,11 @@ public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pha
     /// <remarks>
     /// Sample request:
     /// 
-    ///    PUT /api/pharmaceutical-companies/{pharmaceuticalCompanyId}
-    ///    {
+    ///     PUT /api/pharmaceutical-companies/{pharmaceuticalCompanyId}
+    ///     {
     ///         "companyName": "Pharmaceutical Company Name",
     ///         "nationId": "Nation Id"
-    ///    }
+    ///     }
     ///    
     /// </remarks>
     /// <response code="200">Returns the updated pharmaceutical company</response>

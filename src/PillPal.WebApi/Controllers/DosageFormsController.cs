@@ -74,10 +74,10 @@ public class DosageFormsController(IDosageFormService dosageFormService)
     /// <remarks>
     /// Sample request:
     /// 
-    ///    PUT /api/dosage-forms/{dosageFormId}
-    ///    {
+    ///     PUT /api/dosage-forms/{dosageFormId}
+    ///     {
     ///         "formName": "Updated Dosage Form Name"
-    ///    }
+    ///     }
     ///    
     /// </remarks>
     /// <response code="200">Returns the updated dosage form</response>
