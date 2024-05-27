@@ -10,7 +10,11 @@ public class CreateSpecificationValidator : AbstractValidator<CreateSpecificatio
 {
     public CreateSpecificationValidator()
     {
-        RuleFor(x => x.TypeName).NotEmpty().MaximumLength(50);
-        RuleFor(x => x.Detail).NotEmpty().MaximumLength(100);
+        RuleFor(x => x.TypeName)
+            .NotEmpty()
+            .MaximumLength(50);
+
+        RuleFor(x => x.Detail)
+            .MaximumLength(100);
     }
 }
