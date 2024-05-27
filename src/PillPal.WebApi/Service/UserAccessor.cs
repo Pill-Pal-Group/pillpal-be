@@ -1,20 +1,10 @@
-﻿using System.Security.Claims;
+﻿using PillPal.Application.Common.Interfaces;
+using System.Security.Claims;
 
 namespace PillPal.WebApi.Service;
 
-public class UserAccessor : IUserAccessor
+public class UserAccessor(IHttpContextAccessor accessor) : IUser
 {
-    private readonly IHttpContextAccessor _accessor;
-
-    public UserAccessor(IHttpContextAccessor accessor)
-    {
-        _accessor = accessor;
-    }
-
-    public string UserId => _accessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty;
-}
-
-public interface IUserAccessor
-{
-    public string UserId { get; }
+    public string? Id =>
+        accessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier) ?? "Manual";
 }
