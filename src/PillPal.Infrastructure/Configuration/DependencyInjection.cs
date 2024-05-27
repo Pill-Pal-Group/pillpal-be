@@ -1,4 +1,5 @@
-﻿using PillPal.Infrastructure.Persistence;
+﻿using PillPal.Application.Common.Interfaces.Data;
+using PillPal.Infrastructure.Persistence;
 using PillPal.Infrastructure.Persistence.Interceptors;
 
 namespace PillPal.Infrastructure.Configuration;
@@ -14,7 +15,7 @@ public static class DependencyInjection
 
         services.AddDbContext<ApplicationDbContext>((service, options) =>
         {
-            options.AddInterceptors(service.GetService<ISaveChangesInterceptor>()!);
+            options.AddInterceptors(service.GetServices<ISaveChangesInterceptor>());
 
             options.UseSqlServer(connectionString);
         });
