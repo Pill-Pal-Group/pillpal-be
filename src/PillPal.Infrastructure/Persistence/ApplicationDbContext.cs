@@ -1,37 +1,41 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using PillPal.Core.Identity;
+﻿namespace PillPal.Infrastructure.Persistence;
 
-namespace PillPal.Infrastructure.Persistence;
-
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>
+public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : IdentityDbContext<ApplicationUser, IdentityRole<Guid>, Guid>(options), IApplicationDbContext
 {
-    private readonly IConfiguration _configuration;
+    public DbSet<ActiveIngredient> ActiveIngredients { get; set; }
 
-    public ApplicationDbContext(IConfiguration configuration) : base()
-    {
-        _configuration = configuration;
-    }
+    public DbSet<Brand> Brands { get; set; }
+
+    public DbSet<Category> Categories { get; set; }
 
     public DbSet<Customer> Customers { get; set; }
-    public DbSet<CustomerPackage> CustomerPackages { get; set; }
-    public DbSet<PackageCategory> PackageCategories { get; set; }
-    public DbSet<Pharmacist> Pharmacists { get; set; }
-    public DbSet<Drug> Drugs { get; set; }
-    public DbSet<Ingredient> Ingredients { get; set; }
-    public DbSet<DrugInformation> DrugInformations { get; set; }
-    public DbSet<DetailBrand> DetailBrands { get; set; }
-    public DbSet<PharmacyStore> PharmacyStores { get; set; }
-    public DbSet<Prescript> Prescriptions { get; set; }
-    public DbSet<Schedule> Schedules { get; set; }
-    public DbSet<ScheduleDetail> ScheduleDetails { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.AddInterceptors(new ApplicationDbContextInterceptor());
-        optionsBuilder.UseSqlServer(_configuration.GetConnectionString("PILLPAL_DB"));
-    }
+    public DbSet<CustomerPackage> CustomerPackages { get; set; }
+
+    public DbSet<DosageForm> DosageForms { get; set; }
+
+    public DbSet<MedicationTake> MedicationTakes { get; set; }
+
+    public DbSet<Medicine> Medicines { get; set; }
+
+    public DbSet<MedicineInBrand> MedicineInBrands { get; set; }
+
+    public DbSet<Nation> Nations { get; set; }
+
+    public DbSet<PackageCategory> PackageCategories { get; set; }
+
+    public DbSet<Payment> Payments { get; set; }
+
+    public DbSet<PharmaceuticalCompany> PharmaceuticalCompanies { get; set; }
+
+    public DbSet<PharmacyStore> PharmacyStores { get; set; }
+
+    public DbSet<Prescript> Prescripts { get; set; }
+
+    public DbSet<PrescriptDetail> PrescriptDetails { get; set; }
+
+    public DbSet<Specification> Specifications { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -73,18 +77,6 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityR
         builder.Ignore<IdentityRoleClaim<Guid>>();
         #endregion
 
-        builder.ApplyConfiguration(new CustomerConfig());
-        builder.ApplyConfiguration(new PharmacistConfig());
-        builder.ApplyConfiguration(new ScheduleConfig());
-        builder.ApplyConfiguration(new ScheduleDetailConfig());
-        builder.ApplyConfiguration(new CustomerPackageConfig());
-        builder.ApplyConfiguration(new PrescriptConfig());
-        builder.ApplyConfiguration(new DrugPrescriptConfig());
-        builder.ApplyConfiguration(new PackageCategoryConfig());
-        builder.ApplyConfiguration(new DrugConfig());
-        builder.ApplyConfiguration(new IngredientConfig());
-        builder.ApplyConfiguration(new DrugInformationConfig());
-        builder.ApplyConfiguration(new DetailBrandConfig());
-        builder.ApplyConfiguration(new PharmacyStoreConfig());
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 }

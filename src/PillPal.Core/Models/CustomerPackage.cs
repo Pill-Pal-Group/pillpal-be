@@ -1,15 +1,15 @@
 ﻿namespace PillPal.Core.Models;
 
-public class CustomerPackage : BaseAuditableEntity
+public class CustomerPackage : BaseEntity
 {
-    public string? PackageName { get; set; }
-    public string? PackageType { get; set; }
-    public decimal Price { get; set; }
-    public int Months { get; set; }
+    public int RemainDay { get; set; }
 
     public Guid CustomerId { get; set; }
-    public Customer? Customer { get; set; }
+    public virtual Customer? Customer { get; set; }
 
-    public Guid PackageCategoryId { get; set; }
-    public PackageCategory? PackageCategory { get; set; }
+    public Guid PackageId { get; set; }
+    public virtual PackageCategory? PackageCategory { get; set; }
+
+    public Guid PaymentId { get; set; }
+    public virtual Payment? Payment { get; set; }
 }

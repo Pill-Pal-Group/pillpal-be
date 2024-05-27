@@ -2,15 +2,15 @@
 
 public class Prescript : BaseAuditableEntity
 {
-    public string? PrescriptCode { get; set; }
-    public string? PrescriptName { get; set; }
-    public string? PrescriptDescription { get; set; }
+    public string? PrescriptImage { get; set; }
+    public DateTimeOffset ReceptionDate { get; set; }
     public string? DoctorName { get; set; }
     public string? HospitalName { get; set; }
-    public DateTimeOffset DateIssued { get; set; }
-
-    public ICollection<DrugPrescript> DrugPrescripts { get; set; } = default!;
 
     public Guid CustomerId { get; set; }
-    public Customer? Customer { get; set; }
+    public virtual Customer? Customer { get; set; }
+
+    public virtual ICollection<MedicationTake> MedicationTakes { get; set; } = default!;
+
+    public virtual ICollection<PrescriptDetail> PrescriptDetails { get; set; } = default!;
 }
