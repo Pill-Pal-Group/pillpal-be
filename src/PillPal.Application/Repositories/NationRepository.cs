@@ -10,7 +10,7 @@ public class NationRepository(IApplicationDbContext context, IMapper mapper, ISe
 {
     public async Task<NationDto> CreateNationAsync(CreateNationDto createNationDto)
     {
-        var validator = _serviceProvider.GetRequiredService<CreateNationValidator>();
+        var validator = ServiceProvider.GetRequiredService<CreateNationValidator>();
 
         var validationResult = await validator.ValidateAsync(createNationDto);
 
@@ -19,49 +19,49 @@ public class NationRepository(IApplicationDbContext context, IMapper mapper, ISe
             throw new ValidationException(validationResult.Errors);
         }
 
-        var nation = _mapper.Map<Nation>(createNationDto);
+        var nation = Mapper.Map<Nation>(createNationDto);
 
-        await _context.Nations.AddAsync(nation);
+        await Context.Nations.AddAsync(nation);
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
 
-        return _mapper.Map<NationDto>(nation);
+        return Mapper.Map<NationDto>(nation);
     }
 
     public async Task DeleteNationAsync(Guid nationId)
     {
-        var nation = await _context.Nations
+        var nation = await Context.Nations
             .Where(n => n.Id == nationId && !n.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Nation), nationId);
 
         nation.IsDeleted = true;
 
-        _context.Nations.Update(nation);
+        Context.Nations.Update(nation);
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
     }
 
     public async Task<NationDto> GetNationByIdAsync(Guid nationId)
     {
-        var nation = await _context.Nations
+        var nation = await Context.Nations
             .Where(n => n.Id == nationId && !n.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Nation), nationId);
 
-        return _mapper.Map<NationDto>(nation);
+        return Mapper.Map<NationDto>(nation);
     }
 
     public async Task<IEnumerable<NationDto>> GetNationsAsync()
     {
-        var nations = await _context.Nations
+        var nations = await Context.Nations
             .Where(n => !n.IsDeleted)
             .ToListAsync();
 
-        return _mapper.Map<IEnumerable<NationDto>>(nations);
+        return Mapper.Map<IEnumerable<NationDto>>(nations);
     }
 
     public async Task<NationDto> UpdateNationAsync(Guid nationId, UpdateNationDto updateNationDto)
     {
-        var validator = _serviceProvider.GetRequiredService<UpdateNationValidator>();
+        var validator = ServiceProvider.GetRequiredService<UpdateNationValidator>();
 
         var validationResult = await validator.ValidateAsync(updateNationDto);
 
@@ -70,16 +70,16 @@ public class NationRepository(IApplicationDbContext context, IMapper mapper, ISe
             throw new ValidationException(validationResult.Errors);
         }
 
-        var nation = await _context.Nations
+        var nation = await Context.Nations
             .Where(n => n.Id == nationId && !n.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Nation), nationId);
 
-        _mapper.Map(updateNationDto, nation);
+        Mapper.Map(updateNationDto, nation);
 
-        _context.Nations.Update(nation);
+        Context.Nations.Update(nation);
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
 
-        return _mapper.Map<NationDto>(nation);
+        return Mapper.Map<NationDto>(nation);
     }
 }

@@ -10,7 +10,7 @@ public class BrandRepository(IApplicationDbContext context, IMapper mapper, ISer
 {
     public async Task<BrandDto> CreateBrandAsync(CreateBrandDto createBrandDto)
     {
-        var validator = _serviceProvider.GetRequiredService<CreateBrandValidator>();
+        var validator = ServiceProvider.GetRequiredService<CreateBrandValidator>();
 
         var validationResult = await validator.ValidateAsync(createBrandDto);
 
@@ -19,49 +19,49 @@ public class BrandRepository(IApplicationDbContext context, IMapper mapper, ISer
             throw new ValidationException(validationResult.Errors);
         }
 
-        var brand = _mapper.Map<Brand>(createBrandDto);
+        var brand = Mapper.Map<Brand>(createBrandDto);
 
-        await _context.Brands.AddAsync(brand);
+        await Context.Brands.AddAsync(brand);
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
 
-        return _mapper.Map<BrandDto>(brand);
+        return Mapper.Map<BrandDto>(brand);
     }
 
     public async Task DeleteBrandAsync(Guid brandId)
     {
-        var brand = await _context.Brands
+        var brand = await Context.Brands
             .Where(b => b.Id == brandId && !b.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Brand), brandId);
 
         brand.IsDeleted = true;
 
-        _context.Brands.Update(brand);
+        Context.Brands.Update(brand);
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
     }
 
     public async Task<BrandDto> GetBrandByIdAsync(Guid brandId)
     {
-        var brand = await _context.Brands
+        var brand = await Context.Brands
             .Where(b => b.Id == brandId && !b.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Brand), brandId);
 
-        return _mapper.Map<BrandDto>(brand);
+        return Mapper.Map<BrandDto>(brand);
     }
 
     public async Task<IEnumerable<BrandDto>> GetBrandsAsync()
     {
-        var brands = await _context.Brands
+        var brands = await Context.Brands
             .Where(b => !b.IsDeleted)
             .ToListAsync();
 
-        return _mapper.Map<IEnumerable<BrandDto>>(brands);
+        return Mapper.Map<IEnumerable<BrandDto>>(brands);
     }
 
     public async Task<BrandDto> UpdateBrandAsync(Guid brandId, UpdateBrandDto updateBrandDto)
     {
-        var validator = _serviceProvider.GetRequiredService<UpdateBrandValidator>();
+        var validator = ServiceProvider.GetRequiredService<UpdateBrandValidator>();
 
         var validationResult = await validator.ValidateAsync(updateBrandDto);
 
@@ -70,16 +70,16 @@ public class BrandRepository(IApplicationDbContext context, IMapper mapper, ISer
             throw new ValidationException(validationResult.Errors);
         }
 
-        var brand = await _context.Brands
+        var brand = await Context.Brands
             .Where(b => b.Id == brandId && !b.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Brand), brandId);
 
-        _mapper.Map(updateBrandDto, brand);
+        Mapper.Map(updateBrandDto, brand);
 
-        _context.Brands.Update(brand);
+        Context.Brands.Update(brand);
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
 
-        return _mapper.Map<BrandDto>(brand);
+        return Mapper.Map<BrandDto>(brand);
     }
 }

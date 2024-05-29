@@ -10,7 +10,7 @@ public class SpecificationRepository(IApplicationDbContext context, IMapper mapp
 {
     public async Task<SpecificationDto> CreateSpecificationAsync(CreateSpecificationDto createSpecificationDto)
     {
-        var validator = _serviceProvider.GetRequiredService<CreateSpecificationValidator>();
+        var validator = ServiceProvider.GetRequiredService<CreateSpecificationValidator>();
 
         var validationResult = await validator.ValidateAsync(createSpecificationDto);
 
@@ -19,43 +19,43 @@ public class SpecificationRepository(IApplicationDbContext context, IMapper mapp
             throw new ValidationException(validationResult.Errors);
         }
 
-        var specification = _mapper.Map<Specification>(createSpecificationDto);
+        var specification = Mapper.Map<Specification>(createSpecificationDto);
 
-        await _context.Specifications.AddAsync(specification);
+        await Context.Specifications.AddAsync(specification);
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
 
-        return _mapper.Map<SpecificationDto>(specification);
+        return Mapper.Map<SpecificationDto>(specification);
     }
 
     public async Task DeleteSpecificationAsync(Guid specificationId)
     {
-        var specification = await _context.Specifications.FindAsync(specificationId) 
+        var specification = await Context.Specifications.FindAsync(specificationId) 
             ?? throw new NotFoundException(nameof(Specification), specificationId);
 
-        _context.Specifications.Remove(specification);
+        Context.Specifications.Remove(specification);
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
     }
 
     public async Task<IEnumerable<SpecificationDto>> GetAllSpecificationsAsync()
     {
-        var specifications = await _context.Specifications.ToListAsync();
+        var specifications = await Context.Specifications.ToListAsync();
 
-        return _mapper.Map<IEnumerable<SpecificationDto>>(specifications);
+        return Mapper.Map<IEnumerable<SpecificationDto>>(specifications);
     }
 
     public async Task<SpecificationDto> GetSpecificationByIdAsync(Guid specificationId)
     {
-        var specification = await _context.Specifications.FindAsync(specificationId) 
+        var specification = await Context.Specifications.FindAsync(specificationId) 
             ?? throw new NotFoundException(nameof(Specification), specificationId);
 
-        return _mapper.Map<SpecificationDto>(specification);
+        return Mapper.Map<SpecificationDto>(specification);
     }
 
     public async Task UpdateSpecificationAsync(Guid specificationId, UpdateSpecificationDto updateSpecificationDto)
     {
-        var validator = _serviceProvider.GetRequiredService<UpdateSpecificationValidator>();
+        var validator = ServiceProvider.GetRequiredService<UpdateSpecificationValidator>();
 
         var validationResult = await validator.ValidateAsync(updateSpecificationDto);
 
@@ -64,11 +64,11 @@ public class SpecificationRepository(IApplicationDbContext context, IMapper mapp
             throw new ValidationException(validationResult.Errors);
         }
 
-        var specification = await _context.Specifications.FindAsync(specificationId) 
+        var specification = await Context.Specifications.FindAsync(specificationId) 
             ?? throw new NotFoundException(nameof(Specification), specificationId);
 
-        _mapper.Map(updateSpecificationDto, specification);
+        Mapper.Map(updateSpecificationDto, specification);
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
     }
 }

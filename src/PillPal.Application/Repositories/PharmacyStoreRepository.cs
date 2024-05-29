@@ -10,7 +10,7 @@ public class PharmacyStoreRepository(IApplicationDbContext context, IMapper mapp
 {
     public async Task<PharmacyStoreDto> CreatePharmacyStoreAsync(CreatePharmacyStoreDto createPharmacyStoreDto)
     {
-        var validator = _serviceProvider.GetRequiredService<CreatePharmacyStoreValidator>();
+        var validator = ServiceProvider.GetRequiredService<CreatePharmacyStoreValidator>();
 
         var validationResult = await validator.ValidateAsync(createPharmacyStoreDto);
 
@@ -19,51 +19,51 @@ public class PharmacyStoreRepository(IApplicationDbContext context, IMapper mapp
             throw new ValidationException(validationResult.Errors);
         }
 
-        var pharmacyStore = _mapper.Map<PharmacyStore>(createPharmacyStoreDto);
+        var pharmacyStore = Mapper.Map<PharmacyStore>(createPharmacyStoreDto);
 
-        await _context.PharmacyStores.AddAsync(pharmacyStore);
+        await Context.PharmacyStores.AddAsync(pharmacyStore);
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
 
-        return _mapper.Map<PharmacyStoreDto>(pharmacyStore);
+        return Mapper.Map<PharmacyStoreDto>(pharmacyStore);
     }
 
     public async Task DeletePharmacyStoreAsync(Guid pharmacyStoreId)
     {
-        var pharmacyStore = await _context.PharmacyStores
+        var pharmacyStore = await Context.PharmacyStores
             .Where(c => c.Id == pharmacyStoreId && !c.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmacyStore), pharmacyStoreId);
 
         pharmacyStore.IsDeleted = true;
 
-        _context.PharmacyStores.Update(pharmacyStore);
+        Context.PharmacyStores.Update(pharmacyStore);
 
-        await _context.SaveChangesAsync(); 
+        await Context.SaveChangesAsync(); 
     }
 
     public async Task<PharmacyStoreDto> GetPharmacyStoreByIdAsync(Guid pharmacyStoreId)
     {
-        var pharmacyStore = await _context.PharmacyStores
+        var pharmacyStore = await Context.PharmacyStores
             .Include(c => c.Brand)
             .Where(c => c.Id == pharmacyStoreId && !c.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmacyStore), pharmacyStoreId);
 
-        return _mapper.Map<PharmacyStoreDto>(pharmacyStore);
+        return Mapper.Map<PharmacyStoreDto>(pharmacyStore);
     }
 
     public async Task<IEnumerable<PharmacyStoreDto>> GetPharmacyStoresAsync()
     {
-        var pharmacyStores = await _context.PharmacyStores
+        var pharmacyStores = await Context.PharmacyStores
             .Include(c => c.Brand)
             .Where(c => !c.IsDeleted)
             .ToListAsync();
 
-        return _mapper.Map<IEnumerable<PharmacyStoreDto>>(pharmacyStores);
+        return Mapper.Map<IEnumerable<PharmacyStoreDto>>(pharmacyStores);
     }
 
     public async Task<PharmacyStoreDto> UpdatePharmacyStoreAsync(Guid pharmacyStoreId, UpdatePharmacyStoreDto updatePharmacyStoreDto)
     {
-        var validator = _serviceProvider.GetRequiredService<UpdatePharmacyStoreValidator>();
+        var validator = ServiceProvider.GetRequiredService<UpdatePharmacyStoreValidator>();
 
         var validationResult = await validator.ValidateAsync(updatePharmacyStoreDto);
 
@@ -72,16 +72,16 @@ public class PharmacyStoreRepository(IApplicationDbContext context, IMapper mapp
             throw new ValidationException(validationResult.Errors);
         }
 
-        var pharmacyStore = await _context.PharmacyStores
+        var pharmacyStore = await Context.PharmacyStores
             .Where(c => c.Id == pharmacyStoreId && !c.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmacyStore), pharmacyStoreId);
 
-        pharmacyStore = _mapper.Map(updatePharmacyStoreDto, pharmacyStore);
+        pharmacyStore = Mapper.Map(updatePharmacyStoreDto, pharmacyStore);
 
-        _context.PharmacyStores.Update(pharmacyStore);
+        Context.PharmacyStores.Update(pharmacyStore);
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
 
-        return _mapper.Map<PharmacyStoreDto>(pharmacyStore);
+        return Mapper.Map<PharmacyStoreDto>(pharmacyStore);
     }
 }

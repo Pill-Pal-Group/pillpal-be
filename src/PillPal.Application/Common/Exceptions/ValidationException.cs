@@ -4,7 +4,7 @@ namespace PillPal.Application.Common.Exceptions;
 
 public class ValidationException : HttpException
 {
-    public ValidationException()
+    private ValidationException()
         : base("One or more validation failures have occurred.",
             HttpStatusCode.UnprocessableEntity)
     {

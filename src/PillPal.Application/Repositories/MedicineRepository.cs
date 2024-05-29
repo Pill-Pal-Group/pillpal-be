@@ -10,7 +10,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
 {
     public async Task<MedicineDto> CreateMedicineAsync(CreateMedicineDto createMedicineDto)
     {
-        var validator = _serviceProvider.GetRequiredService<IValidator<CreateMedicineDto>>();
+        var validator = ServiceProvider.GetRequiredService<IValidator<CreateMedicineDto>>();
 
         var validationResult = await validator.ValidateAsync(createMedicineDto);
 
@@ -19,29 +19,29 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             throw new ValidationException(validationResult.Errors);
         }
 
-        var medicine = _mapper.Map<Medicine>(createMedicineDto);
+        var medicine = Mapper.Map<Medicine>(createMedicineDto);
 
-        await _context.Medicines.AddAsync(medicine);
+        await Context.Medicines.AddAsync(medicine);
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
 
-        return _mapper.Map<MedicineDto>(medicine);
+        return Mapper.Map<MedicineDto>(medicine);
     }
 
     public async Task DeleteMedicineAsync(Guid medicineId)
     {
-        var medicine = await _context.Medicines
+        var medicine = await Context.Medicines
             .Where(m => m.Id == medicineId && !m.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Medicine), medicineId);
 
         medicine.IsDeleted = true;
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
     }
 
     public async Task<MedicineDto> GetMedicineByIdAsync(Guid medicineId)
     {
-        var medicine = await _context.Medicines
+        var medicine = await Context.Medicines
             .Where(m => m.Id == medicineId && !m.IsDeleted)
             .Include(m => m.Specification)
             .Include(m => m.PharmaceuticalCompanies)
@@ -50,12 +50,12 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             .Include(m => m.Brands)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Medicine), medicineId);
 
-        return _mapper.Map<MedicineDto>(medicine);
+        return Mapper.Map<MedicineDto>(medicine);
     }
 
     public async Task<IEnumerable<MedicineDto>> GetMedicinesAsync()
     {
-        var medicines = await _context.Medicines
+        var medicines = await Context.Medicines
             .Where(m => !m.IsDeleted)
             .Include(m => m.Specification)
             .Include(m => m.PharmaceuticalCompanies)
@@ -64,7 +64,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             .Include(m => m.Brands)
             .ToListAsync();
 
-        return _mapper.Map<IEnumerable<MedicineDto>>(medicines);
+        return Mapper.Map<IEnumerable<MedicineDto>>(medicines);
     }
 
     public Task<MedicineDto> UpdateMedicineAsync(Guid medicineId, UpdateMedicineDto updateMedicineDto)

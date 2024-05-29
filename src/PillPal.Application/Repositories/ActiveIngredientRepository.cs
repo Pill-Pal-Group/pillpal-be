@@ -10,7 +10,7 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
 {
     public async Task<ActiveIngredientDto> CreateActiveIngredientAsync(CreateActiveIngredientDto createActiveIngredientDto)
     {
-        var validator = _serviceProvider.GetRequiredService<CreateActiveIngredientValidator>();
+        var validator = ServiceProvider.GetRequiredService<CreateActiveIngredientValidator>();
 
         var validationResult = await validator.ValidateAsync(createActiveIngredientDto);
 
@@ -19,49 +19,49 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
             throw new ValidationException(validationResult.Errors);
         }
 
-        var activeIngredient = _mapper.Map<ActiveIngredient>(createActiveIngredientDto);
+        var activeIngredient = Mapper.Map<ActiveIngredient>(createActiveIngredientDto);
 
-        await _context.ActiveIngredients.AddAsync(activeIngredient);
+        await Context.ActiveIngredients.AddAsync(activeIngredient);
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
 
-        return _mapper.Map<ActiveIngredientDto>(activeIngredient);
+        return Mapper.Map<ActiveIngredientDto>(activeIngredient);
     }
 
     public async Task DeleteActiveIngredientAsync(Guid activeIngredientId)
     {
-        var activeIngredient = await _context.ActiveIngredients
+        var activeIngredient = await Context.ActiveIngredients
             .Where(ai => ai.Id == activeIngredientId && !ai.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(ActiveIngredient), activeIngredientId);
 
         activeIngredient.IsDeleted = true;
 
-        _context.ActiveIngredients.Update(activeIngredient);
+        Context.ActiveIngredients.Update(activeIngredient);
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
     }
 
     public async Task<ActiveIngredientDto> GetActiveIngredientByIdAsync(Guid activeIngredientId)
     {
-        var activeIngredient = await _context.ActiveIngredients
+        var activeIngredient = await Context.ActiveIngredients
             .Where(ai => ai.Id == activeIngredientId && !ai.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(ActiveIngredient), activeIngredientId);
 
-        return _mapper.Map<ActiveIngredientDto>(activeIngredient);
+        return Mapper.Map<ActiveIngredientDto>(activeIngredient);
     }
 
     public async Task<IEnumerable<ActiveIngredientDto>> GetActiveIngredientsAsync()
     {
-        var activeIngredients = await _context.ActiveIngredients
+        var activeIngredients = await Context.ActiveIngredients
             .Where(ai => !ai.IsDeleted)
             .ToListAsync();
 
-        return _mapper.Map<IEnumerable<ActiveIngredientDto>>(activeIngredients);
+        return Mapper.Map<IEnumerable<ActiveIngredientDto>>(activeIngredients);
     }
 
     public async Task<ActiveIngredientDto> UpdateActiveIngredientAsync(Guid ingredientId, UpdateActiveIngredientDto updateActiveIngredientDto)
     {
-        var validator = _serviceProvider.GetRequiredService<UpdateActiveIngredientValidator>();
+        var validator = ServiceProvider.GetRequiredService<UpdateActiveIngredientValidator>();
 
         var validationResult = await validator.ValidateAsync(updateActiveIngredientDto);
 
@@ -70,16 +70,16 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
             throw new ValidationException(validationResult.Errors);
         }
 
-        var activeIngredient = await _context.ActiveIngredients
+        var activeIngredient = await Context.ActiveIngredients
             .Where(ai => ai.Id == ingredientId && !ai.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(ActiveIngredient), ingredientId);
 
-        activeIngredient = _mapper.Map(updateActiveIngredientDto, activeIngredient);
+        activeIngredient = Mapper.Map(updateActiveIngredientDto, activeIngredient);
 
-        _context.ActiveIngredients.Update(activeIngredient);
+        Context.ActiveIngredients.Update(activeIngredient);
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
 
-        return _mapper.Map<ActiveIngredientDto>(activeIngredient);
+        return Mapper.Map<ActiveIngredientDto>(activeIngredient);
     }
 }

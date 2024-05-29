@@ -10,7 +10,7 @@ public class DosageFormRepository(IApplicationDbContext context, IMapper mapper,
 {
     public async Task<DosageFormDto> CreateDosageFormAsync(CreateDosageFormDto createDosageFormDto)
     {
-        var validator = _serviceProvider.GetRequiredService<CreateDosageFormValidator>();
+        var validator = ServiceProvider.GetRequiredService<CreateDosageFormValidator>();
 
         var validationResult = await validator.ValidateAsync(createDosageFormDto);
 
@@ -19,44 +19,44 @@ public class DosageFormRepository(IApplicationDbContext context, IMapper mapper,
             throw new ValidationException(validationResult.Errors);
         }
 
-        var dosageForm = _mapper.Map<DosageForm>(createDosageFormDto);
+        var dosageForm = Mapper.Map<DosageForm>(createDosageFormDto);
 
-        await _context.DosageForms.AddAsync(dosageForm);
+        await Context.DosageForms.AddAsync(dosageForm);
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
 
-        return _mapper.Map<DosageFormDto>(dosageForm);
+        return Mapper.Map<DosageFormDto>(dosageForm);
     }
 
     public async Task DeleteDosageFormAsync(Guid dosageFormId)
     {
-        var dosageForm = await _context.DosageForms
+        var dosageForm = await Context.DosageForms
             .FindAsync(dosageFormId) ?? throw new NotFoundException(nameof(DosageForm), dosageFormId);
     
-        _context.DosageForms.Remove(dosageForm);
+        Context.DosageForms.Remove(dosageForm);
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
     }
 
     public async Task<DosageFormDto> GetDosageFormByIdAsync(Guid dosageFormId)
     {
-        var dosageForm = await _context.DosageForms
+        var dosageForm = await Context.DosageForms
             .FindAsync(dosageFormId) ?? throw new NotFoundException(nameof(DosageForm), dosageFormId);
 
-        return _mapper.Map<DosageFormDto>(dosageForm);
+        return Mapper.Map<DosageFormDto>(dosageForm);
     }
 
     public async Task<IEnumerable<DosageFormDto>> GetDosageFormsAsync()
     {
-        var dosageForms = await _context.DosageForms
+        var dosageForms = await Context.DosageForms
             .ToListAsync();
 
-        return _mapper.Map<IEnumerable<DosageFormDto>>(dosageForms);
+        return Mapper.Map<IEnumerable<DosageFormDto>>(dosageForms);
     }
 
     public async Task<DosageFormDto> UpdateDosageFormAsync(Guid dosageFormId, UpdateDosageFormDto updateDosageFormDto)
     {
-        var validator = _serviceProvider.GetRequiredService<UpdateDosageFormValidator>();
+        var validator = ServiceProvider.GetRequiredService<UpdateDosageFormValidator>();
 
         var validationResult = await validator.ValidateAsync(updateDosageFormDto);
 
@@ -65,13 +65,13 @@ public class DosageFormRepository(IApplicationDbContext context, IMapper mapper,
             throw new ValidationException(validationResult.Errors);
         }
 
-        var dosageForm = await _context.DosageForms
+        var dosageForm = await Context.DosageForms
             .FindAsync(dosageFormId) ?? throw new NotFoundException(nameof(DosageForm), dosageFormId);
 
-        _mapper.Map(updateDosageFormDto, dosageForm);
+        Mapper.Map(updateDosageFormDto, dosageForm);
 
-        await _context.SaveChangesAsync();
+        await Context.SaveChangesAsync();
 
-        return _mapper.Map<DosageFormDto>(dosageForm);
+        return Mapper.Map<DosageFormDto>(dosageForm);
     }
 }
