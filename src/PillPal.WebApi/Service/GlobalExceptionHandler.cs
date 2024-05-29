@@ -5,7 +5,8 @@ using ValidationException = PillPal.Application.Common.Exceptions.ValidationExce
 
 namespace PillPal.WebApi.Service;
 
-public class GlobalExceptionHandler : IExceptionHandler
+public class GlobalExceptionHandler(IProblemDetailsService problemDetailsService)
+    : IExceptionHandler
 {
     private static readonly string[] _separator = ["\r\n", "\r", "\n"];
 
@@ -41,10 +42,12 @@ public class GlobalExceptionHandler : IExceptionHandler
             problemDetails.Extensions.Add("stackTrace", exception.StackTrace?.Split(_separator, StringSplitOptions.None));
         }
 
-        httpContext.Response.ContentType = "application/problem+json";
         httpContext.Response.StatusCode = statusCode;
 
-        await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
-        return true;
+        return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext
+        {
+            HttpContext = httpContext,
+            ProblemDetails = problemDetails
+        });
     }
 }
