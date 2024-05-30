@@ -1,0 +1,19 @@
+
+name: delete artifact
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+jobs:
+
+  cleanup: 
+    runs-on: windows-latest
+    steps:
+      - name: Delete artifact
+        uses: actions/delete-artifact@v1
+        with:
+          name: .net-app
+          
