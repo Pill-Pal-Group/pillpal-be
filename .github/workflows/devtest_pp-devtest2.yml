@@ -6,7 +6,7 @@ name: Build and deploy ASP.Net Core app to Azure Web App - pp-devtest2
 on:
   push:
     branches:
-      - devtest
+      - dev
   workflow_dispatch:
 
 jobs:
@@ -63,4 +63,13 @@ jobs:
           app-name: 'pp-devtest2'
           slot-name: 'Production'
           package: .
+
+  cleanup: 
+    runs-on: windows-latest
+    needs: deploy
+    steps:
+      - name: Delete artifact
+        uses: actions/delete-artifact@v1
+        with:
+          name: .net-app
           
