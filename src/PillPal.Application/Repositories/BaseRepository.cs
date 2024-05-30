@@ -4,9 +4,9 @@ namespace PillPal.Application.Repositories;
 
 public class BaseRepository
 {
-    protected readonly IApplicationDbContext Context;
+    protected readonly IApplicationDbContext Context = null!;
 
-    protected readonly IMapper Mapper;
+    protected readonly IMapper Mapper = null!;
 
     protected readonly IServiceProvider ServiceProvider;
 
@@ -17,6 +17,11 @@ public class BaseRepository
     {
         Context = context;
         Mapper = mapper;
+        ServiceProvider = serviceProvider;
+    }
+
+    protected BaseRepository(IServiceProvider serviceProvider)
+    {
         ServiceProvider = serviceProvider;
     }
 

@@ -25,7 +25,23 @@ namespace PillPal.WebApi
             builder.Services.AddApplicationServices();
             builder.Services.AddWebServices();
 
-            //builder.Services.AddJwtAuth();
+            //--
+            builder.Services.AddJwtAuth(builder.Configuration);
+            builder.Services.AddAuthorization(op =>
+            {
+                op.AddPolicy("Admin", policy =>
+                {
+                    policy.RequireRole("Admin");
+                });
+
+                op.AddPolicy("Customer", policy =>
+                {
+                    policy.RequireRole("Customer");
+                });
+
+
+            });
+            //--
 
             var app = builder.Build();
 

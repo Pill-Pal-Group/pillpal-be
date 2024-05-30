@@ -1,4 +1,7 @@
-﻿using PillPal.Application.Common.Interfaces.Data;
+﻿using PillPal.Application.Common.Interfaces.Auth;
+using PillPal.Application.Common.Interfaces.Data;
+using PillPal.Infrastructure.Auth;
+using PillPal.Infrastructure.Identity;
 using PillPal.Infrastructure.Persistence;
 using PillPal.Infrastructure.Persistence.Interceptors;
 
@@ -22,21 +25,20 @@ public static class DependencyInjection
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>()!);
 
-        //services.AddDefaultIdentity<ApplicationUser>()
-        //    .AddRoles<IdentityRole>()
-        //    .AddEntityFrameworkStores<ApplicationDbContext>();
+        services.AddIdentityCore<ApplicationUser>(op =>
+        {
+            op.Password.RequireDigit = false;
+            op.Password.RequireLowercase = false;
+            op.Password.RequireNonAlphanumeric = false;
+            op.Password.RequireUppercase = false;
+            op.Password.RequiredLength = 6;
+        })
+        .AddRoles<IdentityRole<Guid>>()
+        .AddEntityFrameworkStores<ApplicationDbContext>();
 
-        //services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
-        //{
-        //    options.Password.RequireDigit = false;
-        //    options.Password.RequireLowercase = false;
-        //    options.Password.RequireNonAlphanumeric = false;
-        //    options.Password.RequireUppercase = false;
-        //    options.Password.RequiredLength = 6;
+        services.AddTransient<IIdentityService, IdentityService>();
 
-        //    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+()";
-        //})
-        //.AddEntityFrameworkStores<ApplicationDbContext>();
+        services.AddTransient<IJwtService, JwtService>();
 
         return services;
     }

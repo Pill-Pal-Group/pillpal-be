@@ -1,4 +1,5 @@
-﻿using PillPal.Application.Common.Interfaces.Services;
+﻿using PillPal.Application.Common.Interfaces.Auth;
+using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Application.Repositories;
 
 namespace PillPal.Application.Configuration;
@@ -7,6 +8,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
+        services.AddScoped<IAuthService, AuthRepository>();
+
         services.AddScoped<IActiveIngredientService, ActiveIngredientRepository>();
         services.AddScoped<IBrandService, BrandRepository>();
         services.AddScoped<ICategoryService, CategoryRepository>();
