@@ -27,10 +27,10 @@ public static class DependencyInjection
 
         services.AddIdentityCore<ApplicationUser>(op =>
         {
-            op.Password.RequireDigit = false;
-            op.Password.RequireLowercase = false;
-            op.Password.RequireNonAlphanumeric = false;
-            op.Password.RequireUppercase = false;
+            op.Password.RequireDigit = true;
+            op.Password.RequireLowercase = true;
+            op.Password.RequireNonAlphanumeric = true;
+            op.Password.RequireUppercase = true;
             op.Password.RequiredLength = 6;
         })
         .AddRoles<IdentityRole<Guid>>()
