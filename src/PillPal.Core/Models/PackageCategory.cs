@@ -1,8 +1,9 @@
 ﻿namespace PillPal.Core.Models;
 
-public class PackageCategory : BaseEntity
+public class PackageCategory : BaseAuditableEntity
 {
-    public string? PackageCategoryName { get; set; }
+    public string? PackageTime { get; set; }
+    public decimal Price { get; set; }
 
-    public ICollection<CustomerPackage> CustomerPackages { get; set; } = default!;
+    public virtual ICollection<CustomerPackage> CustomerPackages { get; set; } = default!;
 }

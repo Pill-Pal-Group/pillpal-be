@@ -1,4 +1,12 @@
-﻿global using Microsoft.EntityFrameworkCore;
+﻿global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore.Diagnostics;
 global using Microsoft.EntityFrameworkCore.Metadata.Builders;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.DependencyInjection;
+global using PillPal.Core.Common;
+global using PillPal.Core.Constant;
+global using PillPal.Core.Identity;
 global using PillPal.Core.Models;
-global using PillPal.Infrastructure.Configuration;
+global using System.Reflection;

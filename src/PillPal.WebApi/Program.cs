@@ -1,31 +1,43 @@
-namespace PillPal.WebApi
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
+
+namespace PillPal.WebApi;
+
+public class Program
 {
-    public class Program
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
+        var builder = WebApplication.CreateBuilder(args);
+
+        builder.Services.AddControllers(options =>
         {
-            var builder = WebApplication.CreateBuilder(args);
+            options.Conventions.Add(new RouteTokenTransformerConvention(
+                new KebabCaseParameterTransformer()));
+        });
 
-            builder.Services.AddControllers();
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+        builder.Services.AddInfrastructureServices(builder.Configuration);
+        builder.Services.AddApplicationServices();
+        builder.Services.AddWebServices(builder.Configuration);
 
-            var app = builder.Build();
+        var app = builder.Build();
 
-            if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+        app.UseExceptionHandler();
 
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-
-            app.MapControllers();
-
-            app.Run();
+        if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
+
+        app.UseCors();
+
+        app.UseHttpsRedirection();
+
+        app.UseAuthentication();
+
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.Run();
     }
 }

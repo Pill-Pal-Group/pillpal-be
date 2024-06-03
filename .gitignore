@@ -10,6 +10,9 @@
 *.userosscache
 *.sln.docstates
 
+.sonarqube
+.idea
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -61,6 +64,7 @@ BenchmarkDotNet.Artifacts/
 project.lock.json
 project.fragment.lock.json
 artifacts/
+appsettings.Development.json
 
 # Tye
 .tye/

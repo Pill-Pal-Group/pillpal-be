@@ -6,10 +6,10 @@ public class Customer : BaseEntity
     public DateTimeOffset? Dob { get; set; }
     public string? Address { get; set; }
 
-    public ICollection<CustomerPackage> CustomerPackages { get; set; } = default!;
-    public ICollection<Prescript> Prescripts { get; set; } = default!;
-    public ICollection<Schedule> Schedules { get; set; } = default!;
+    public virtual ICollection<Prescript> Prescripts { get; set; } = default!;
+
+    public virtual ICollection<CustomerPackage> CustomerPackages { get; set; } = default!;
 
     public Guid IdentityUserId { get; set; }
-    public ApplicationUser? IdentityUser { get; set; }
+    public virtual ApplicationUser? IdentityUser { get; set; }
 }

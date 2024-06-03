@@ -1,0 +1,87 @@
+﻿using PillPal.Application.Common.Exceptions;
+using PillPal.Application.Common.Interfaces.Data;
+using PillPal.Application.Common.Interfaces.Services;
+using PillPal.Application.Dtos.PharmaceuticalCompanies;
+
+namespace PillPal.Application.Repositories;
+
+public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
+    : BaseRepository(context, mapper, serviceProvider), IPharmaceuticalCompanyService
+{
+    public async Task<PharmaceuticalCompanyDto> CreatePharmaceuticalCompanyAsync(CreatePharmaceuticalCompanyDto createPharmaceuticalCompanyDto)
+    {
+        var validator = ServiceProvider.GetRequiredService<CreatePharmaceuticalCompanyValidator>();
+
+        var validationResult = await validator.ValidateAsync(createPharmaceuticalCompanyDto);
+
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
+
+        var pharmaceuticalCompany = Mapper.Map<PharmaceuticalCompany>(createPharmaceuticalCompanyDto);
+
+        await Context.PharmaceuticalCompanies.AddAsync(pharmaceuticalCompany);
+
+        await Context.SaveChangesAsync();
+
+        return Mapper.Map<PharmaceuticalCompanyDto>(pharmaceuticalCompany);
+    }
+
+    public async Task DeletePharmaceuticalCompanyAsync(Guid nationId)
+    {
+        var pharmaceuticalCompany = await Context.PharmaceuticalCompanies
+            .Where(b => b.Id == nationId && !b.IsDeleted)
+            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmaceuticalCompany), nationId);
+
+        pharmaceuticalCompany.IsDeleted = true;
+
+        Context.PharmaceuticalCompanies.Update(pharmaceuticalCompany);
+
+        await Context.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<PharmaceuticalCompanyDto>> GetPharmaceuticalCompaniesAsync()
+    {
+        var pharmaceuticalCompanies = await Context.PharmaceuticalCompanies
+            .Include(b => b.Nation)
+            .Where(b => !b.IsDeleted)
+            .ToListAsync();
+
+        return Mapper.Map<IEnumerable<PharmaceuticalCompanyDto>>(pharmaceuticalCompanies);
+    }
+
+    public async Task<PharmaceuticalCompanyDto> GetPharmaceuticalCompanyByIdAsync(Guid nationId)
+    {
+        var pharmaceuticalCompany = await Context.PharmaceuticalCompanies
+            .Include(b => b.Nation)
+            .Where(b => b.Id == nationId && !b.IsDeleted)
+            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmaceuticalCompany), nationId);
+
+        return Mapper.Map<PharmaceuticalCompanyDto>(pharmaceuticalCompany);
+    }
+
+    public async Task<PharmaceuticalCompanyDto> UpdatePharmaceuticalCompanyAsync(Guid nationId, UpdatePharmaceuticalCompanyDto updatePharmaceuticalCompanyDto)
+    {
+        var validator = ServiceProvider.GetRequiredService<UpdatePharmaceuticalCompanyValidator>();
+
+        var validationResult = await validator.ValidateAsync(updatePharmaceuticalCompanyDto);
+
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
+
+        var pharmaceuticalCompany = await Context.PharmaceuticalCompanies
+            .Where(b => b.Id == nationId && !b.IsDeleted)
+            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmaceuticalCompany), nationId);
+
+        Mapper.Map(updatePharmaceuticalCompanyDto, pharmaceuticalCompany);
+
+        Context.PharmaceuticalCompanies.Update(pharmaceuticalCompany);
+
+        await Context.SaveChangesAsync();
+
+        return Mapper.Map<PharmaceuticalCompanyDto>(pharmaceuticalCompany);
+    }
+}

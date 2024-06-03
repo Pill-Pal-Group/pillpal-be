@@ -1,0 +1,9 @@
+﻿namespace PillPal.Application.Common.Exceptions;
+
+public class HttpException(
+    string? message,
+    HttpStatusCode statusCode = HttpStatusCode.InternalServerError)
+    : Exception(message)
+{
+    public HttpStatusCode StatusCode { get; } = statusCode;
+}
