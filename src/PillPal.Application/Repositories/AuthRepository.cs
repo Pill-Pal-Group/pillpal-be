@@ -23,18 +23,31 @@ public class AuthRepository(
 
         var user = await identityService.LoginAsync(request.Email!, request.Password!);
 
-        var token = jwtService.GenerateJwtToken(user.Item1, user.role);
+        var (accessToken, expired) = jwtService.GenerateJwtToken(user.Item1, user.role);
+
+        var refreshToken = jwtService.GenerateRefreshToken(accessToken);
 
         return new AccessTokenResponse
         {
-            AccessToken = token,
-            TokenType = "Bearer"
+            AccessToken = accessToken,
+            TokenType = "Bearer",
+            RefreshToken = refreshToken,
+            ExpiresIn = expired
         };
     }
 
-    public async Task<AccessTokenResponse> RefreshTokenAsync(string refreshToken)
+    public async Task<AccessTokenResponse> RefreshTokenAsync(RefreshRequest refreshToken)
     {
-        throw new NotImplementedException();
+        var validator = GetValidator<RefreshRequest>();
+
+        var validationResult = await validator.ValidateAsync(refreshToken);
+
+        if (!validationResult.IsValid)
+        {
+            throw new ValidationException(validationResult.Errors);
+        }
+
+        throw new NotImplementedException("Currently under development");
     }
 
     public async Task RegisterAsync(RegisterRequest request)
@@ -62,17 +75,20 @@ public class AuthRepository(
             throw new ValidationException(validationResult.Errors);
         }
 
-        // jwtService.ValidateFirebaseToken(request.Token!);
-        var email = jwtService.GetUserEmailFromToken(request.Token!);
+        var email = jwtService.GetEmailPrincipal(request.Token!);
 
         var user = await identityService.GetUserByEmailAsync(email);
 
-        var token = jwtService.GenerateJwtToken(user.Item1, user.role);
+        var (accessToken, expired) = jwtService.GenerateJwtToken(user.Item1, user.role);
+
+        var refreshToken = jwtService.GenerateRefreshToken(accessToken);
 
         return new AccessTokenResponse
         {
-            AccessToken = token,
-            TokenType = "Bearer"
+            AccessToken = accessToken,
+            TokenType = "Bearer",
+            RefreshToken = refreshToken,
+            ExpiresIn = expired
         };
     }
 }

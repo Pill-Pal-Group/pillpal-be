@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using PillPal.Application.Configuration;
+using PillPal.Core.Constant;
 using PillPal.Infrastructure.Configuration;
 using PillPal.WebApi.Configuration;
 
@@ -17,31 +18,18 @@ namespace PillPal.WebApi
                     new KebabCaseParameterTransformer()));
             });
 
-            builder.Services.AddSwaggerDoc();
-
-            builder.Services.AddCorsServices();
-
             builder.Services.AddInfrastructureServices(builder.Configuration);
             builder.Services.AddApplicationServices();
             builder.Services.AddWebServices();
 
-            //--
             builder.Services.AddJwtAuth(builder.Configuration);
-            builder.Services.AddAuthorization(op =>
+
+            builder.Services.AddAuthorization(options =>
             {
-                op.AddPolicy("Admin", policy =>
-                {
-                    policy.RequireRole("Admin");
-                });
-
-                op.AddPolicy("Customer", policy =>
-                {
-                    policy.RequireRole("Customer");
-                });
-
-
+                options.AddPolicy(Role.Admin, policy => policy.RequireRole(Role.Admin));
+                options.AddPolicy(Role.Manager, policy => policy.RequireRole(Role.Manager));
+                options.AddPolicy(Role.Customer, policy => policy.RequireRole(Role.Customer));
             });
-            //--
 
             var app = builder.Build();
 
