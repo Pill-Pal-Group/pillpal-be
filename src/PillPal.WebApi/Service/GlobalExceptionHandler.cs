@@ -18,6 +18,7 @@ public class GlobalExceptionHandler(IProblemDetailsService problemDetailsService
         var statusCode = exception switch
         {
             HttpException httpException => (int)httpException.StatusCode,
+            UnauthorizedAccessException _ => StatusCodes.Status401Unauthorized,
             _ => StatusCodes.Status500InternalServerError
         };
 

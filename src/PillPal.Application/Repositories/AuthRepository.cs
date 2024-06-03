@@ -1,4 +1,5 @@
-﻿using PillPal.Application.Common.Interfaces.Auth;
+﻿using System.Security.Claims;
+using PillPal.Application.Common.Interfaces.Auth;
 using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Dtos.Auths;
 
@@ -47,7 +48,30 @@ public class AuthRepository(
             throw new ValidationException(validationResult.Errors);
         }
 
-        throw new NotImplementedException("Currently under development");
+        var isTokenValid = jwtService.ValidateRefreshToken(refreshToken.ExpiredToken!, refreshToken.RefreshToken!);
+
+        if (!isTokenValid)
+        {
+            throw new UnauthorizedAccessException("Invalid token");
+        }
+
+        var claimsPrincipal = jwtService.GetPrincipalFromExpiredToken(refreshToken.ExpiredToken!);
+
+        var email = claimsPrincipal.FindFirst(ClaimTypes.Email)?.Value;
+
+        var user = await identityService.GetUserByEmailAsync(email!);
+
+        var (accessToken, expired) = jwtService.GenerateJwtToken(user.Item1, user.role);
+
+        var newRefreshToken = jwtService.GenerateRefreshToken(accessToken);
+
+        return new AccessTokenResponse
+        {
+            AccessToken = accessToken,
+            TokenType = "Bearer",
+            RefreshToken = newRefreshToken,
+            ExpiresIn = expired
+        };
     }
 
     public async Task RegisterAsync(RegisterRequest request)

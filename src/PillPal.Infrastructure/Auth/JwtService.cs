@@ -2,6 +2,7 @@
 using PillPal.Application.Common.Interfaces.Auth;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
@@ -58,7 +59,46 @@ namespace PillPal.Infrastructure.Auth
 
         public string GenerateRefreshToken(string token)
         {
-            return "abc";
+            using var sha256 = SHA256.Create();
+
+            var hash = sha256.ComputeHash(Encoding.ASCII.GetBytes(token));
+
+            return Convert.ToBase64String(hash);
+        }
+
+        public bool ValidateRefreshToken(string token, string refreshToken)
+        {
+            using var sha256 = SHA256.Create();
+
+            var hash = sha256.ComputeHash(Encoding.ASCII.GetBytes(token));
+
+            return refreshToken == Convert.ToBase64String(hash);
+        }
+
+        public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
+        {
+            var TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = Issuer,
+                ValidAudience = Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey))
+            };
+
+            SecurityToken securityToken;
+            var principal = _tokenHandler.ValidateToken(token, TokenValidationParameters, out securityToken);
+
+            var jwtToken = securityToken as JwtSecurityToken;
+
+            if (jwtToken is null || !jwtToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            {
+                throw new SecurityTokenException("Invalid token");
+            }
+
+            return principal;
         }
 
         public string GetEmailPrincipal(string token)

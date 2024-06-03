@@ -24,10 +24,11 @@ public static class JwtAuthConfigure
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
 
                     ValidIssuer = iss,
                     ValidAudience = aud,
-                    ValidateLifetime = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
                 };
             });
