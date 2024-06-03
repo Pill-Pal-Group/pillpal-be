@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using PillPal.Core.Constant;
+using PillPal.WebApi.Service;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -8,21 +9,21 @@ namespace PillPal.WebApi.Controllers;
 public class TestAuthsController : ControllerBase
 {
     [HttpGet("admin-only")]
-    [Authorize(Roles = "Admin")]
+    [AuthorizeRoles(Role.Admin)]
     public string TestAdmin()
     {
         return "admin verified";
     }
 
     [HttpGet("customer-only")]
-    [Authorize(Roles = "Customer")]
+    [AuthorizeRoles(Role.Customer)]
     public string TestCustomer()
     {
         return "customer verified";
     }
 
     [HttpGet("both-admin-customer")]
-    [Authorize(Roles = "Admin,Customer")]
+    [AuthorizeRoles(Role.Admin, Role.Customer)]
     public string TestBoth()
     {
         return "both admin and customer allow";
