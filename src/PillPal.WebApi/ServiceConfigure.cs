@@ -2,16 +2,12 @@
 using PillPal.Application.Common.Interfaces.Data;
 using PillPal.WebApi.Service;
 
-namespace PillPal.WebApi.Configuration;
+namespace PillPal.WebApi;
 
-public static class DependencyInjection
+public static class ServiceConfigure
 {
-    public static IServiceCollection AddWebServices(this IServiceCollection services)
+    public static IServiceCollection AddWebServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddSwaggerDoc();
-
-        services.AddCorsServices();
-
         services.AddScoped<IUser, UserAccessor>();
 
         services.AddHttpContextAccessor();
@@ -24,6 +20,14 @@ public static class DependencyInjection
         services.AddProblemDetails();
 
         services.AddExceptionHandler<GlobalExceptionHandler>();
+
+        services.AddSwaggerDoc();
+
+        services.AddJwtAuth(configuration);
+
+        services.AddAuthorizationPolicy();
+
+        services.AddCorsServices();
 
         return services;
     }

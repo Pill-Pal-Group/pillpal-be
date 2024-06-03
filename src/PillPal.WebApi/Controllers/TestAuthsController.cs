@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PillPal.Core.Constant;
-using PillPal.WebApi.Service;
 
 namespace PillPal.WebApi.Controllers;
 

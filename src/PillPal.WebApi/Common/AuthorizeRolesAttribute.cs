@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace PillPal.WebApi.Service;
+namespace PillPal.WebApi.Common;
 
 public class AuthorizeRolesAttribute : AuthorizeAttribute
 {
