@@ -32,7 +32,7 @@ public class DosageFormRepository(IApplicationDbContext context, IMapper mapper,
     {
         var dosageForm = await Context.DosageForms
             .FindAsync(dosageFormId) ?? throw new NotFoundException(nameof(DosageForm), dosageFormId);
-    
+
         Context.DosageForms.Remove(dosageForm);
 
         await Context.SaveChangesAsync();

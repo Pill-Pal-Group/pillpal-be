@@ -1,6 +1,4 @@
-﻿using PillPal.Application.Dtos.Brands;
-
-namespace PillPal.Application.Dtos.Medicines;
+﻿namespace PillPal.Application.Dtos.Medicines;
 
 public record CreateMedicineDto
 {

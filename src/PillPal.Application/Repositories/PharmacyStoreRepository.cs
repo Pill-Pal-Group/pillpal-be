@@ -38,7 +38,7 @@ public class PharmacyStoreRepository(IApplicationDbContext context, IMapper mapp
 
         Context.PharmacyStores.Update(pharmacyStore);
 
-        await Context.SaveChangesAsync(); 
+        await Context.SaveChangesAsync();
     }
 
     public async Task<PharmacyStoreDto> GetPharmacyStoreByIdAsync(Guid pharmacyStoreId)

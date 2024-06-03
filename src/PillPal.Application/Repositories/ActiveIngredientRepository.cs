@@ -5,7 +5,7 @@ using PillPal.Application.Dtos.ActiveIngredients;
 
 namespace PillPal.Application.Repositories;
 
-public class ActiveIngredientRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider) 
+public class ActiveIngredientRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
     : BaseRepository(context, mapper, serviceProvider), IActiveIngredientService
 {
     public async Task<ActiveIngredientDto> CreateActiveIngredientAsync(CreateActiveIngredientDto createActiveIngredientDto)

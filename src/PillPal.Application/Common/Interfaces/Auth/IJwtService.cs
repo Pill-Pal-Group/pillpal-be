@@ -1,5 +1,5 @@
-﻿using System.Security.Claims;
-using PillPal.Core.Identity;
+﻿using PillPal.Core.Identity;
+using System.Security.Claims;
 
 namespace PillPal.Application.Common.Interfaces.Auth;
 

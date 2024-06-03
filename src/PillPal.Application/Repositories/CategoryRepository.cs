@@ -56,7 +56,7 @@ public class CategoryRepository(IApplicationDbContext context, IMapper mapper, I
             .Where(c => c.Id == categoryId && !c.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Category), categoryId);
 
-        return Mapper.Map<CategoryDto>(category); 
+        return Mapper.Map<CategoryDto>(category);
     }
 
     public async Task<CategoryDto> UpdateCategoryAsync(Guid categoryId, UpdateCategoryDto updateCategoryDto)
@@ -80,6 +80,6 @@ public class CategoryRepository(IApplicationDbContext context, IMapper mapper, I
 
         await Context.SaveChangesAsync();
 
-        return Mapper.Map<CategoryDto>(category); 
+        return Mapper.Map<CategoryDto>(category);
     }
 }

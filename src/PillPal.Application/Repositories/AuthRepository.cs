@@ -1,7 +1,7 @@
-﻿using System.Security.Claims;
-using PillPal.Application.Common.Interfaces.Auth;
+﻿using PillPal.Application.Common.Interfaces.Auth;
 using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Dtos.Auths;
+using System.Security.Claims;
 
 namespace PillPal.Application.Repositories;
 

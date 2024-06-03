@@ -15,7 +15,7 @@ public partial class MapperConfigure : Profile
                 dest => dest.Brands,
                 opt => opt.MapFrom(
                     src => src.BrandIds.Select(pc => new BrandDto { Id = pc })));
-            
+
         CreateMap<Medicine, UpdateMedicineDto>().ReverseMap();
     }
 }

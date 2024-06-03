@@ -30,7 +30,7 @@ public class SpecificationRepository(IApplicationDbContext context, IMapper mapp
 
     public async Task DeleteSpecificationAsync(Guid specificationId)
     {
-        var specification = await Context.Specifications.FindAsync(specificationId) 
+        var specification = await Context.Specifications.FindAsync(specificationId)
             ?? throw new NotFoundException(nameof(Specification), specificationId);
 
         Context.Specifications.Remove(specification);
@@ -47,7 +47,7 @@ public class SpecificationRepository(IApplicationDbContext context, IMapper mapp
 
     public async Task<SpecificationDto> GetSpecificationByIdAsync(Guid specificationId)
     {
-        var specification = await Context.Specifications.FindAsync(specificationId) 
+        var specification = await Context.Specifications.FindAsync(specificationId)
             ?? throw new NotFoundException(nameof(Specification), specificationId);
 
         return Mapper.Map<SpecificationDto>(specification);
@@ -64,7 +64,7 @@ public class SpecificationRepository(IApplicationDbContext context, IMapper mapp
             throw new ValidationException(validationResult.Errors);
         }
 
-        var specification = await Context.Specifications.FindAsync(specificationId) 
+        var specification = await Context.Specifications.FindAsync(specificationId)
             ?? throw new NotFoundException(nameof(Specification), specificationId);
 
         Mapper.Map(updateSpecificationDto, specification);

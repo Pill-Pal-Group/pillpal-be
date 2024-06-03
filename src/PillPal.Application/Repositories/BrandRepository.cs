@@ -5,7 +5,7 @@ using PillPal.Application.Dtos.Brands;
 
 namespace PillPal.Application.Repositories;
 
-public class BrandRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider) 
+public class BrandRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
     : BaseRepository(context, mapper, serviceProvider), IBrandService
 {
     public async Task<BrandDto> CreateBrandAsync(CreateBrandDto createBrandDto)
