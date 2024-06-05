@@ -41,13 +41,18 @@ public class CategoryRepository(IApplicationDbContext context, IMapper mapper, I
         await Context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<CategoryDto>> GetCategoriesAsync()
+    public async Task<IEnumerable<CategoryDto>> GetCategoriesAsync(CategoryQueryParameter queryParameter)
     {
-        var categories = await Context.Categories
-            .Where(c => !c.IsDeleted)
+        var categories = Context.Categories
+            .Where(c => !c.IsDeleted);
+        
+        categories = categories.Filter(queryParameter);
+
+        var resultList = await categories
+            .AsNoTracking()
             .ToListAsync();
 
-        return Mapper.Map<IEnumerable<CategoryDto>>(categories);
+        return Mapper.Map<IEnumerable<CategoryDto>>(resultList);
     }
 
     public async Task<CategoryDto> GetCategoryByIdAsync(Guid categoryId)

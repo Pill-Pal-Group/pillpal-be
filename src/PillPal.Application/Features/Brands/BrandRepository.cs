@@ -50,13 +50,18 @@ public class BrandRepository(IApplicationDbContext context, IMapper mapper, ISer
         return Mapper.Map<BrandDto>(brand);
     }
 
-    public async Task<IEnumerable<BrandDto>> GetBrandsAsync()
+    public async Task<IEnumerable<BrandDto>> GetBrandsAsync(BrandQueryParameter queryParameter)
     {
-        var brands = await Context.Brands
-            .Where(b => !b.IsDeleted)
+        var brands = Context.Brands
+            .Where(b => !b.IsDeleted);
+        
+        brands = brands.Filter(queryParameter);
+
+        var resultList = await brands
+            .AsNoTracking()
             .ToListAsync();
 
-        return Mapper.Map<IEnumerable<BrandDto>>(brands);
+        return Mapper.Map<IEnumerable<BrandDto>>(resultList);
     }
 
     public async Task<BrandDto> UpdateBrandAsync(Guid brandId, UpdateBrandDto updateBrandDto)

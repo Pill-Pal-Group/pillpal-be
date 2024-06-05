@@ -14,12 +14,13 @@ public class BrandsController(IBrandService brandService)
     /// <summary>
     /// Get all brands
     /// </summary>
+    /// <param name="queryParameter"></param>
     /// <response code="200">Returns a list of brands</response>
     [HttpGet(Name = "GetBrands")]
     [ProducesResponseType(typeof(IEnumerable<BrandDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetBrandsAsync()
+    public async Task<IActionResult> GetBrandsAsync([FromQuery] BrandQueryParameter queryParameter)
     {
-        var brands = await brandService.GetBrandsAsync();
+        var brands = await brandService.GetBrandsAsync(queryParameter);
 
         return Ok(brands);
     }

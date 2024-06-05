@@ -14,12 +14,13 @@ public class CategoriesController(ICategoryService categoryService)
     /// <summary>
     /// Get all categories
     /// </summary>
+    /// <param name="queryParameter"></param>
     /// <response code="200">Returns a list of categories</response>
     [HttpGet(Name = "GetCategories")]
     [ProducesResponseType(typeof(IEnumerable<CategoryDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetCategoriesAsync()
+    public async Task<IActionResult> GetCategoriesAsync([FromQuery] CategoryQueryParameter queryParameter)
     {
-        var categories = await categoryService.GetCategoriesAsync();
+        var categories = await categoryService.GetCategoriesAsync(queryParameter);
 
         return Ok(categories);
     }

@@ -37,13 +37,19 @@ public class CustomerRepository(IApplicationDbContext context, IMapper mapper, I
         return Mapper.Map<CustomerDto>(customer);
     }
 
-    public async Task<IEnumerable<CustomerDto>> GetCustomersAsync()
+    public async Task<IEnumerable<CustomerDto>> GetCustomersAsync(CustomerQueryParameter queryParameter)
     {
-        var customers = await Context.Customers
+        var customers = Context.Customers
             .Include(c => c.IdentityUser)
+            .AsQueryable();
+
+        customers = customers.Filter(queryParameter);
+
+        var resultList = await customers
+            .AsNoTracking()
             .ToListAsync();
 
-        return Mapper.Map<IEnumerable<CustomerDto>>(customers);
+        return Mapper.Map<IEnumerable<CustomerDto>>(resultList);
     }
 
     public async Task<CustomerDto> UpdateCustomerAsync(Guid customerId, UpdateCustomerDto updateCustomerDto)

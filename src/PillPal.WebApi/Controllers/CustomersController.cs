@@ -14,12 +14,13 @@ public class CustomersController(ICustomerService customerService)
     /// <summary>
     /// Get all customers
     /// </summary>
+    /// <param name="queryParameter"></param>
     /// <response code="200">Returns a list of customers</response>
     [HttpGet(Name = "GetCustomers")]
     [ProducesResponseType(typeof(IEnumerable<CustomerDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetCustomersAsync()
+    public async Task<IActionResult> GetCustomersAsync([FromQuery] CustomerQueryParameter queryParameter)
     {
-        var customers = await customerService.GetCustomersAsync();
+        var customers = await customerService.GetCustomersAsync(queryParameter);
 
         return Ok(customers);
     }

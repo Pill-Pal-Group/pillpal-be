@@ -14,12 +14,13 @@ public class NationsController(INationService nationService)
     /// <summary>
     /// Get all nations
     /// </summary>
+    /// <param name="queryParameter"></param>
     /// <response code="200">Returns a list of nations</response>
     [HttpGet(Name = "GetNations")]
     [ProducesResponseType(typeof(IEnumerable<NationDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetNationsAsync()
+    public async Task<IActionResult> GetNationsAsync([FromQuery] NationQueryParameter queryParameter)
     {
-        var nations = await nationService.GetNationsAsync();
+        var nations = await nationService.GetNationsAsync(queryParameter);
 
         return Ok(nations);
     }
