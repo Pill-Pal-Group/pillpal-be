@@ -55,7 +55,7 @@ public class SpecificationsController(ISpecificationService specificationService
     ///     
     /// </remarks>
     /// <response code="201">Returns the created specification</response>
-    /// <response code="422">If the specification is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPost(Name = "CreateSpecification")]
     [ProducesResponseType(typeof(SpecificationDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -83,7 +83,7 @@ public class SpecificationsController(ISpecificationService specificationService
     /// </remarks>
     /// <response code="204">No content</response>
     /// <response code="404">If the specification is not found</response>
-    /// <response code="422">If the specification is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPut("{specificationId:guid}", Name = "UpdateSpecification")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

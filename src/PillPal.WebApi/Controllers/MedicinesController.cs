@@ -61,7 +61,7 @@ public class MedicinesController(IMedicineService medicineService)
     ///
     /// </remarks>
     /// <response code="201">Returns the created medicine</response>
-    /// <response code="422">If the resource is not found</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPost(Name = "CreateMedicine")]
     [ProducesResponseType(typeof(MedicineDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -95,7 +95,7 @@ public class MedicinesController(IMedicineService medicineService)
     /// </remarks>
     /// <response code="200">Returns the updated medicine</response>
     /// <response code="404">If the medicine is not found</response>
-    /// <response code="422">If the resource is not found</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPut("{medicineId:guid}", Name = "UpdateMedicine")]
     [ProducesResponseType(typeof(MedicineDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

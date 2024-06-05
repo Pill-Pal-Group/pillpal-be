@@ -56,7 +56,7 @@ public class PharmacyStoresController(IPharmacyStoreService pharmacyStoreService
     ///     
     /// </remarks>
     /// <response code="201">Returns the created pharmacy store</response>
-    /// <response code="422">If the pharmacy store is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPost(Name = "CreatePharmacyStore")]
     [ProducesResponseType(typeof(PharmacyStoreDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -85,7 +85,7 @@ public class PharmacyStoresController(IPharmacyStoreService pharmacyStoreService
     /// </remarks>
     /// <response code="200">Returns the updated pharmacy store</response>
     /// <response code="404">If the pharmacy store is not found</response>
-    /// <response code="422">If the pharmacy store is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPut("{pharmacyStoreId:guid}", Name = "UpdatePharmacyStore")]
     [ProducesResponseType(typeof(PharmacyStoreDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

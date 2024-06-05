@@ -55,7 +55,7 @@ public class NationsController(INationService nationService)
     ///     
     /// </remarks>
     /// <response code="201">Returns the created nation</response>
-    /// <response code="422">If the nation is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPost(Name = "CreateNation")]
     [ProducesResponseType(typeof(NationDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -83,7 +83,7 @@ public class NationsController(INationService nationService)
     /// </remarks>
     /// <response code="200">Returns the updated nation</response>
     /// <response code="404">If the nation is not found</response>
-    /// <response code="422">If the nation is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPut("{nationId:guid}", Name = "UpdateNation")]
     [ProducesResponseType(typeof(NationDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

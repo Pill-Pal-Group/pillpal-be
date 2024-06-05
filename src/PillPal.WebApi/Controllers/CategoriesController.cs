@@ -54,7 +54,7 @@ public class CategoriesController(ICategoryService categoryService)
     ///     
     /// </remarks>
     /// <response code="201">Returns the created category</response>
-    /// <response code="422">If the category is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPost(Name = "CreateCategory")]
     [ProducesResponseType(typeof(CategoryDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -81,7 +81,7 @@ public class CategoriesController(ICategoryService categoryService)
     /// </remarks>
     /// <response code="200">Returns the updated category</response>
     /// <response code="404">If the category is not found</response>
-    /// <response code="422">If the category is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPut("{categoryId:guid}", Name = "UpdateCategory")]
     [ProducesResponseType(typeof(CategoryDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

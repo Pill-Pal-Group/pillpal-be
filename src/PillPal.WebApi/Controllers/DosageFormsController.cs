@@ -55,7 +55,7 @@ public class DosageFormsController(IDosageFormService dosageFormService)
     ///     
     /// </remarks>
     /// <response code="201">Returns the created dosage form</response>
-    /// <response code="422">If the dosage form is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPost(Name = "CreateDosageForm")]
     [ProducesResponseType(typeof(DosageFormDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -82,7 +82,7 @@ public class DosageFormsController(IDosageFormService dosageFormService)
     /// </remarks>
     /// <response code="200">Returns the updated dosage form</response>
     /// <response code="404">If the dosage form is not found</response>
-    /// <response code="422">If the dosage form is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPut("{dosageFormId:guid}", Name = "UpdateDosageForm")]
     [ProducesResponseType(typeof(DosageFormDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

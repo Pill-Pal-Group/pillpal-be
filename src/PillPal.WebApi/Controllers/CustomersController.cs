@@ -56,7 +56,7 @@ public class CustomersController(ICustomerService customerService)
     ///     
     /// </remarks>
     /// <response code="201">Returns the created customer</response>
-    /// <response code="422">If the customer is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPost(Name = "CreateCustomer")]
     [ProducesResponseType(typeof(CustomerDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -85,7 +85,7 @@ public class CustomersController(ICustomerService customerService)
     /// </remarks>
     /// <response code="200">Returns the updated customer</response>
     /// <response code="404">If the customer is not found</response>
-    /// <response code="422">If the customer is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPut("{customerId:guid}", Name = "UpdateCustomer")]
     [ProducesResponseType(typeof(CustomerDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

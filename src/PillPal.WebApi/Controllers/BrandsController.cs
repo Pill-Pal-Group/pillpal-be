@@ -55,7 +55,7 @@ public class BrandsController(IBrandService brandService)
     ///     
     /// </remarks>
     /// <response code="201">Returns the created brand</response>
-    /// <response code="422">If the brand is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPost(Name = "CreateBrand")]
     [ProducesResponseType(typeof(BrandDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -83,7 +83,7 @@ public class BrandsController(IBrandService brandService)
     /// </remarks>
     /// <response code="200">Returns the updated brand</response>
     /// <response code="404">If the brand is not found</response>
-    /// <response code="422">If the brand is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPut("{brandId:guid}", Name = "UpdateBrand")]
     [ProducesResponseType(typeof(BrandDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

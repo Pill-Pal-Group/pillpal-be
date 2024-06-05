@@ -55,6 +55,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     ///     
     /// </remarks>
     /// <response code="201">Returns the created active ingredient</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPost(Name = "CreateActiveIngredient")]
     [ProducesResponseType(typeof(ActiveIngredientDto), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateActiveIngredientAsync(CreateActiveIngredientDto createActiveIngredientDto)
@@ -81,7 +82,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// </remarks>
     /// <response code="200">Returns the updated active ingredient</response>
     /// <response code="404">If the active ingredient is not found</response>
-    /// <response code="422">If the active ingredient is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPut("{activeIngredientId:guid}", Name = "UpdateActiveIngredient")]
     [ProducesResponseType(typeof(ActiveIngredientDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

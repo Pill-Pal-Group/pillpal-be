@@ -56,7 +56,7 @@ public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pha
     ///     
     /// </remarks>
     /// <response code="201">Returns the created pharmaceutical company</response>
-    /// <response code="422">If the pharmaceutical company is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPost(Name = "CreatePharmaceuticalCompany")]
     [ProducesResponseType(typeof(PharmaceuticalCompanyDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -84,7 +84,7 @@ public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pha
     /// </remarks>
     /// <response code="200">Returns the updated pharmaceutical company</response>
     /// <response code="404">If the pharmaceutical company is not found</response>
-    /// <response code="422">If the pharmaceutical company is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPut("{pharmaceuticalCompanyId:guid}", Name = "UpdatePharmaceuticalCompany")]
     [ProducesResponseType(typeof(PharmaceuticalCompanyDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
