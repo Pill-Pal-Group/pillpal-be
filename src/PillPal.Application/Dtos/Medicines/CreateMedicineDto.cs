@@ -6,10 +6,10 @@ public record CreateMedicineDto
     public bool RequirePrescript { get; init; }
     public string? Image { get; init; }
     public Guid SpecificationId { get; init; }
-    // public IEnumerable<Guid> PharmaceuticalCompanyIds { get; init; } = default!;
-    // public IEnumerable<Guid> DosageFormIds { get; init; } = default!;
-    // public IEnumerable<Guid> ActiveIngredientIds { get; init; } = default!;
-    public IEnumerable<Guid> BrandIds { get; init; } = default!;
+    public IEnumerable<Guid> PharmaceuticalCompanys { get; init; } = default!;
+    public IEnumerable<Guid> DosageForms { get; init; } = default!;
+    public IEnumerable<Guid> ActiveIngredients { get; init; } = default!;
+    public IEnumerable<Guid> Brands { get; init; } = default!;
 }
 
 public class CreateMedicineValidator : AbstractValidator<CreateMedicineDto>
@@ -33,19 +33,19 @@ public class CreateMedicineValidator : AbstractValidator<CreateMedicineDto>
             .NotEmpty()
             .WithMessage("Specification is required.");
 
-        // RuleFor(x => x.PharmaceuticalCompanyIds)
-        //     .NotEmpty()
-        //     .WithMessage("Pharmaceutical companies are required.");
+        RuleFor(x => x.PharmaceuticalCompanys)
+            .NotEmpty()
+            .WithMessage("Pharmaceutical companies are required.");
 
-        // RuleFor(x => x.DosageFormIds)
-        //     .NotEmpty()
-        //     .WithMessage("Dosage forms are required.");
+        RuleFor(x => x.DosageForms)
+            .NotEmpty()
+            .WithMessage("Dosage forms are required.");
 
-        // RuleFor(x => x.ActiveIngredientIds)
-        //     .NotEmpty()
-        //     .WithMessage("Active ingredients are required.");
+        RuleFor(x => x.ActiveIngredients)
+            .NotEmpty()
+            .WithMessage("Active ingredients are required.");
 
-        RuleFor(x => x.BrandIds)
+        RuleFor(x => x.Brands)
             .NotEmpty()
             .WithMessage("Brands are required.");
     }

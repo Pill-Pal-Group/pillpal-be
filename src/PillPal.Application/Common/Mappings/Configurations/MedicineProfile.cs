@@ -1,5 +1,4 @@
-﻿using PillPal.Application.Dtos.Brands;
-using PillPal.Application.Dtos.Medicines;
+﻿using PillPal.Application.Dtos.Medicines;
 
 namespace PillPal.Application.Common.Mappings;
 
@@ -8,14 +7,19 @@ public partial class MapperConfigure : Profile
     void MedicineProfile()
     {
         CreateMap<Medicine, MedicineDto>().ReverseMap();
+
         CreateMap<Medicine, CreateMedicineDto>()
             .ReverseMap()
-            .ForMember(dest => dest.SpecificationId, opt => opt.MapFrom(src => src.SpecificationId))
-            .ForMember(
-                dest => dest.Brands,
-                opt => opt.MapFrom(
-                    src => src.BrandIds.Select(pc => new BrandDto { Id = pc })));
+            .ForMember(dest => dest.PharmaceuticalCompanies, opt => opt.Ignore())
+            .ForMember(dest => dest.DosageForms, opt => opt.Ignore())
+            .ForMember(dest => dest.ActiveIngredients, opt => opt.Ignore())
+            .ForMember(dest => dest.Brands, opt => opt.Ignore());
 
-        CreateMap<Medicine, UpdateMedicineDto>().ReverseMap();
+        CreateMap<Medicine, UpdateMedicineDto>()
+            .ReverseMap()
+            .ForMember(dest => dest.PharmaceuticalCompanies, opt => opt.Ignore())
+            .ForMember(dest => dest.DosageForms, opt => opt.Ignore())
+            .ForMember(dest => dest.ActiveIngredients, opt => opt.Ignore())
+            .ForMember(dest => dest.Brands, opt => opt.Ignore());
     }
 }
