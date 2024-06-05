@@ -1,4 +1,4 @@
-﻿using PillPal.Application.Dtos.Identities;
+﻿using PillPal.Application.Features.Identities;
 using PillPal.Core.Identity;
 
 namespace PillPal.Application.Common.Mappings;

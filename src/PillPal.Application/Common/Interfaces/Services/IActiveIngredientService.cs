@@ -1,4 +1,4 @@
-﻿using PillPal.Application.Dtos.ActiveIngredients;
+﻿using PillPal.Application.Features.ActiveIngredients;
 
 namespace PillPal.Application.Common.Interfaces.Services;
 

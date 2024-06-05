@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Dtos.Specifications;
+using PillPal.Application.Features.Specifications;
 
 namespace PillPal.WebApi.Controllers;
 

@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PillPal.Application.Common.Interfaces.Auth;
-using PillPal.Application.Dtos.Auths;
-using LoginRequest = PillPal.Application.Dtos.Auths.LoginRequest;
-using RegisterRequest = PillPal.Application.Dtos.Auths.RegisterRequest;
+using PillPal.Application.Features.Auths;
+using LoginRequest = PillPal.Application.Features.Auths.LoginRequest;
+using RegisterRequest = PillPal.Application.Features.Auths.RegisterRequest;
 
 namespace PillPal.WebApi.Controllers;
 

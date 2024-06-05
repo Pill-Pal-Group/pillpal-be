@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Dtos.Medicines;
+using PillPal.Application.Features.Medicines;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -14,12 +14,16 @@ public class MedicinesController(IMedicineService medicineService)
     /// <summary>
     /// Get all medicines
     /// </summary>
+    /// <param name="queryParameter"></param>
+    /// <param name="includeParameter"></param>
     /// <response code="200">Returns a list of medicines</response>
     [HttpGet(Name = "GetMedicines")]
     [ProducesResponseType(typeof(IEnumerable<MedicineDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetMedicinesAsync()
+    public async Task<IActionResult> GetMedicinesAsync(
+        [FromQuery] MedicineQueryParameter queryParameter,
+        [FromQuery] MedicineIncludeParameter includeParameter)
     {
-        var medicines = await medicineService.GetMedicinesAsync();
+        var medicines = await medicineService.GetMedicinesAsync(queryParameter, includeParameter);
 
         return Ok(medicines);
     }

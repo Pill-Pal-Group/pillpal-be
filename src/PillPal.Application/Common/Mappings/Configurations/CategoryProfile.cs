@@ -1,4 +1,4 @@
-﻿using PillPal.Application.Dtos.Categories;
+﻿using PillPal.Application.Features.Categories;
 
 namespace PillPal.Application.Common.Mappings;
 

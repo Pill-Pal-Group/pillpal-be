@@ -1,4 +1,4 @@
-﻿using PillPal.Application.Dtos.DosageForms;
+﻿using PillPal.Application.Features.DosageForms;
 
 namespace PillPal.Application.Common.Mappings;
 

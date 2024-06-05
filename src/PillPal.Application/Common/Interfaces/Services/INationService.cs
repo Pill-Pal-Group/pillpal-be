@@ -1,4 +1,4 @@
-﻿using PillPal.Application.Dtos.Nations;
+﻿using PillPal.Application.Features.Nations;
 
 namespace PillPal.Application.Common.Interfaces.Services;
 

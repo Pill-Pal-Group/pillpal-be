@@ -1,4 +1,4 @@
-﻿using PillPal.Application.Dtos.PharmaceuticalCompanies;
+﻿using PillPal.Application.Features.PharmaceuticalCompanies;
 
 namespace PillPal.Application.Common.Mappings;
 

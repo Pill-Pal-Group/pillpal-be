@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Dtos.DosageForms;
+using PillPal.Application.Features.DosageForms;
 
 namespace PillPal.WebApi.Controllers;
 

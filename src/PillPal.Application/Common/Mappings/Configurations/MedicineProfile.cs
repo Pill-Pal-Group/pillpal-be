@@ -1,4 +1,4 @@
-﻿using PillPal.Application.Dtos.Medicines;
+﻿using PillPal.Application.Features.Medicines;
 
 namespace PillPal.Application.Common.Mappings;
 
