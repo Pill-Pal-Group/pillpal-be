@@ -1,5 +1,4 @@
-﻿using PillPal.Application.Common.Exceptions;
-using PillPal.Application.Common.Interfaces.Data;
+﻿using PillPal.Application.Common.Interfaces.Data;
 
 namespace PillPal.Infrastructure.Identity;
 
@@ -62,13 +61,13 @@ public class IdentityService : IIdentityService
 
             user = await _userManager.FindByEmailAsync(email);
 
-            await _userManager.AddToRoleAsync(user, Role.Customer);
+            await _userManager.AddToRoleAsync(user!, Role.Customer);
         }
 
-        var role = await _userManager.GetRolesAsync(user)
+        var role = await _userManager.GetRolesAsync(user!)
             .ContinueWith(task => task.Result.FirstOrDefault());
 
-        return (user, role);
+        return (user!, role!);
     }
 
     public async Task<string?> GetUserNameAsync(string userId)
@@ -87,23 +86,19 @@ public class IdentityService : IIdentityService
 
     public async Task<(ApplicationUser, string role)> LoginAsync(string email, string password)
     {
-        var user = await _userManager.FindByEmailAsync(email);
-
-        if (user == null)
-        {
-            throw new NotFoundException(nameof(ApplicationUser), email);
-        }
+        var user = await _userManager.FindByEmailAsync(email)
+            ?? throw new UnauthorizedAccessException($"User with identifier '{email}' not found");
 
         var result = await _userManager.CheckPasswordAsync(user, password);
 
         if (!result)
         {
-            throw new Exception("Invalid password");
+            throw new UnauthorizedAccessException("Invalid password");
         }
 
         var role = await _userManager.GetRolesAsync(user)
             .ContinueWith(task => task.Result.FirstOrDefault());
 
-        return (user, role);
+        return (user!, role!);
     }
 }
