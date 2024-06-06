@@ -53,7 +53,7 @@ public class SpecificationRepository(IApplicationDbContext context, IMapper mapp
         return Mapper.Map<SpecificationDto>(specification);
     }
 
-    public async Task UpdateSpecificationAsync(Guid specificationId, UpdateSpecificationDto updateSpecificationDto)
+    public async Task<SpecificationDto> UpdateSpecificationAsync(Guid specificationId, UpdateSpecificationDto updateSpecificationDto)
     {
         var validator = ServiceProvider.GetRequiredService<UpdateSpecificationValidator>();
 
@@ -69,6 +69,10 @@ public class SpecificationRepository(IApplicationDbContext context, IMapper mapp
 
         Mapper.Map(updateSpecificationDto, specification);
 
+        Context.Specifications.Update(specification);
+
         await Context.SaveChangesAsync();
+
+        return Mapper.Map<SpecificationDto>(specification);
     }
 }

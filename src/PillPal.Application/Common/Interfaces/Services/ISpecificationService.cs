@@ -42,7 +42,7 @@ public interface ISpecificationService
     /// </returns>
     /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
     /// <exception cref="ValidationException">Thrown when validation fails for the update information.</exception>
-    Task UpdateSpecificationAsync(Guid specificationId, UpdateSpecificationDto updateSpecificationDto);
+    Task<SpecificationDto> UpdateSpecificationAsync(Guid specificationId, UpdateSpecificationDto updateSpecificationDto);
 
     /// <summary>
     /// Deletes a specification, this deletion is permanent and cannot be undone.
