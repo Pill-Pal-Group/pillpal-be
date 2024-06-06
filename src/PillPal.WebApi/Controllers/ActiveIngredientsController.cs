@@ -14,12 +14,13 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// <summary>
     /// Get all active ingredients
     /// </summary>
+    /// <param name="queryParameter"></param>
     /// <response code="200">Returns a list of active ingredients</response>
     [HttpGet(Name = "GetActiveIngredients")]
     [ProducesResponseType(typeof(IEnumerable<ActiveIngredientDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetActiveIngredientsAsync()
+    public async Task<IActionResult> GetActiveIngredientsAsync([FromQuery] ActiveIngredientQueryParameter queryParameter)
     {
-        var activeIngredients = await activeIngredientService.GetActiveIngredientsAsync();
+        var activeIngredients = await activeIngredientService.GetActiveIngredientsAsync(queryParameter);
 
         return Ok(activeIngredients);
     }

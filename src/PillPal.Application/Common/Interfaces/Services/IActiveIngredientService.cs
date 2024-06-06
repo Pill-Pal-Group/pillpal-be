@@ -11,5 +11,5 @@ public interface IActiveIngredientService
 
     Task<ActiveIngredientDto> GetActiveIngredientByIdAsync(Guid activeIngredientId);
 
-    Task<IEnumerable<ActiveIngredientDto>> GetActiveIngredientsAsync();
+    Task<IEnumerable<ActiveIngredientDto>> GetActiveIngredientsAsync(ActiveIngredientQueryParameter queryParameter);
 }

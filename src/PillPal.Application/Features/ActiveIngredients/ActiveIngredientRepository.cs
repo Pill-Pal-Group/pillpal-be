@@ -50,10 +50,11 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
         return Mapper.Map<ActiveIngredientDto>(activeIngredient);
     }
 
-    public async Task<IEnumerable<ActiveIngredientDto>> GetActiveIngredientsAsync()
+    public async Task<IEnumerable<ActiveIngredientDto>> GetActiveIngredientsAsync(ActiveIngredientQueryParameter queryParameter)
     {
         var activeIngredients = await Context.ActiveIngredients
             .Where(ai => !ai.IsDeleted)
+            .Filter(queryParameter)
             .ToListAsync();
 
         return Mapper.Map<IEnumerable<ActiveIngredientDto>>(activeIngredients);
