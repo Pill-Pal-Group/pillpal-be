@@ -16,7 +16,7 @@ public class CreateCustomerValidator : AbstractValidator<CreateCustomerDto>
             .WithMessage("Dob must be less than current date.");
 
         RuleFor(x => x.Address)
-            .MaximumLength(255);
+            .MaximumLength(500);
 
         RuleFor(x => x.IdentityUserId)
             .NotEmpty();

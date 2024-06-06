@@ -15,6 +15,6 @@ public class CreateActiveIngredientValidator : AbstractValidator<CreateActiveIng
             .MaximumLength(50);
 
         RuleFor(x => x.IngredientInformation)
-            .MaximumLength(500);
+            .MaximumLength(2048);
     }
 }

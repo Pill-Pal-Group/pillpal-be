@@ -12,10 +12,10 @@ public class CreatePharmacyStoreValidator : AbstractValidator<CreatePharmacyStor
     public CreatePharmacyStoreValidator()
     {
         RuleFor(x => x.StoreLocation)
-            .MaximumLength(255);
+            .MaximumLength(500);
 
         RuleFor(x => x.StoreImage)
-            .MaximumLength(255);
+            .MaximumLength(500);
 
         RuleFor(x => x.BrandId)
             .NotEmpty();

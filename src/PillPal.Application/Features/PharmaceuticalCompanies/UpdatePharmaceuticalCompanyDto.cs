@@ -13,7 +13,7 @@ public class UpdatePharmaceuticalCompanyValidator : AbstractValidator<UpdatePhar
     {
         RuleFor(x => x.CompanyName)
             .NotEmpty()
-            .MaximumLength(100);
+            .MaximumLength(200);
 
         RuleFor(x => x.NationId)
             .NotEmpty();

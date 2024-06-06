@@ -12,10 +12,10 @@ public class CreateNationValidator : AbstractValidator<CreateNationDto>
     {
         RuleFor(x => x.NationCode)
             .NotEmpty()
-            .MaximumLength(10);
+            .MaximumLength(20);
 
         RuleFor(x => x.NationName)
             .NotEmpty()
-            .MaximumLength(50);
+            .MaximumLength(100);
     }
 }

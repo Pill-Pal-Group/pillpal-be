@@ -26,7 +26,7 @@ public class UpdateMedicineValidator : AbstractValidator<UpdateMedicineDto>
             .WithMessage("Require prescript is required.");
 
         RuleFor(x => x.Image)
-            .MaximumLength(100)
+            .MaximumLength(500)
             .WithMessage("Image must not exceed 100 characters.");
 
         RuleFor(x => x.SpecificationId)

@@ -15,6 +15,6 @@ public class UpdateSpecificationValidator : AbstractValidator<UpdateSpecificatio
             .MaximumLength(50);
 
         RuleFor(x => x.Detail)
-            .MaximumLength(100);
+            .MaximumLength(500);
     }
 }
