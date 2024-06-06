@@ -28,11 +28,11 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
         return Mapper.Map<ActiveIngredientDto>(activeIngredient);
     }
 
-    public async Task DeleteActiveIngredientAsync(Guid activeIngredientId)
+    public async Task DeleteActiveIngredientAsync(Guid ingredientId)
     {
         var activeIngredient = await Context.ActiveIngredients
-            .Where(ai => ai.Id == activeIngredientId && !ai.IsDeleted)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(ActiveIngredient), activeIngredientId);
+            .Where(ai => ai.Id == ingredientId && !ai.IsDeleted)
+            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(ActiveIngredient), ingredientId);
 
         activeIngredient.IsDeleted = true;
 
@@ -41,11 +41,11 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
         await Context.SaveChangesAsync();
     }
 
-    public async Task<ActiveIngredientDto> GetActiveIngredientByIdAsync(Guid activeIngredientId)
+    public async Task<ActiveIngredientDto> GetActiveIngredientByIdAsync(Guid ingredientId)
     {
         var activeIngredient = await Context.ActiveIngredients
-            .Where(ai => ai.Id == activeIngredientId && !ai.IsDeleted)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(ActiveIngredient), activeIngredientId);
+            .Where(ai => ai.Id == ingredientId && !ai.IsDeleted)
+            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(ActiveIngredient), ingredientId);
 
         return Mapper.Map<ActiveIngredientDto>(activeIngredient);
     }

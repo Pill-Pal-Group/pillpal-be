@@ -28,11 +28,11 @@ public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMap
         return Mapper.Map<PharmaceuticalCompanyDto>(pharmaceuticalCompany);
     }
 
-    public async Task DeletePharmaceuticalCompanyAsync(Guid nationId)
+    public async Task DeletePharmaceuticalCompanyAsync(Guid companyId)
     {
         var pharmaceuticalCompany = await Context.PharmaceuticalCompanies
-            .Where(b => b.Id == nationId && !b.IsDeleted)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmaceuticalCompany), nationId);
+            .Where(b => b.Id == companyId && !b.IsDeleted)
+            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmaceuticalCompany), companyId);
 
         pharmaceuticalCompany.IsDeleted = true;
 
@@ -51,17 +51,17 @@ public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMap
         return Mapper.Map<IEnumerable<PharmaceuticalCompanyDto>>(pharmaceuticalCompanies);
     }
 
-    public async Task<PharmaceuticalCompanyDto> GetPharmaceuticalCompanyByIdAsync(Guid nationId)
+    public async Task<PharmaceuticalCompanyDto> GetPharmaceuticalCompanyByIdAsync(Guid companyId)
     {
         var pharmaceuticalCompany = await Context.PharmaceuticalCompanies
             .Include(b => b.Nation)
-            .Where(b => b.Id == nationId && !b.IsDeleted)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmaceuticalCompany), nationId);
+            .Where(b => b.Id == companyId && !b.IsDeleted)
+            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmaceuticalCompany), companyId);
 
         return Mapper.Map<PharmaceuticalCompanyDto>(pharmaceuticalCompany);
     }
 
-    public async Task<PharmaceuticalCompanyDto> UpdatePharmaceuticalCompanyAsync(Guid nationId, UpdatePharmaceuticalCompanyDto updatePharmaceuticalCompanyDto)
+    public async Task<PharmaceuticalCompanyDto> UpdatePharmaceuticalCompanyAsync(Guid companyId, UpdatePharmaceuticalCompanyDto updatePharmaceuticalCompanyDto)
     {
         var validator = ServiceProvider.GetRequiredService<UpdatePharmaceuticalCompanyValidator>();
 
@@ -73,8 +73,8 @@ public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMap
         }
 
         var pharmaceuticalCompany = await Context.PharmaceuticalCompanies
-            .Where(b => b.Id == nationId && !b.IsDeleted)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmaceuticalCompany), nationId);
+            .Where(b => b.Id == companyId && !b.IsDeleted)
+            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmaceuticalCompany), companyId);
 
         Mapper.Map(updatePharmaceuticalCompanyDto, pharmaceuticalCompany);
 
