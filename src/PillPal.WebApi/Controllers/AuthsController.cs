@@ -20,7 +20,7 @@ public class AuthsController(IAuthService authService)
     /// <remarks>
     /// Sample request:
     ///
-    ///     POST /api/auth/register
+    ///     POST /api/auths/register
     ///     {
     ///         "email": "sample@mail.com",
     ///         "password": "Password@9"
@@ -46,7 +46,7 @@ public class AuthsController(IAuthService authService)
     /// <remarks>
     /// Sample request:
     ///
-    ///     POST /api/auth/login
+    ///     POST /api/auths/login
     ///     {
     ///         "email": "sample@mail.com",
     ///         "password": "password"
@@ -74,7 +74,7 @@ public class AuthsController(IAuthService authService)
     /// <remarks>
     /// Sample request:
     ///
-    ///     POST /api/auth/firebase-login
+    ///     POST /api/auths/token-login
     ///     {
     ///         "token": "firebase_token"
     ///     }
@@ -99,7 +99,7 @@ public class AuthsController(IAuthService authService)
     /// <remarks>
     /// Sample request:
     ///
-    ///     POST /api/auth/refresh-token
+    ///     POST /api/auths/refresh-token
     ///     {
     ///         "expiredToken": "expired jwt token",
     ///         "refreshToken": "refresh token"
