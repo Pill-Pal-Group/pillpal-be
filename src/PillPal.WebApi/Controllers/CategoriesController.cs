@@ -4,8 +4,8 @@ using PillPal.Application.Features.Categories;
 
 namespace PillPal.WebApi.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
 public class CategoriesController(ICategoryService categoryService)
@@ -28,7 +28,7 @@ public class CategoriesController(ICategoryService categoryService)
     /// <summary>
     /// Get a category by id
     /// </summary>
-    /// <param name="categoryId"></param>
+    /// <param name="categoryId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="200">Returns a category</response>
     /// <response code="404">If the category is not found</response>
     [HttpGet("{categoryId:guid}", Name = "GetCategoryById")]
@@ -69,7 +69,7 @@ public class CategoriesController(ICategoryService categoryService)
     /// <summary>
     /// Update a category
     /// </summary>
-    /// <param name="categoryId"></param>
+    /// <param name="categoryId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateCategoryDto"></param>
     /// <remarks>
     /// Sample request:
@@ -97,7 +97,7 @@ public class CategoriesController(ICategoryService categoryService)
     /// <summary>
     /// Delete a category (soft delete)
     /// </summary>
-    /// <param name="categoryId"></param>
+    /// <param name="categoryId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the category is not found</response>
     [HttpDelete("{categoryId:guid}", Name = "DeleteCategory")]

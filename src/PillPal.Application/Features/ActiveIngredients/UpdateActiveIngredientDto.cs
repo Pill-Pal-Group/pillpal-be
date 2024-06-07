@@ -2,7 +2,10 @@
 
 public record UpdateActiveIngredientDto
 {
+    /// <example>Paracetamol</example>
     public string? IngredientName { get; init; }
+
+    /// <example>Paracetamol is a paracetamol-based analgesic</example>
     public string? IngredientInformation { get; init; }
 }
 

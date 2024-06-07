@@ -4,8 +4,8 @@ using PillPal.Application.Features.DosageForms;
 
 namespace PillPal.WebApi.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
 public class DosageFormsController(IDosageFormService dosageFormService)
@@ -28,7 +28,7 @@ public class DosageFormsController(IDosageFormService dosageFormService)
     /// <summary>
     /// Get a dosage form by id
     /// </summary>
-    /// <param name="dosageFormId"></param>
+    /// <param name="dosageFormId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="200">Returns a dosage form</response>
     /// <response code="404">If the dosage form is not found</response>
     [HttpGet("{dosageFormId:guid}", Name = "GetDosageFormById")]
@@ -69,7 +69,7 @@ public class DosageFormsController(IDosageFormService dosageFormService)
     /// <summary>
     /// Update a dosage form
     /// </summary>
-    /// <param name="dosageFormId"></param>
+    /// <param name="dosageFormId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateDosageFormDto"></param>
     /// <remarks>
     /// Sample request:
@@ -97,7 +97,7 @@ public class DosageFormsController(IDosageFormService dosageFormService)
     /// <summary>
     /// Delete a dosage form
     /// </summary>
-    /// <param name="dosageFormId"></param>
+    /// <param name="dosageFormId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the dosage form is not found</response>
     [HttpDelete("{dosageFormId:guid}", Name = "DeleteDosageForm")]

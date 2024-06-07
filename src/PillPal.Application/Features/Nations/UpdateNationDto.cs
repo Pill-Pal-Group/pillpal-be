@@ -2,7 +2,10 @@
 
 public record UpdateNationDto
 {
+    /// <example>VN</example>
     public string? NationCode { get; init; }
+
+    /// <example>Vietnam</example>
     public string? NationName { get; init; }
 }
 

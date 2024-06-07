@@ -2,6 +2,7 @@
 
 public record CategoryQueryParameter
 {
+    /// <example>CAT6060-555555</example>
     public string? CategoryCode { get; init; }
 }
 

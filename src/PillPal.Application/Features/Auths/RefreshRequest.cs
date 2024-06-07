@@ -2,7 +2,10 @@
 
 public record RefreshRequest
 {
+    /// <example>expiredToken</example>
     public string? ExpiredToken { get; init; }
+
+    /// <example>refreshToken</example>
     public string? RefreshToken { get; init; }
 }
 

@@ -4,8 +4,8 @@ using PillPal.Application.Features.PharmacyStores;
 
 namespace PillPal.WebApi.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
 public class PharmacyStoresController(IPharmacyStoreService pharmacyStoreService)
@@ -27,7 +27,7 @@ public class PharmacyStoresController(IPharmacyStoreService pharmacyStoreService
     /// <summary>
     /// Get a pharmacy store by id
     /// </summary>
-    /// <param name="pharmacyStoreId"></param>
+    /// <param name="pharmacyStoreId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="200">Returns a pharmacy store</response>
     /// <response code="404">If the pharmacy store is not found</response>
     [HttpGet("{pharmacyStoreId:guid}", Name = "GetPharmacyStoreById")]
@@ -70,7 +70,7 @@ public class PharmacyStoresController(IPharmacyStoreService pharmacyStoreService
     /// <summary>
     /// Update a pharmacy store
     /// </summary>
-    /// <param name="pharmacyStoreId"></param>
+    /// <param name="pharmacyStoreId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updatePharmacyStoreDto"></param>
     /// <remarks>
     /// Sample request:
@@ -100,7 +100,7 @@ public class PharmacyStoresController(IPharmacyStoreService pharmacyStoreService
     /// <summary>
     /// Delete a pharmacy store (soft delete)
     /// </summary>
-    /// <param name="pharmacyStoreId"></param>
+    /// <param name="pharmacyStoreId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the pharmacy store is not found</response>
     [HttpDelete("{pharmacyStoreId:guid}", Name = "DeletePharmacyStore")]

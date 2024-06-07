@@ -2,8 +2,13 @@
 
 public record CreatePharmacyStoreDto
 {
+    /// <example>Q9, HCM, VN</example>
     public string? StoreLocation { get; init; }
+
+    /// <example>https://monke.com/store.jpg</example>
     public string? StoreImage { get; init; }
+
+    /// <example>00000000-0000-0000-0000-000000000000</example>
     public Guid BrandId { get; init; }
 }
 

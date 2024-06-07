@@ -2,10 +2,16 @@
 
 public record CreateMedicineDto
 {
+    /// <example>Paracetamol</example>
     public string? MedicineName { get; init; }
     public bool RequirePrescript { get; init; }
+
+    /// <example>https://monke.com/paracetamol.jpg</example>
     public string? Image { get; init; }
+
+    /// <example>00000000-0000-0000-0000-000000000000</example>
     public Guid SpecificationId { get; init; }
+
     public IEnumerable<Guid> PharmaceuticalCompanys { get; init; } = default!;
     public IEnumerable<Guid> DosageForms { get; init; } = default!;
     public IEnumerable<Guid> ActiveIngredients { get; init; } = default!;

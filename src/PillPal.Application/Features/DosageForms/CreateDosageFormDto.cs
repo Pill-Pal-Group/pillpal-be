@@ -2,6 +2,7 @@
 
 public record CreateDosageFormDto
 {
+    /// <example>Tablet</example>
     public string? FormName { get; init; }
 }
 

@@ -2,6 +2,7 @@
 
 public record CustomerQueryParameter
 {
+    /// <example>CUS6060-555555</example>
     public string? CustomerCode { get; init; }
 }
 

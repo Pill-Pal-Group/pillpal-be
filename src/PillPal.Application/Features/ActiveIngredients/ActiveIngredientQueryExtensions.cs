@@ -2,6 +2,7 @@
 
 public record ActiveIngredientQueryParameter
 {
+    /// <example>API6060-555555</example>
     public string? IngredientCode { get; init; }
 }
 

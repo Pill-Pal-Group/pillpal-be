@@ -2,6 +2,7 @@
 
 public record BrandQueryParameter
 {
+    /// <example>BRD6060-555555</example>
     public string? BrandCode { get; init; }
 }
 

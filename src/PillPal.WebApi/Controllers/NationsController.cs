@@ -4,8 +4,8 @@ using PillPal.Application.Features.Nations;
 
 namespace PillPal.WebApi.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
 public class NationsController(INationService nationService)
@@ -28,7 +28,7 @@ public class NationsController(INationService nationService)
     /// <summary>
     /// Get a nation by id
     /// </summary>
-    /// <param name="nationId"></param>
+    /// <param name="nationId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="200">Returns a nation</response>
     /// <response code="404">If the nation is not found</response>
     [HttpGet("{nationId:guid}", Name = "GetNationById")]
@@ -70,7 +70,7 @@ public class NationsController(INationService nationService)
     /// <summary>
     /// Update a nation
     /// </summary>
-    /// <param name="nationId"></param>
+    /// <param name="nationId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateNationDto"></param>
     /// <remarks>
     /// Sample request:
@@ -99,7 +99,7 @@ public class NationsController(INationService nationService)
     /// <summary>
     /// Delete a nation (soft delete)
     /// </summary>
-    /// <param name="nationId"></param>
+    /// <param name="nationId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the nation is not found</response>
     [HttpDelete("{nationId:guid}", Name = "DeleteNation")]

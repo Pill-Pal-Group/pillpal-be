@@ -4,8 +4,8 @@ using PillPal.Application.Features.Brands;
 
 namespace PillPal.WebApi.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
 public class BrandsController(IBrandService brandService)
@@ -28,7 +28,7 @@ public class BrandsController(IBrandService brandService)
     /// <summary>
     /// Get a brand by id
     /// </summary>
-    /// <param name="brandId"></param>
+    /// <param name="brandId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="200">Returns a brand</response>
     /// <response code="404">If the brand is not found</response>
     [HttpGet("{brandId:guid}", Name = "GetBrandById")]
@@ -70,7 +70,7 @@ public class BrandsController(IBrandService brandService)
     /// <summary>
     /// Update a brand
     /// </summary>
-    /// <param name="brandId"></param>
+    /// <param name="brandId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateBrandDto"></param>
     /// <remarks>
     /// Sample request:
@@ -99,7 +99,7 @@ public class BrandsController(IBrandService brandService)
     /// <summary>
     /// Delete a brand (soft delete)
     /// </summary>
-    /// <param name="brandId"></param>
+    /// <param name="brandId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the brand is not found</response>
     [HttpDelete("{brandId:guid}", Name = "DeleteBrand")]

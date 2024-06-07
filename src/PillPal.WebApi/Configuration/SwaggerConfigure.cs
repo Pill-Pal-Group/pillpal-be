@@ -1,4 +1,6 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
+using Microsoft.OpenApi.Models;
+using PillPal.Application.Features.Auths;
 using System.Reflection;
 
 namespace PillPal.WebApi.Configuration;
@@ -28,10 +30,15 @@ public static class SwaggerConfigure
                 }
             });
 
-            var xmlFile = Assembly.GetExecutingAssembly().GetName().Name + ".xml";
-            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            var controllerXmlFile = Assembly.GetExecutingAssembly().GetName().Name + ".xml";
+            var controllerXmlPath = Path.Combine(AppContext.BaseDirectory, controllerXmlFile);
 
-            config.IncludeXmlComments(xmlPath);
+            config.IncludeXmlComments(controllerXmlPath);
+
+            var dtoXmlFile = Assembly.GetAssembly(typeof(AuthRepository))!.GetName().Name + ".xml";
+            var dtoXmlPath = Path.Combine(AppContext.BaseDirectory, dtoXmlFile);
+
+            config.IncludeXmlComments(dtoXmlPath);
 
             config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
@@ -55,7 +62,30 @@ public static class SwaggerConfigure
                     Array.Empty<string>()
                 }
             });
-        });
+
+            if (environment == "Development")
+            {
+                config.AddServer(new OpenApiServer
+                {
+                    Url = "http://localhost:5209",
+                    Description = "Local server - http"
+                });
+
+                config.AddServer(new OpenApiServer
+                {
+                    Url = "https://localhost:7299",
+                    Description = "Local server - https"
+                });
+            }
+
+            config.AddServer(new OpenApiServer
+            {
+                Url = "https://pp-devtest2.azurewebsites.net",
+                Description = "Staging server"
+            });
+
+        })
+        .AddFluentValidationRulesToSwagger();
 
         return services;
     }

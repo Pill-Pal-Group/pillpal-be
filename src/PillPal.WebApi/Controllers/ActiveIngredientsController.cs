@@ -4,8 +4,8 @@ using PillPal.Application.Features.ActiveIngredients;
 
 namespace PillPal.WebApi.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
 public class ActiveIngredientsController(IActiveIngredientService activeIngredientService)
@@ -28,7 +28,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// <summary>
     /// Get an active ingredient by id
     /// </summary>
-    /// <param name="activeIngredientId"></param>
+    /// <param name="activeIngredientId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="200">Returns an active ingredient</response>
     /// <response code="404">If the active ingredient is not found</response>
     [HttpGet("{activeIngredientId:guid}", Name = "GetActiveIngredientById")]
@@ -69,7 +69,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// <summary>
     /// Update an active ingredient
     /// </summary>
-    /// <param name="activeIngredientId"></param>
+    /// <param name="activeIngredientId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateActiveIngredientDto"></param>
     /// <remarks>
     /// Sample request:
@@ -98,7 +98,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// <summary>
     /// Delete an active ingredient (soft delete)
     /// </summary>
-    /// <param name="activeIngredientId"></param>
+    /// <param name="activeIngredientId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the active ingredient is not found</response>
     [HttpDelete("{activeIngredientId:guid}", Name = "DeleteActiveIngredient")]

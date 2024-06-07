@@ -2,6 +2,7 @@
 
 public record CreateCategoryDto
 {
+    /// <example>Vaccines</example>
     public string? CategoryName { get; init; }
 }
 

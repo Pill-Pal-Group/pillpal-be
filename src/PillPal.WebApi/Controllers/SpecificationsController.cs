@@ -4,8 +4,8 @@ using PillPal.Application.Features.Specifications;
 
 namespace PillPal.WebApi.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
 public class SpecificationsController(ISpecificationService specificationService)
@@ -27,7 +27,7 @@ public class SpecificationsController(ISpecificationService specificationService
     /// <summary>
     /// Get a specification by id
     /// </summary>
-    /// <param name="specificationId"></param>
+    /// <param name="specificationId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="200">Returns a specification</response>
     /// <response code="404">If the specification is not found</response>
     [HttpGet("{specificationId:guid}", Name = "GetSpecificationById")]
@@ -69,7 +69,7 @@ public class SpecificationsController(ISpecificationService specificationService
     /// <summary>
     /// Update a specification
     /// </summary>
-    /// <param name="specificationId"></param>
+    /// <param name="specificationId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateSpecificationDto"></param>
     /// <remarks>
     /// Sample request:
@@ -98,7 +98,7 @@ public class SpecificationsController(ISpecificationService specificationService
     /// <summary>
     /// Delete a specification
     /// </summary>
-    /// <param name="specificationId"></param>
+    /// <param name="specificationId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the specification is not found</response>
     [HttpDelete("{specificationId:guid}", Name = "DeleteSpecification")]

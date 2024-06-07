@@ -6,8 +6,8 @@ using RegisterRequest = PillPal.Application.Features.Auths.RegisterRequest;
 
 namespace PillPal.WebApi.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
 public class AuthsController(IAuthService authService)
@@ -22,8 +22,8 @@ public class AuthsController(IAuthService authService)
     ///
     ///     POST /api/auths/register
     ///     {
-    ///         "email": "sample@mail.com",
-    ///         "password": "Password@9"
+    ///         "email": "monke@mail.com",
+    ///         "password": "P@ssword7"
     ///     }
     ///
     /// </remarks>
@@ -48,8 +48,8 @@ public class AuthsController(IAuthService authService)
     ///
     ///     POST /api/auths/login
     ///     {
-    ///         "email": "sample@mail.com",
-    ///         "password": "password"
+    ///         "email": "monke@mail.com",
+    ///         "password": "P@ssword7"
     ///     }
     ///
     /// </remarks>

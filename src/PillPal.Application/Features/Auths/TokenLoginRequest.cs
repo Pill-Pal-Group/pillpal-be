@@ -2,6 +2,7 @@
 
 public class TokenLoginRequest
 {
+    /// <example>token</example>
     public string? Token { get; init; }
 }
 

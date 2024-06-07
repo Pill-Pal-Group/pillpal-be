@@ -4,18 +4,27 @@ namespace PillPal.Application.Features.Medicines;
 
 public record MedicineQueryParameter
 {
+    /// <example>MED6060-555555</example>
     public string? MedicineCode { get; init; }
     public bool? RequirePrescript { get; init; }
 }
 
 public record MedicineIncludeParameter
 {
-    //todo: remove true init to these props
-    public bool IncludeSpecification { get; init; } = true;
-    public bool IncludePharmaceuticalCompanies { get; init; } = true;
-    public bool IncludeDosageForms { get; init; } = true;
-    public bool IncludeActiveIngredients { get; init; } = true;
-    public bool IncludeBrands { get; init; } = true;
+    /// <example>true</example>
+    public bool IncludeSpecification { get; init; }
+
+    /// <example>true</example>
+    public bool IncludePharmaceuticalCompanies { get; init; }
+
+    /// <example>true</example>
+    public bool IncludeDosageForms { get; init; }
+
+    /// <example>true</example>
+    public bool IncludeActiveIngredients { get; init; }
+
+    /// <example>true</example>
+    public bool IncludeBrands { get; init; }
 }
 
 public static class MedicineQueryExtensions

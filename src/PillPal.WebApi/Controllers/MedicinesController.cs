@@ -4,8 +4,8 @@ using PillPal.Application.Features.Medicines;
 
 namespace PillPal.WebApi.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
 public class MedicinesController(IMedicineService medicineService)
@@ -31,7 +31,7 @@ public class MedicinesController(IMedicineService medicineService)
     /// <summary>
     /// Get a medicine by id
     /// </summary>
-    /// <param name="medicineId"></param>
+    /// <param name="medicineId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="200">Returns a medicine</response>
     /// <response code="404">If the medicine is not found</response>
     [HttpGet("{medicineId:guid}", Name = "GetMedicineById")]
@@ -79,7 +79,7 @@ public class MedicinesController(IMedicineService medicineService)
     /// <summary>
     /// Update a medicine
     /// </summary>
-    /// <param name="medicineId"></param>
+    /// <param name="medicineId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateMedicineDto"></param>
     /// <remarks>
     /// Sample request:
@@ -114,7 +114,7 @@ public class MedicinesController(IMedicineService medicineService)
     /// <summary>
     /// Delete a medicine (soft delete)
     /// </summary>
-    /// <param name="medicineId"></param>
+    /// <param name="medicineId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the medicine is not found</response>
     [HttpDelete("{medicineId:guid}", Name = "DeleteMedicine")]

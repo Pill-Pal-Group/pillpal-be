@@ -2,8 +2,13 @@
 
 public record CreateCustomerDto
 {
+    /// <example>2002-01-01</example>
     public DateTimeOffset? Dob { get; init; }
+
+    /// <example>Q9, HCMC, Vietnam</example>
     public string? Address { get; init; }
+
+    /// <example>00000000-0000-0000-0000-000000000000</example>
     public Guid IdentityUserId { get; init; }
 }
 

@@ -2,7 +2,10 @@
 
 public record CreateBrandDto
 {
+    /// <example>https://monke.com/brand</example>
     public string? BrandUrl { get; init; }
+
+    /// <example>https://monke.com/brandlogo.jpg</example>
     public string? BrandLogo { get; init; }
 }
 

@@ -2,7 +2,10 @@
 
 public record LoginRequest
 {
+    /// <example>monke@mail.com</example>
     public string? Email { get; init; }
+
+    /// <example>P@ssword7</example>
     public string? Password { get; init; }
 }
 

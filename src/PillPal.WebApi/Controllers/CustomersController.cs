@@ -4,8 +4,8 @@ using PillPal.Application.Features.Customers;
 
 namespace PillPal.WebApi.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
 public class CustomersController(ICustomerService customerService)
@@ -28,7 +28,7 @@ public class CustomersController(ICustomerService customerService)
     /// <summary>
     /// Get a customer by id
     /// </summary>
-    /// <param name="customerId"></param>
+    /// <param name="customerId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="200">Returns a customer</response>
     /// <response code="404">If the customer is not found</response>
     [HttpGet("{customerId:guid}", Name = "GetCustomerById")]
@@ -50,8 +50,8 @@ public class CustomersController(ICustomerService customerService)
     /// 
     ///     POST /api/customers
     ///     {
-    ///         "dob": "2000-01-01T00:00:00+00:00",
-    ///         "address": "123 Main St",
+    ///         "dob": "2002-01-01",
+    ///         "address": "Q9, HCMC, Vietnam",
     ///         "identityUserId": "00000000-0000-0000-0000-000000000000"
     ///     }
     ///     
@@ -71,15 +71,15 @@ public class CustomersController(ICustomerService customerService)
     /// <summary>
     /// Update a customer
     /// </summary>
-    /// <param name="customerId"></param>
+    /// <param name="customerId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateCustomerDto"></param>
     /// <remarks>
     /// Sample request:
     /// 
     ///     PUT /api/customers/{customerId}
     ///     {
-    ///         "dob": "2000-01-01T00:00:00+00:00",
-    ///         "address": "123 Main St",
+    ///         "dob": "2002-01-01",
+    ///         "address": "Q9, HCMC, Vietnam",
     ///         "identityUserId": "00000000-0000-0000-0000-000000000000"
     ///     }
     ///     
