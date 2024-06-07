@@ -45,7 +45,7 @@ public class CategoryRepository(IApplicationDbContext context, IMapper mapper, I
     {
         var categories = Context.Categories
             .Where(c => !c.IsDeleted);
-        
+
         categories = categories.Filter(queryParameter);
 
         var resultList = await categories

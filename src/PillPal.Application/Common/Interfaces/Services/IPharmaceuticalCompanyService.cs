@@ -43,7 +43,7 @@ public interface IPharmaceuticalCompanyService
     /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
     /// <exception cref="ValidationException">Thrown when validation fails for the update information.</exception>
     Task<PharmaceuticalCompanyDto> UpdatePharmaceuticalCompanyAsync(Guid companyId, UpdatePharmaceuticalCompanyDto updatePharmaceuticalCompanyDto);
-    
+
     /// <summary>
     /// Deletes a pharmaceutical company by performing a soft delete.
     /// </summary>

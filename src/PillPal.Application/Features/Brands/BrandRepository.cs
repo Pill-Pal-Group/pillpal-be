@@ -54,7 +54,7 @@ public class BrandRepository(IApplicationDbContext context, IMapper mapper, ISer
     {
         var brands = Context.Brands
             .Where(b => !b.IsDeleted);
-        
+
         brands = brands.Filter(queryParameter);
 
         var resultList = await brands

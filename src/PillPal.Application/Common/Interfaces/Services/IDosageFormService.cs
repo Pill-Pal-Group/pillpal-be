@@ -21,7 +21,7 @@ public interface IDosageFormService
     /// </returns>
     /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
     Task<DosageFormDto> GetDosageFormByIdAsync(Guid dosageFormId);
-    
+
     /// <summary>
     /// Creates a new dosage form.
     /// </summary>

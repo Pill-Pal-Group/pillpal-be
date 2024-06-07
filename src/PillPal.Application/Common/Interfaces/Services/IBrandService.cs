@@ -12,7 +12,7 @@ public interface IBrandService
     /// The task result contains a collection of <see cref="BrandDto"/> objects.
     /// </returns>
     Task<IEnumerable<BrandDto>> GetBrandsAsync(BrandQueryParameter queryParameter);
-    
+
     /// <summary>
     /// Retrieves a brand by its unique identifier.
     /// </summary>

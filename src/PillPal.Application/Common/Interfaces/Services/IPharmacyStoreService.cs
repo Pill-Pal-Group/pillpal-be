@@ -31,7 +31,7 @@ public interface IPharmacyStoreService
     /// </returns>
     /// <exception cref="ValidationException">Thrown when validation fails for the creation data.</exception>
     Task<PharmacyStoreDto> CreatePharmacyStoreAsync(CreatePharmacyStoreDto createPharmacyStoreDto);
-    
+
     /// <summary>
     /// Updates an existing pharmacy store.
     /// </summary>
@@ -43,7 +43,7 @@ public interface IPharmacyStoreService
     /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
     /// <exception cref="ValidationException">Thrown when validation fails for the update information.</exception>
     Task<PharmacyStoreDto> UpdatePharmacyStoreAsync(Guid pharmacyStoreId, UpdatePharmacyStoreDto updatePharmacyStoreDto);
-    
+
     /// <summary>
     /// Deletes a pharmacy store by performing a soft delete.
     /// </summary>
