@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Dtos.Categories;
+using PillPal.Application.Features.Categories;
 
 namespace PillPal.WebApi.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
 public class CategoriesController(ICategoryService categoryService)
@@ -14,12 +14,13 @@ public class CategoriesController(ICategoryService categoryService)
     /// <summary>
     /// Get all categories
     /// </summary>
+    /// <param name="queryParameter"></param>
     /// <response code="200">Returns a list of categories</response>
     [HttpGet(Name = "GetCategories")]
     [ProducesResponseType(typeof(IEnumerable<CategoryDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetCategoriesAsync()
+    public async Task<IActionResult> GetCategoriesAsync([FromQuery] CategoryQueryParameter queryParameter)
     {
-        var categories = await categoryService.GetCategoriesAsync();
+        var categories = await categoryService.GetCategoriesAsync(queryParameter);
 
         return Ok(categories);
     }
@@ -27,7 +28,7 @@ public class CategoriesController(ICategoryService categoryService)
     /// <summary>
     /// Get a category by id
     /// </summary>
-    /// <param name="categoryId"></param>
+    /// <param name="categoryId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="200">Returns a category</response>
     /// <response code="404">If the category is not found</response>
     [HttpGet("{categoryId:guid}", Name = "GetCategoryById")]
@@ -54,7 +55,7 @@ public class CategoriesController(ICategoryService categoryService)
     ///     
     /// </remarks>
     /// <response code="201">Returns the created category</response>
-    /// <response code="422">If the category is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPost(Name = "CreateCategory")]
     [ProducesResponseType(typeof(CategoryDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -68,7 +69,7 @@ public class CategoriesController(ICategoryService categoryService)
     /// <summary>
     /// Update a category
     /// </summary>
-    /// <param name="categoryId"></param>
+    /// <param name="categoryId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateCategoryDto"></param>
     /// <remarks>
     /// Sample request:
@@ -81,7 +82,7 @@ public class CategoriesController(ICategoryService categoryService)
     /// </remarks>
     /// <response code="200">Returns the updated category</response>
     /// <response code="404">If the category is not found</response>
-    /// <response code="422">If the category is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPut("{categoryId:guid}", Name = "UpdateCategory")]
     [ProducesResponseType(typeof(CategoryDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -96,7 +97,7 @@ public class CategoriesController(ICategoryService categoryService)
     /// <summary>
     /// Delete a category (soft delete)
     /// </summary>
-    /// <param name="categoryId"></param>
+    /// <param name="categoryId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the category is not found</response>
     [HttpDelete("{categoryId:guid}", Name = "DeleteCategory")]

@@ -30,19 +30,24 @@ public class AuditableEntityInterceptor(IUser user)
     {
         if (context == null) return;
 
-        foreach (var entry in context.ChangeTracker.Entries<BaseAuditableEntity>())
-        {
-            if (entry.State is EntityState.Added or EntityState.Modified)
-            {
-                var utcNow = DateTime.UtcNow;
+        var entries = context.ChangeTracker.Entries<BaseAuditableEntity>();
 
-                if (entry.State == EntityState.Added)
-                {
-                    entry.Entity.CreatedBy = _user.Id;
-                    entry.Entity.CreatedAt = utcNow;
-                }
-                entry.Entity.UpdatedBy = _user.Id;
-                entry.Entity.UpdatedAt = utcNow;
+        foreach (var entry in entries.Where(e => e.State is EntityState.Added or EntityState.Modified))
+        {
+            var utcNow = DateTime.UtcNow;
+
+            if (entry.State == EntityState.Added)
+            {
+                entry.Entity.CreatedBy = _user.Id;
+                entry.Entity.CreatedAt = utcNow;
+            }
+
+            entry.Entity.UpdatedBy = _user.Id;
+            entry.Entity.UpdatedAt = utcNow;
+
+            if (entry.Entity.IsDeleted)
+            {
+                entry.Entity.DeletedAt = utcNow;
             }
         }
     }

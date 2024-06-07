@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Dtos.Nations;
+using PillPal.Application.Features.Nations;
 
 namespace PillPal.WebApi.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
 public class NationsController(INationService nationService)
@@ -14,12 +14,13 @@ public class NationsController(INationService nationService)
     /// <summary>
     /// Get all nations
     /// </summary>
+    /// <param name="queryParameter"></param>
     /// <response code="200">Returns a list of nations</response>
     [HttpGet(Name = "GetNations")]
     [ProducesResponseType(typeof(IEnumerable<NationDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetNationsAsync()
+    public async Task<IActionResult> GetNationsAsync([FromQuery] NationQueryParameter queryParameter)
     {
-        var nations = await nationService.GetNationsAsync();
+        var nations = await nationService.GetNationsAsync(queryParameter);
 
         return Ok(nations);
     }
@@ -27,7 +28,7 @@ public class NationsController(INationService nationService)
     /// <summary>
     /// Get a nation by id
     /// </summary>
-    /// <param name="nationId"></param>
+    /// <param name="nationId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="200">Returns a nation</response>
     /// <response code="404">If the nation is not found</response>
     [HttpGet("{nationId:guid}", Name = "GetNationById")]
@@ -55,7 +56,7 @@ public class NationsController(INationService nationService)
     ///     
     /// </remarks>
     /// <response code="201">Returns the created nation</response>
-    /// <response code="422">If the nation is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPost(Name = "CreateNation")]
     [ProducesResponseType(typeof(NationDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -69,7 +70,7 @@ public class NationsController(INationService nationService)
     /// <summary>
     /// Update a nation
     /// </summary>
-    /// <param name="nationId"></param>
+    /// <param name="nationId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateNationDto"></param>
     /// <remarks>
     /// Sample request:
@@ -83,7 +84,7 @@ public class NationsController(INationService nationService)
     /// </remarks>
     /// <response code="200">Returns the updated nation</response>
     /// <response code="404">If the nation is not found</response>
-    /// <response code="422">If the nation is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPut("{nationId:guid}", Name = "UpdateNation")]
     [ProducesResponseType(typeof(NationDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -98,7 +99,7 @@ public class NationsController(INationService nationService)
     /// <summary>
     /// Delete a nation (soft delete)
     /// </summary>
-    /// <param name="nationId"></param>
+    /// <param name="nationId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the nation is not found</response>
     [HttpDelete("{nationId:guid}", Name = "DeleteNation")]

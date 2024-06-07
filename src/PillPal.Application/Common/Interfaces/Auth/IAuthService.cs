@@ -1,4 +1,4 @@
-﻿using PillPal.Application.Dtos.Auths;
+﻿using PillPal.Application.Features.Auths;
 
 namespace PillPal.Application.Common.Interfaces.Auth;
 

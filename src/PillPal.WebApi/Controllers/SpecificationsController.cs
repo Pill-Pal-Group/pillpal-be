@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Dtos.Specifications;
+using PillPal.Application.Features.Specifications;
 
 namespace PillPal.WebApi.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
 public class SpecificationsController(ISpecificationService specificationService)
@@ -27,7 +27,7 @@ public class SpecificationsController(ISpecificationService specificationService
     /// <summary>
     /// Get a specification by id
     /// </summary>
-    /// <param name="specificationId"></param>
+    /// <param name="specificationId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="200">Returns a specification</response>
     /// <response code="404">If the specification is not found</response>
     [HttpGet("{specificationId:guid}", Name = "GetSpecificationById")]
@@ -55,7 +55,7 @@ public class SpecificationsController(ISpecificationService specificationService
     ///     
     /// </remarks>
     /// <response code="201">Returns the created specification</response>
-    /// <response code="422">If the specification is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPost(Name = "CreateSpecification")]
     [ProducesResponseType(typeof(SpecificationDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -69,7 +69,7 @@ public class SpecificationsController(ISpecificationService specificationService
     /// <summary>
     /// Update a specification
     /// </summary>
-    /// <param name="specificationId"></param>
+    /// <param name="specificationId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateSpecificationDto"></param>
     /// <remarks>
     /// Sample request:
@@ -81,24 +81,24 @@ public class SpecificationsController(ISpecificationService specificationService
     ///     }
     ///     
     /// </remarks>
-    /// <response code="204">No content</response>
+    /// <response code="200">Returns the updated specification</response>
     /// <response code="404">If the specification is not found</response>
-    /// <response code="422">If the specification is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPut("{specificationId:guid}", Name = "UpdateSpecification")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(SpecificationDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> UpdateSpecificationAsync(Guid specificationId, UpdateSpecificationDto updateSpecificationDto)
     {
-        await specificationService.UpdateSpecificationAsync(specificationId, updateSpecificationDto);
+        var specification = await specificationService.UpdateSpecificationAsync(specificationId, updateSpecificationDto);
 
-        return NoContent();
+        return Ok(specification);
     }
 
     /// <summary>
     /// Delete a specification
     /// </summary>
-    /// <param name="specificationId"></param>
+    /// <param name="specificationId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the specification is not found</response>
     [HttpDelete("{specificationId:guid}", Name = "DeleteSpecification")]

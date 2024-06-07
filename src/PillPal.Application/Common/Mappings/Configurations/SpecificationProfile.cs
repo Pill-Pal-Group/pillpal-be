@@ -1,4 +1,4 @@
-﻿using PillPal.Application.Dtos.Specifications;
+﻿using PillPal.Application.Features.Specifications;
 
 namespace PillPal.Application.Common.Mappings;
 

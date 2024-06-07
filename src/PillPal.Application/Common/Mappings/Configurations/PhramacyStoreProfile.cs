@@ -1,4 +1,4 @@
-﻿using PillPal.Application.Dtos.PharmacyStores;
+﻿using PillPal.Application.Features.PharmacyStores;
 
 namespace PillPal.Application.Common.Mappings;
 

@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Dtos.PharmaceuticalCompanies;
+using PillPal.Application.Features.PharmaceuticalCompanies;
 
 namespace PillPal.WebApi.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
 public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pharmaceuticalCompanyService)
@@ -28,7 +28,7 @@ public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pha
     /// <summary>
     /// Get a pharmaceutical company by id
     /// </summary>
-    /// <param name="pharmaceuticalCompanyId"></param>
+    /// <param name="pharmaceuticalCompanyId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="200">Returns a pharmaceutical company</response>
     /// <response code="404">If the pharmaceutical company is not found</response>
     [HttpGet("{pharmaceuticalCompanyId:guid}", Name = "GetPharmaceuticalCompanyById")]
@@ -56,7 +56,7 @@ public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pha
     ///     
     /// </remarks>
     /// <response code="201">Returns the created pharmaceutical company</response>
-    /// <response code="422">If the pharmaceutical company is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPost(Name = "CreatePharmaceuticalCompany")]
     [ProducesResponseType(typeof(PharmaceuticalCompanyDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -70,7 +70,7 @@ public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pha
     /// <summary>
     /// Update a pharmaceutical company
     /// </summary>
-    /// <param name="pharmaceuticalCompanyId"></param>
+    /// <param name="pharmaceuticalCompanyId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updatePharmaceuticalCompanyDto"></param>
     /// <remarks>
     /// Sample request:
@@ -84,7 +84,7 @@ public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pha
     /// </remarks>
     /// <response code="200">Returns the updated pharmaceutical company</response>
     /// <response code="404">If the pharmaceutical company is not found</response>
-    /// <response code="422">If the pharmaceutical company is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPut("{pharmaceuticalCompanyId:guid}", Name = "UpdatePharmaceuticalCompany")]
     [ProducesResponseType(typeof(PharmaceuticalCompanyDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -99,7 +99,7 @@ public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pha
     /// <summary>
     /// Delete a pharmaceutical company (soft delete)
     /// </summary>
-    /// <param name="pharmaceuticalCompanyId"></param>
+    /// <param name="pharmaceuticalCompanyId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the pharmaceutical company is not found</response>
     [HttpDelete("{pharmaceuticalCompanyId:guid}", Name = "DeletePharmaceuticalCompany")]

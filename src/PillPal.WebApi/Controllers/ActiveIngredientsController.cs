@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Dtos.ActiveIngredients;
+using PillPal.Application.Features.ActiveIngredients;
 
 namespace PillPal.WebApi.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
 public class ActiveIngredientsController(IActiveIngredientService activeIngredientService)
@@ -14,12 +14,13 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// <summary>
     /// Get all active ingredients
     /// </summary>
+    /// <param name="queryParameter"></param>
     /// <response code="200">Returns a list of active ingredients</response>
     [HttpGet(Name = "GetActiveIngredients")]
     [ProducesResponseType(typeof(IEnumerable<ActiveIngredientDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetActiveIngredientsAsync()
+    public async Task<IActionResult> GetActiveIngredientsAsync([FromQuery] ActiveIngredientQueryParameter queryParameter)
     {
-        var activeIngredients = await activeIngredientService.GetActiveIngredientsAsync();
+        var activeIngredients = await activeIngredientService.GetActiveIngredientsAsync(queryParameter);
 
         return Ok(activeIngredients);
     }
@@ -27,7 +28,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// <summary>
     /// Get an active ingredient by id
     /// </summary>
-    /// <param name="activeIngredientId"></param>
+    /// <param name="activeIngredientId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="200">Returns an active ingredient</response>
     /// <response code="404">If the active ingredient is not found</response>
     [HttpGet("{activeIngredientId:guid}", Name = "GetActiveIngredientById")]
@@ -55,6 +56,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     ///     
     /// </remarks>
     /// <response code="201">Returns the created active ingredient</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPost(Name = "CreateActiveIngredient")]
     [ProducesResponseType(typeof(ActiveIngredientDto), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateActiveIngredientAsync(CreateActiveIngredientDto createActiveIngredientDto)
@@ -67,7 +69,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// <summary>
     /// Update an active ingredient
     /// </summary>
-    /// <param name="activeIngredientId"></param>
+    /// <param name="activeIngredientId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateActiveIngredientDto"></param>
     /// <remarks>
     /// Sample request:
@@ -81,7 +83,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// </remarks>
     /// <response code="200">Returns the updated active ingredient</response>
     /// <response code="404">If the active ingredient is not found</response>
-    /// <response code="422">If the active ingredient is not valid</response>
+    /// <response code="422">If the input data is invalid</response>
     [HttpPut("{activeIngredientId:guid}", Name = "UpdateActiveIngredient")]
     [ProducesResponseType(typeof(ActiveIngredientDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -96,7 +98,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// <summary>
     /// Delete an active ingredient (soft delete)
     /// </summary>
-    /// <param name="activeIngredientId"></param>
+    /// <param name="activeIngredientId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the active ingredient is not found</response>
     [HttpDelete("{activeIngredientId:guid}", Name = "DeleteActiveIngredient")]

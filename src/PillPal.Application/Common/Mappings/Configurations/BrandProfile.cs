@@ -1,4 +1,4 @@
-﻿using PillPal.Application.Dtos.Brands;
+﻿using PillPal.Application.Features.Brands;
 
 namespace PillPal.Application.Common.Mappings;
 

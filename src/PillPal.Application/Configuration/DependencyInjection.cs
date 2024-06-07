@@ -1,6 +1,16 @@
 ﻿using PillPal.Application.Common.Interfaces.Auth;
 using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Repositories;
+using PillPal.Application.Features.ActiveIngredients;
+using PillPal.Application.Features.Auths;
+using PillPal.Application.Features.Brands;
+using PillPal.Application.Features.Categories;
+using PillPal.Application.Features.Customers;
+using PillPal.Application.Features.DosageForms;
+using PillPal.Application.Features.Medicines;
+using PillPal.Application.Features.Nations;
+using PillPal.Application.Features.PharmaceuticalCompanies;
+using PillPal.Application.Features.PharmacyStores;
+using PillPal.Application.Features.Specifications;
 
 namespace PillPal.Application.Configuration;
 
