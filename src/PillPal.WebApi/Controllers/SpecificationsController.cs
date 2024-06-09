@@ -19,7 +19,7 @@ public class SpecificationsController(ISpecificationService specificationService
     [ProducesResponseType(typeof(IEnumerable<SpecificationDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetSpecificationsAsync()
     {
-        var specifications = await specificationService.GetAllSpecificationsAsync();
+        var specifications = await specificationService.GetSpecificationsAsync();
 
         return Ok(specifications);
     }

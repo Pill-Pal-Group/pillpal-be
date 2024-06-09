@@ -52,16 +52,13 @@ public class NationRepository(IApplicationDbContext context, IMapper mapper, ISe
 
     public async Task<IEnumerable<NationDto>> GetNationsAsync(NationQueryParameter queryParameter)
     {
-        var nations = Context.Nations
-            .Where(n => !n.IsDeleted);
-
-        nations = nations.Filter(queryParameter);
-
-        var resultList = await nations
+        var nations = await Context.Nations
+            .Where(n => !n.IsDeleted)
+            .Filter(queryParameter)
             .AsNoTracking()
             .ToListAsync();
 
-        return Mapper.Map<IEnumerable<NationDto>>(resultList);
+        return Mapper.Map<IEnumerable<NationDto>>(nations);
     }
 
     public async Task<NationDto> UpdateNationAsync(Guid nationId, UpdateNationDto updateNationDto)

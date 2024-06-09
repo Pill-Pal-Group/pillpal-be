@@ -10,7 +10,7 @@ public interface ISpecificationService
     /// <returns>
     /// The task result contains a collection of <see cref="SpecificationDto"/> objects.
     /// </returns>
-    Task<IEnumerable<SpecificationDto>> GetAllSpecificationsAsync();
+    Task<IEnumerable<SpecificationDto>> GetSpecificationsAsync();
 
     /// <summary>
     /// Retrieves a specification by its unique identifier.

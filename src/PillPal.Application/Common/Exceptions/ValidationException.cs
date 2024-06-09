@@ -2,6 +2,9 @@
 
 namespace PillPal.Application.Common.Exceptions;
 
+/// <summary>
+/// Exception thrown when a request is invalid, status code 422.
+/// </summary>
 public class ValidationException : HttpException
 {
     private ValidationException()

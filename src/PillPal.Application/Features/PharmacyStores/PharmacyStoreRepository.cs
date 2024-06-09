@@ -56,6 +56,7 @@ public class PharmacyStoreRepository(IApplicationDbContext context, IMapper mapp
         var pharmacyStores = await Context.PharmacyStores
             .Include(c => c.Brand)
             .Where(c => !c.IsDeleted)
+            .AsNoTracking()
             .ToListAsync();
 
         return Mapper.Map<IEnumerable<PharmacyStoreDto>>(pharmacyStores);

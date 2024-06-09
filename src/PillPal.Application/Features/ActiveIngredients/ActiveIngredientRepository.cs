@@ -55,6 +55,7 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
         var activeIngredients = await Context.ActiveIngredients
             .Where(ai => !ai.IsDeleted)
             .Filter(queryParameter)
+            .AsNoTracking()
             .ToListAsync();
 
         return Mapper.Map<IEnumerable<ActiveIngredientDto>>(activeIngredients);
