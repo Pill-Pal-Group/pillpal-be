@@ -52,7 +52,7 @@ public class BrandRepository(IApplicationDbContext context, IMapper mapper, ISer
 
     public async Task<IEnumerable<BrandDto>> GetBrandsAsync(BrandQueryParameter queryParameter)
     {
-        var brands = Context.Brands
+        var brands = await Context.Brands
             .Where(b => !b.IsDeleted)
             .Filter(queryParameter)
             .AsNoTracking()

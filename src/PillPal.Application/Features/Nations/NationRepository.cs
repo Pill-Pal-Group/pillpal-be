@@ -52,7 +52,7 @@ public class NationRepository(IApplicationDbContext context, IMapper mapper, ISe
 
     public async Task<IEnumerable<NationDto>> GetNationsAsync(NationQueryParameter queryParameter)
     {
-        var nations = Context.Nations
+        var nations = await Context.Nations
             .Where(n => !n.IsDeleted)
             .Filter(queryParameter)
             .AsNoTracking()
