@@ -46,6 +46,7 @@ public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMap
         var pharmaceuticalCompanies = await Context.PharmaceuticalCompanies
             .Include(b => b.Nation)
             .Where(b => !b.IsDeleted)
+            .AsNoTracking()
             .ToListAsync();
 
         return Mapper.Map<IEnumerable<PharmaceuticalCompanyDto>>(pharmaceuticalCompanies);

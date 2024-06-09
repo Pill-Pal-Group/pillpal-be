@@ -113,17 +113,12 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         MedicineQueryParameter queryParameter, MedicineIncludeParameter includeParameter)
     {
         var medicines = Context.Medicines
-            .Where(m => !m.IsDeleted);
-
-        medicines = medicines.Filter(queryParameter);
-
-        medicines = medicines.Include(includeParameter);
-
-        var resultList = await medicines
+            .Where(m => !m.IsDeleted)
+            .Filter(queryParameter)
             .AsNoTracking()
             .ToListAsync();
 
-        return Mapper.Map<IEnumerable<MedicineDto>>(resultList);
+        return Mapper.Map<IEnumerable<MedicineDto>>(medicines);
     }
 
     public async Task<MedicineDto> UpdateMedicineAsync(Guid medicineId, UpdateMedicineDto updateMedicineDto)

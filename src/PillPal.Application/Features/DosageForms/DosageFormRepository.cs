@@ -49,6 +49,7 @@ public class DosageFormRepository(IApplicationDbContext context, IMapper mapper,
     public async Task<IEnumerable<DosageFormDto>> GetDosageFormsAsync()
     {
         var dosageForms = await Context.DosageForms
+            .AsNoTracking()
             .ToListAsync();
 
         return Mapper.Map<IEnumerable<DosageFormDto>>(dosageForms);
