@@ -115,6 +115,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         var medicines = await Context.Medicines
             .Where(m => !m.IsDeleted)
             .Filter(queryParameter)
+            .Include(includeParameter)
             .AsNoTracking()
             .ToListAsync();
 
