@@ -10,14 +10,7 @@ public class NationRepository(IApplicationDbContext context, IMapper mapper, ISe
 {
     public async Task<NationDto> CreateNationAsync(CreateNationDto createNationDto)
     {
-        var validator = ServiceProvider.GetRequiredService<CreateNationValidator>();
-
-        var validationResult = await validator.ValidateAsync(createNationDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(createNationDto);
 
         var nation = Mapper.Map<Nation>(createNationDto);
 
@@ -45,6 +38,7 @@ public class NationRepository(IApplicationDbContext context, IMapper mapper, ISe
     {
         var nation = await Context.Nations
             .Where(n => n.Id == nationId && !n.IsDeleted)
+            .AsNoTracking()
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Nation), nationId);
 
         return Mapper.Map<NationDto>(nation);
@@ -63,14 +57,7 @@ public class NationRepository(IApplicationDbContext context, IMapper mapper, ISe
 
     public async Task<NationDto> UpdateNationAsync(Guid nationId, UpdateNationDto updateNationDto)
     {
-        var validator = ServiceProvider.GetRequiredService<UpdateNationValidator>();
-
-        var validationResult = await validator.ValidateAsync(updateNationDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(updateNationDto);
 
         var nation = await Context.Nations
             .Where(n => n.Id == nationId && !n.IsDeleted)

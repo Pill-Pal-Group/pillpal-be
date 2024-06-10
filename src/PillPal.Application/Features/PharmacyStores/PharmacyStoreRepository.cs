@@ -10,14 +10,7 @@ public class PharmacyStoreRepository(IApplicationDbContext context, IMapper mapp
 {
     public async Task<PharmacyStoreDto> CreatePharmacyStoreAsync(CreatePharmacyStoreDto createPharmacyStoreDto)
     {
-        var validator = ServiceProvider.GetRequiredService<CreatePharmacyStoreValidator>();
-
-        var validationResult = await validator.ValidateAsync(createPharmacyStoreDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(createPharmacyStoreDto);
 
         var pharmacyStore = Mapper.Map<PharmacyStore>(createPharmacyStoreDto);
 
@@ -46,6 +39,7 @@ public class PharmacyStoreRepository(IApplicationDbContext context, IMapper mapp
         var pharmacyStore = await Context.PharmacyStores
             .Include(c => c.Brand)
             .Where(c => c.Id == pharmacyStoreId && !c.IsDeleted)
+            .AsNoTracking()
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmacyStore), pharmacyStoreId);
 
         return Mapper.Map<PharmacyStoreDto>(pharmacyStore);
@@ -64,14 +58,7 @@ public class PharmacyStoreRepository(IApplicationDbContext context, IMapper mapp
 
     public async Task<PharmacyStoreDto> UpdatePharmacyStoreAsync(Guid pharmacyStoreId, UpdatePharmacyStoreDto updatePharmacyStoreDto)
     {
-        var validator = ServiceProvider.GetRequiredService<UpdatePharmacyStoreValidator>();
-
-        var validationResult = await validator.ValidateAsync(updatePharmacyStoreDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(updatePharmacyStoreDto);
 
         var pharmacyStore = await Context.PharmacyStores
             .Where(c => c.Id == pharmacyStoreId && !c.IsDeleted)

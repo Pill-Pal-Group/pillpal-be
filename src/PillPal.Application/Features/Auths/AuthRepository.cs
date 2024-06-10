@@ -13,14 +13,7 @@ public class AuthRepository(
 {
     public async Task<AccessTokenResponse> LoginAsync(LoginRequest request)
     {
-        var validator = GetValidator<LoginRequest>();
-
-        var validationResult = await validator.ValidateAsync(request);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(request);
 
         var user = await identityService.LoginAsync(request.Email!, request.Password!);
 
@@ -39,14 +32,7 @@ public class AuthRepository(
 
     public async Task<AccessTokenResponse> RefreshTokenAsync(RefreshRequest refreshToken)
     {
-        var validator = GetValidator<RefreshRequest>();
-
-        var validationResult = await validator.ValidateAsync(refreshToken);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(refreshToken);
 
         var isTokenValid = jwtService.ValidateRefreshToken(refreshToken.ExpiredToken!, refreshToken.RefreshToken!);
 
@@ -76,28 +62,14 @@ public class AuthRepository(
 
     public async Task RegisterAsync(RegisterRequest request)
     {
-        var validator = GetValidator<RegisterRequest>();
-
-        var validationResult = await validator.ValidateAsync(request);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(request);
 
         await identityService.CreateUserAsync(request.Email!, request.Password!);
     }
 
     public async Task<AccessTokenResponse> TokenLoginAsync(TokenLoginRequest request)
     {
-        var validator = GetValidator<TokenLoginRequest>();
-
-        var validationResult = await validator.ValidateAsync(request);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(request);
 
         var email = jwtService.GetEmailPrincipal(request.Token!);
 

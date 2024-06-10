@@ -10,14 +10,7 @@ public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMap
 {
     public async Task<PharmaceuticalCompanyDto> CreatePharmaceuticalCompanyAsync(CreatePharmaceuticalCompanyDto createPharmaceuticalCompanyDto)
     {
-        var validator = ServiceProvider.GetRequiredService<CreatePharmaceuticalCompanyValidator>();
-
-        var validationResult = await validator.ValidateAsync(createPharmaceuticalCompanyDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(createPharmaceuticalCompanyDto);
 
         var pharmaceuticalCompany = Mapper.Map<PharmaceuticalCompany>(createPharmaceuticalCompanyDto);
 
@@ -57,6 +50,7 @@ public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMap
         var pharmaceuticalCompany = await Context.PharmaceuticalCompanies
             .Include(b => b.Nation)
             .Where(b => b.Id == companyId && !b.IsDeleted)
+            .AsNoTracking()
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmaceuticalCompany), companyId);
 
         return Mapper.Map<PharmaceuticalCompanyDto>(pharmaceuticalCompany);
@@ -64,14 +58,7 @@ public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMap
 
     public async Task<PharmaceuticalCompanyDto> UpdatePharmaceuticalCompanyAsync(Guid companyId, UpdatePharmaceuticalCompanyDto updatePharmaceuticalCompanyDto)
     {
-        var validator = ServiceProvider.GetRequiredService<UpdatePharmaceuticalCompanyValidator>();
-
-        var validationResult = await validator.ValidateAsync(updatePharmaceuticalCompanyDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(updatePharmaceuticalCompanyDto);
 
         var pharmaceuticalCompany = await Context.PharmaceuticalCompanies
             .Where(b => b.Id == companyId && !b.IsDeleted)

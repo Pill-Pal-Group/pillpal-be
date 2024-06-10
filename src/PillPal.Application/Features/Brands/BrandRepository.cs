@@ -10,14 +10,7 @@ public class BrandRepository(IApplicationDbContext context, IMapper mapper, ISer
 {
     public async Task<BrandDto> CreateBrandAsync(CreateBrandDto createBrandDto)
     {
-        var validator = ServiceProvider.GetRequiredService<CreateBrandValidator>();
-
-        var validationResult = await validator.ValidateAsync(createBrandDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(createBrandDto);
 
         var brand = Mapper.Map<Brand>(createBrandDto);
 
@@ -45,6 +38,7 @@ public class BrandRepository(IApplicationDbContext context, IMapper mapper, ISer
     {
         var brand = await Context.Brands
             .Where(b => b.Id == brandId && !b.IsDeleted)
+            .AsNoTracking()
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Brand), brandId);
 
         return Mapper.Map<BrandDto>(brand);
@@ -63,14 +57,7 @@ public class BrandRepository(IApplicationDbContext context, IMapper mapper, ISer
 
     public async Task<BrandDto> UpdateBrandAsync(Guid brandId, UpdateBrandDto updateBrandDto)
     {
-        var validator = ServiceProvider.GetRequiredService<UpdateBrandValidator>();
-
-        var validationResult = await validator.ValidateAsync(updateBrandDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(updateBrandDto);
 
         var brand = await Context.Brands
             .Where(b => b.Id == brandId && !b.IsDeleted)

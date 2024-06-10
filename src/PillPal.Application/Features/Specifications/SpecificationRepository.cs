@@ -10,14 +10,7 @@ public class SpecificationRepository(IApplicationDbContext context, IMapper mapp
 {
     public async Task<SpecificationDto> CreateSpecificationAsync(CreateSpecificationDto createSpecificationDto)
     {
-        var validator = ServiceProvider.GetRequiredService<CreateSpecificationValidator>();
-
-        var validationResult = await validator.ValidateAsync(createSpecificationDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(createSpecificationDto);
 
         var specification = Mapper.Map<Specification>(createSpecificationDto);
 
@@ -57,14 +50,7 @@ public class SpecificationRepository(IApplicationDbContext context, IMapper mapp
 
     public async Task<SpecificationDto> UpdateSpecificationAsync(Guid specificationId, UpdateSpecificationDto updateSpecificationDto)
     {
-        var validator = ServiceProvider.GetRequiredService<UpdateSpecificationValidator>();
-
-        var validationResult = await validator.ValidateAsync(updateSpecificationDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(updateSpecificationDto);
 
         var specification = await Context.Specifications.FindAsync(specificationId)
             ?? throw new NotFoundException(nameof(Specification), specificationId);
