@@ -1,6 +1,7 @@
 ﻿using PillPal.Application.Features.ActiveIngredients;
-using PillPal.Application.Features.Brands;
+using PillPal.Application.Features.Categories;
 using PillPal.Application.Features.DosageForms;
+using PillPal.Application.Features.MedicinesInBrands;
 using PillPal.Application.Features.PharmaceuticalCompanies;
 using PillPal.Application.Features.Specifications;
 using System.Text.Json.Serialization;
@@ -25,15 +26,13 @@ public record MedicineDto
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public SpecificationDto? Specification { get; init; }
 
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public IEnumerable<PharmaceuticalCompanyDto>? PharmaceuticalCompanies { get; init; }
+    public IEnumerable<CategoryDto> Categories { get; init; } = default!;
 
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public IEnumerable<DosageFormDto>? DosageForms { get; init; }
+    public IEnumerable<PharmaceuticalCompanyDto> PharmaceuticalCompanies { get; init; } = default!;
 
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public IEnumerable<ActiveIngredientDto>? ActiveIngredients { get; init; }
+    public IEnumerable<DosageFormDto> DosageForms { get; init; } = default!;
 
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public IEnumerable<BrandDto>? Brands { get; init; }
+    public IEnumerable<ActiveIngredientDto> ActiveIngredients { get; init; } = default!;
+
+    public IEnumerable<MedicineInBrandsDto> MedicineInBrands { get; init; } = default!;
 }

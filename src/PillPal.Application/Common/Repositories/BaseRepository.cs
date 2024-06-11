@@ -1,5 +1,5 @@
-﻿using PillPal.Application.Common.Exceptions;
-using PillPal.Application.Common.Interfaces.Data;
+﻿using PillPal.Application.Common.Interfaces.Data;
+using PillPal.Core.Common;
 
 namespace PillPal.Application.Common.Repositories;
 
@@ -39,22 +39,10 @@ public class BaseRepository
     }
 
     protected static async Task<List<T>> GetEntitiesByIdsAsync<T>(IEnumerable<Guid> ids, DbSet<T> dbSet)
-        where T : class
+        where T : BaseEntity
     {
         return await dbSet
-            .Where(e => ids.Contains((Guid)e.GetType().GetProperty("Id")!.GetValue(e)!))
+            .Where(e => ids.Contains(e.Id))
             .ToListAsync();
-    }
-
-    protected static void ValidateEntityCounts<T>(IEnumerable<Guid> ids, IEnumerable<T> entities, string entityName)
-        where T : class
-    {
-        if (entities.Count() != ids.Count())
-        {
-            throw new NotFoundException(
-                entityName,
-                ids.Except(entities.Select(e => (Guid)e.GetType().GetProperty("Id")!.GetValue(e)!)).FirstOrDefault()
-            );
-        }
     }
 }

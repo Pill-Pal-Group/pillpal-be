@@ -3,6 +3,7 @@ using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Application.Common.Repositories;
 using PillPal.Application.Features.Medicines;
+using PillPal.Application.Features.MedicinesInBrands;
 
 namespace PillPal.Application.Features.Medicines;
 
@@ -11,77 +12,59 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
 {
     public async Task<MedicineDto> CreateMedicineAsync(CreateMedicineDto createMedicineDto)
     {
-        var validator = ServiceProvider.GetRequiredService<IValidator<CreateMedicineDto>>();
-
-        var validationResult = await validator.ValidateAsync(createMedicineDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(createMedicineDto);
 
         var medicine = Mapper.Map<Medicine>(createMedicineDto);
 
-        var brands = await Context.Brands
-            .Where(b => createMedicineDto.Brands.Contains(b.Id))
-            .ToListAsync();
+        // get related entities from list of ids
+        var categories = await GetEntitiesByIdsAsync(createMedicineDto.Categories, Context.Categories);
+        var pharmaceuticalCompanies = await GetEntitiesByIdsAsync(createMedicineDto.PharmaceuticalCompanies, Context.PharmaceuticalCompanies);
+        var dosageForms = await GetEntitiesByIdsAsync(createMedicineDto.DosageForms, Context.DosageForms);
+        var activeIngredients = await GetEntitiesByIdsAsync(createMedicineDto.ActiveIngredients, Context.ActiveIngredients);
 
-        var pharmaceuticalCompanies = await Context.PharmaceuticalCompanies
-            .Where(pc => createMedicineDto.PharmaceuticalCompanys.Contains(pc.Id))
-            .ToListAsync();
-
-        var dosageForms = await Context.DosageForms
-            .Where(df => createMedicineDto.DosageForms.Contains(df.Id))
-            .ToListAsync();
-
-        var activeIngredients = await Context.ActiveIngredients
-            .Where(ai => createMedicineDto.ActiveIngredients.Contains(ai.Id))
-            .ToListAsync();
-
-        if (brands.Count != createMedicineDto.Brands.Count())
-        {
-            throw new NotFoundException(
-                nameof(Brand),
-                createMedicineDto.Brands.Except(brands.Select(b => b.Id)).FirstOrDefault()
-            );
-        }
-
-        if (pharmaceuticalCompanies.Count != createMedicineDto.PharmaceuticalCompanys.Count())
-        {
-            throw new NotFoundException(
-                nameof(PharmaceuticalCompany),
-                createMedicineDto.PharmaceuticalCompanys.Except(pharmaceuticalCompanies.Select(pc => pc.Id)).FirstOrDefault()
-            );
-        }
-
-        if (dosageForms.Count != createMedicineDto.DosageForms.Count())
-        {
-            throw new NotFoundException(
-                nameof(DosageForm),
-                createMedicineDto.DosageForms.Except(dosageForms.Select(df => df.Id)).FirstOrDefault());
-        }
-
-        if (activeIngredients.Count != createMedicineDto.ActiveIngredients.Count())
-        {
-            throw new NotFoundException(
-                nameof(ActiveIngredient),
-                createMedicineDto.ActiveIngredients.Except(activeIngredients.Select(ai => ai.Id)).FirstOrDefault()
-            );
-        }
-
+        // assign related entities
+        medicine.Categories = categories;
         medicine.PharmaceuticalCompanies = pharmaceuticalCompanies;
-
         medicine.DosageForms = dosageForms;
-
         medicine.ActiveIngredients = activeIngredients;
-
-        medicine.Brands = brands;
 
         await Context.Medicines.AddAsync(medicine);
 
         await Context.SaveChangesAsync();
 
         return Mapper.Map<MedicineDto>(medicine);
+    }
+
+    public async Task CreateMedicineInBrandAsync(Guid medicineId, CreateMedicineInBrandsDto createMedicineInBrandDto)
+    {
+        await ValidateAsync(createMedicineInBrandDto);
+
+        var medicineInBrand = Mapper.Map<MedicineInBrand>(createMedicineInBrandDto);
+
+        var medicine = await Context.Medicines
+            .Where(m => m.Id == medicineId && !m.IsDeleted)
+            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Medicine), medicineId);
+
+        medicineInBrand.Medicine = medicine;
+
+        await Context.MedicineInBrands.AddAsync(medicineInBrand);
+
+        await Context.SaveChangesAsync();
+    }
+
+    public async Task UpdateMedicineInBrandAsync(Guid medicineId, UpdateMedicineInBrandsDto updateMedicineInBrandDto)
+    {
+        await ValidateAsync(updateMedicineInBrandDto);
+
+        var medicineInBrand = await Context.MedicineInBrands
+            .Where(mib => mib.MedicineId == medicineId && mib.BrandId == updateMedicineInBrandDto.BrandId)
+            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(MedicineInBrand), medicineId);
+
+        Mapper.Map(updateMedicineInBrandDto, medicineInBrand);
+
+        Context.MedicineInBrands.Update(medicineInBrand);
+
+        await Context.SaveChangesAsync();
     }
 
     public async Task DeleteMedicineAsync(Guid medicineId)
@@ -100,10 +83,13 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         var medicine = await Context.Medicines
             .Where(m => m.Id == medicineId && !m.IsDeleted)
             .Include(m => m.Specification)
+            .Include(m => m.Categories)
             .Include(m => m.PharmaceuticalCompanies)
             .Include(m => m.DosageForms)
             .Include(m => m.ActiveIngredients)
-            .Include(m => m.Brands)
+            .Include(m => m.MedicineInBrands.Where(mib => !mib.IsDeleted))
+            .ThenInclude(mib => mib.Brand)
+            .AsNoTracking()
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Medicine), medicineId);
 
         return Mapper.Map<MedicineDto>(medicine);
@@ -115,6 +101,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         var medicines = await Context.Medicines
             .Where(m => !m.IsDeleted)
             .Filter(queryParameter)
+            .Include(includeParameter)
             .AsNoTracking()
             .ToListAsync();
 
@@ -123,76 +110,30 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
 
     public async Task<MedicineDto> UpdateMedicineAsync(Guid medicineId, UpdateMedicineDto updateMedicineDto)
     {
-        var validator = ServiceProvider.GetRequiredService<IValidator<UpdateMedicineDto>>();
-
-        var validationResult = await validator.ValidateAsync(updateMedicineDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(updateMedicineDto);
 
         var medicine = await Context.Medicines
             .Where(m => m.Id == medicineId && !m.IsDeleted)
+            .Include(m => m.Categories)
+            .Include(m => m.Specification)
             .Include(m => m.PharmaceuticalCompanies)
             .Include(m => m.DosageForms)
             .Include(m => m.ActiveIngredients)
-            .Include(m => m.Brands)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Medicine), medicineId);
 
         Mapper.Map(updateMedicineDto, medicine);
+        
+        // get related entities from list of ids
+        var categories = await GetEntitiesByIdsAsync(updateMedicineDto.Categories, Context.Categories);
+        var pharmaceuticalCompanies = await GetEntitiesByIdsAsync(updateMedicineDto.PharmaceuticalCompanies, Context.PharmaceuticalCompanies);
+        var dosageForms = await GetEntitiesByIdsAsync(updateMedicineDto.DosageForms, Context.DosageForms);
+        var activeIngredients = await GetEntitiesByIdsAsync(updateMedicineDto.ActiveIngredients, Context.ActiveIngredients);
 
-        var brands = await Context.Brands
-            .Where(b => updateMedicineDto.Brands.Contains(b.Id))
-            .ToListAsync();
-
-        var pharmaceuticalCompanies = await Context.PharmaceuticalCompanies
-            .Where(pc => updateMedicineDto.PharmaceuticalCompanys.Contains(pc.Id))
-            .ToListAsync();
-
-        var dosageForms = await Context.DosageForms
-            .Where(df => updateMedicineDto.DosageForms.Contains(df.Id))
-            .ToListAsync();
-
-        var activeIngredients = await Context.ActiveIngredients
-            .Where(ai => updateMedicineDto.ActiveIngredients.Contains(ai.Id))
-            .ToListAsync();
-
-        if (brands.Count != updateMedicineDto.Brands.Count())
-        {
-            throw new NotFoundException(
-                nameof(Brand), updateMedicineDto.Brands.Except(brands.Select(b => b.Id)).FirstOrDefault()
-            );
-        }
-
-        if (pharmaceuticalCompanies.Count != updateMedicineDto.PharmaceuticalCompanys.Count())
-        {
-            throw new NotFoundException(
-                nameof(PharmaceuticalCompany), updateMedicineDto.PharmaceuticalCompanys.Except(pharmaceuticalCompanies.Select(pc => pc.Id)).FirstOrDefault()
-            );
-        }
-
-        if (dosageForms.Count != updateMedicineDto.DosageForms.Count())
-        {
-            throw new NotFoundException(
-                nameof(DosageForm), updateMedicineDto.DosageForms.Except(dosageForms.Select(df => df.Id)).FirstOrDefault()
-            );
-        }
-
-        if (activeIngredients.Count != updateMedicineDto.ActiveIngredients.Count())
-        {
-            throw new NotFoundException(
-                nameof(ActiveIngredient), updateMedicineDto.ActiveIngredients.Except(activeIngredients.Select(ai => ai.Id)).FirstOrDefault()
-            );
-        }
-
+        // assign related entities
+        medicine.Categories = categories;
         medicine.PharmaceuticalCompanies = pharmaceuticalCompanies;
-
         medicine.DosageForms = dosageForms;
-
         medicine.ActiveIngredients = activeIngredients;
-
-        medicine.Brands = brands;
 
         // manually change entity state to modified so that interceptor detects changes
         // hence updating the updated at field
@@ -202,5 +143,18 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         await Context.SaveChangesAsync();
 
         return Mapper.Map<MedicineDto>(medicine);
+    }
+
+    public async Task DeleteMedicineInBrandAsync(Guid medicineId, Guid brandId)
+    {
+        var medicineInBrand = await Context.MedicineInBrands
+            .Where(mib => mib.MedicineId == medicineId && mib.BrandId == brandId)
+            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(MedicineInBrand), medicineId);
+
+        medicineInBrand.IsDeleted = true;
+
+        Context.MedicineInBrands.Update(medicineInBrand);
+
+        await Context.SaveChangesAsync();
     }
 }

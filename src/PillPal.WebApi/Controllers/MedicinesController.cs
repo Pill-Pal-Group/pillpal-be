@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Application.Features.Medicines;
+using PillPal.Application.Features.MedicinesInBrands;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -57,10 +58,18 @@ public class MedicinesController(IMedicineService medicineService)
     ///         "requirePrescript": true,
     ///         "image": "Image Url",
     ///         "specificationId": "6b4aadb0-8189-467a-8aba-6572d3d4b972",
-    ///         "pharmaceuticalCompanys": ["6b4aadb0-8189-467a-8aba-6572d3d4b972"],
-    ///         "dosageForms": ["6b4aadb0-8189-467a-8aba-6572d3d4b972"],
-    ///         "activeIngredients": ["6b4aadb0-8189-467a-8aba-6572d3d4b972"],
-    ///         "brands": ["6b4aadb0-8189-467a-8aba-6572d3d4b972"]
+    ///         "categories": [
+    ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
+    ///         ],
+    ///         "pharmaceuticalCompanys": [
+    ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
+    ///         ],
+    ///         "dosageForms": [
+    ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
+    ///         ],
+    ///         "activeIngredients": [
+    ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
+    ///         ],
     ///     }
     ///
     /// </remarks>
@@ -77,6 +86,37 @@ public class MedicinesController(IMedicineService medicineService)
     }
 
     /// <summary>
+    /// Add a medicine to a brand with price
+    /// </summary>
+    /// <param name="medicineId" example="00000000-0000-0000-0000-000000000000"></param>
+    /// <param name="createMedicineInBrandDto"></param>
+    /// <remarks>
+    /// Sample request:
+    ///
+    ///     POST /api/medicines/{medicineId}/brands
+    ///     {
+    ///         "brandId": "6b4aadb0-8189-467a-8aba-6572d3d4b972",
+    ///         "price": 100.000,
+    ///         "medicineUrl": "https://monke.com/paracetamol"
+    ///     }
+    ///
+    /// </remarks>
+    /// <response code="201">Returns the created medicine in brand</response>
+    /// <response code="404">If the medicine id is not found</response>
+    /// <response code="422">If the input data is invalid</response>
+    [HttpPost("{medicineId:guid}/brands", Name = "CreateMedicineInBrand")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+    public async Task<IActionResult> CreateMedicineInBrandAsync(Guid medicineId,
+        CreateMedicineInBrandsDto createMedicineInBrandDto)
+    {
+        await medicineService.CreateMedicineInBrandAsync(medicineId, createMedicineInBrandDto);
+
+        return Created();
+    }
+
+    /// <summary>
     /// Update a medicine
     /// </summary>
     /// <param name="medicineId" example="00000000-0000-0000-0000-000000000000"></param>
@@ -90,10 +130,18 @@ public class MedicinesController(IMedicineService medicineService)
     ///         "requirePrescript": true,
     ///         "image": "Image Url",
     ///         "specificationId": "6b4aadb0-8189-467a-8aba-6572d3d4b972",
-    ///         "pharmaceuticalCompanys": ["6b4aadb0-8189-467a-8aba-6572d3d4b972"],
-    ///         "dosageForms": ["6b4aadb0-8189-467a-8aba-6572d3d4b972"],
-    ///         "activeIngredients": ["6b4aadb0-8189-467a-8aba-6572d3d4b972"],
-    ///         "brands": ["6b4aadb0-8189-467a-8aba-6572d3d4b972"]
+    ///         "categories": [
+    ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
+    ///         ],
+    ///         "pharmaceuticalCompanys": [
+    ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
+    ///         ],
+    ///         "dosageForms": [
+    ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
+    ///         ],
+    ///         "activeIngredients": [
+    ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
+    ///         ],
     ///     }
     ///
     /// </remarks>
@@ -112,6 +160,37 @@ public class MedicinesController(IMedicineService medicineService)
     }
 
     /// <summary>
+    /// Update a medicine in a brand
+    /// </summary>
+    /// <param name="medicineId" example="00000000-0000-0000-0000-000000000000"></param>
+    /// <param name="updateMedicineInBrandDto"></param>
+    /// <remarks>
+    /// Sample request:
+    ///
+    ///     PUT /api/medicines/{medicineId}/brands
+    ///     {
+    ///         "brandId": "6b4aadb0-8189-467a-8aba-6572d3d4b972",
+    ///         "price": 100.000,
+    ///         "medicineUrl": "https://monke.com/paracetamol"
+    ///     }
+    ///
+    /// </remarks>
+    /// <response code="204">No content</response>
+    /// <response code="404">If the medicine is not found</response>
+    /// <response code="422">If the input data is invalid</response>
+    [HttpPut("{medicineId:guid}/brands", Name = "UpdateMedicineInBrand")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+    public async Task<IActionResult> UpdateMedicineInBrandAsync(Guid medicineId,
+        UpdateMedicineInBrandsDto updateMedicineInBrandDto)
+    {
+        await medicineService.UpdateMedicineInBrandAsync(medicineId, updateMedicineInBrandDto);
+
+        return NoContent();
+    }
+
+    /// <summary>
     /// Delete a medicine (soft delete)
     /// </summary>
     /// <param name="medicineId" example="00000000-0000-0000-0000-000000000000"></param>
@@ -123,6 +202,23 @@ public class MedicinesController(IMedicineService medicineService)
     public async Task<IActionResult> DeleteMedicineAsync(Guid medicineId)
     {
         await medicineService.DeleteMedicineAsync(medicineId);
+
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Delete a medicine in a brand (soft delete)
+    /// </summary>
+    /// <param name="medicineId" example="00000000-0000-0000-0000-000000000000"></param>
+    /// <param name="brandId" example="00000000-0000-0000-0000-000000000000"></param>
+    /// <response code="204">No content</response>
+    /// <response code="404">If the medicine is not found</response>
+    [HttpDelete("{medicineId:guid}/brands/{brandId:guid}", Name = "DeleteMedicineInBrand")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteMedicineInBrandAsync(Guid medicineId, Guid brandId)
+    {
+        await medicineService.DeleteMedicineInBrandAsync(medicineId, brandId);
 
         return NoContent();
     }

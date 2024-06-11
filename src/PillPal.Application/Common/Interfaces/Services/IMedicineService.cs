@@ -1,4 +1,5 @@
 ﻿using PillPal.Application.Features.Medicines;
+using PillPal.Application.Features.MedicinesInBrands;
 
 namespace PillPal.Application.Common.Interfaces.Services;
 
@@ -34,6 +35,24 @@ public interface IMedicineService
     /// </returns>
     /// <exception cref="ValidationException">Thrown when validation fails for the creation data.</exception>
     Task<MedicineDto> CreateMedicineAsync(CreateMedicineDto createMedicineDto);
+    
+    /// <summary>
+    /// Adds brand to medicine with price.
+    /// </summary>
+    /// <param name="medicineId">The unique identifier for the medicine.</param>
+    /// <param name="createMedicineInBrandDto">The DTO containing the creation data for the medicine in brand.</param>
+    /// <exception cref="Exceptions.NotFoundException">Thrown if the either the medicine or brand is not found.</exception>
+    /// <exception cref="ValidationException">Thrown when validation fails for the creation data.</exception>
+    Task CreateMedicineInBrandAsync(Guid medicineId, CreateMedicineInBrandsDto createMedicineInBrandDto);
+
+    /// <summary>
+    /// Updates an existing medicine in brand.
+    /// </summary>
+    /// <param name="medicineId">The unique identifier for the medicine.</param>
+    /// <param name="updateMedicineInBrandDto">The DTO containing update information for the medicine in brand.</param>
+    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="ValidationException">Thrown when validation fails for the update information.</exception>    
+    Task UpdateMedicineInBrandAsync(Guid medicineId, UpdateMedicineInBrandsDto updateMedicineInBrandDto);
 
     /// <summary>
     /// Updates an existing medicine.
@@ -56,4 +75,12 @@ public interface IMedicineService
     /// </returns>
     /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
     Task DeleteMedicineAsync(Guid medicineId);
+
+    /// <summary>
+    /// Deletes a medicine in brand by performing a soft delete.
+    /// </summary>
+    /// <param name="medicineId">The unique identifier for the medicine.</param>
+    /// <param name="brandId">The unique identifier for the brand.</param>
+    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    Task DeleteMedicineInBrandAsync(Guid medicineId, Guid brandId);
 }
