@@ -122,7 +122,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Medicine), medicineId);
 
         Mapper.Map(updateMedicineDto, medicine);
-        
+
         // get related entities from list of ids
         var categories = await GetEntitiesByIdsAsync(updateMedicineDto.Categories, Context.Categories);
         var pharmaceuticalCompanies = await GetEntitiesByIdsAsync(updateMedicineDto.PharmaceuticalCompanies, Context.PharmaceuticalCompanies);

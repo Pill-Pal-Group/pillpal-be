@@ -35,7 +35,7 @@ public interface IMedicineService
     /// </returns>
     /// <exception cref="ValidationException">Thrown when validation fails for the creation data.</exception>
     Task<MedicineDto> CreateMedicineAsync(CreateMedicineDto createMedicineDto);
-    
+
     /// <summary>
     /// Adds brand to medicine with price.
     /// </summary>
