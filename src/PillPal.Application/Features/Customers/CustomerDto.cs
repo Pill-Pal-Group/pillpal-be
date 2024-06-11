@@ -15,5 +15,5 @@ public record CustomerDto
 
     /// <example>Q9, HCMC, Vietnam</example>
     public string? Address { get; init; }
-    public ApplicationUserDto ApplicationUser { get; init; } = default!;
+    public ApplicationUserDto IdentityUser { get; init; } = default!;
 }
