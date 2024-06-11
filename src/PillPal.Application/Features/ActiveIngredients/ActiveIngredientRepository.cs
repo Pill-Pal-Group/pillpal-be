@@ -10,14 +10,7 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
 {
     public async Task<ActiveIngredientDto> CreateActiveIngredientAsync(CreateActiveIngredientDto createActiveIngredientDto)
     {
-        var validator = ServiceProvider.GetRequiredService<CreateActiveIngredientValidator>();
-
-        var validationResult = await validator.ValidateAsync(createActiveIngredientDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(createActiveIngredientDto);
 
         var activeIngredient = Mapper.Map<ActiveIngredient>(createActiveIngredientDto);
 
@@ -45,6 +38,7 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
     {
         var activeIngredient = await Context.ActiveIngredients
             .Where(ai => ai.Id == ingredientId && !ai.IsDeleted)
+            .AsNoTracking()
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(ActiveIngredient), ingredientId);
 
         return Mapper.Map<ActiveIngredientDto>(activeIngredient);
@@ -63,14 +57,7 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
 
     public async Task<ActiveIngredientDto> UpdateActiveIngredientAsync(Guid ingredientId, UpdateActiveIngredientDto updateActiveIngredientDto)
     {
-        var validator = ServiceProvider.GetRequiredService<UpdateActiveIngredientValidator>();
-
-        var validationResult = await validator.ValidateAsync(updateActiveIngredientDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(updateActiveIngredientDto);
 
         var activeIngredient = await Context.ActiveIngredients
             .Where(ai => ai.Id == ingredientId && !ai.IsDeleted)

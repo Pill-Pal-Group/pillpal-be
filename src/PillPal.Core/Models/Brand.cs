@@ -8,7 +8,5 @@ public class Brand : BaseAuditableEntity
 
     public virtual ICollection<PharmacyStore> PharmacyStores { get; set; } = default!;
 
-    public virtual ICollection<Medicine> Medicines { get; set; } = default!;
-
     public virtual ICollection<MedicineInBrand> MedicineInBrands { get; set; } = default!;
 }

@@ -10,14 +10,7 @@ public class CustomerRepository(IApplicationDbContext context, IMapper mapper, I
 {
     public async Task<CustomerDto> CreateCustomerAsync(CreateCustomerDto createCustomerDto)
     {
-        var validator = ServiceProvider.GetRequiredService<CreateCustomerValidator>();
-
-        var validationResult = await validator.ValidateAsync(createCustomerDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(createCustomerDto);
 
         var customer = Mapper.Map<Customer>(createCustomerDto);
 
@@ -32,6 +25,7 @@ public class CustomerRepository(IApplicationDbContext context, IMapper mapper, I
     {
         var customer = await Context.Customers
             .Include(c => c.IdentityUser)
+            .AsNoTracking()
             .FirstOrDefaultAsync(c => c.Id == customerId) ?? throw new NotFoundException(nameof(Customer), customerId);
 
         return Mapper.Map<CustomerDto>(customer);
@@ -39,35 +33,26 @@ public class CustomerRepository(IApplicationDbContext context, IMapper mapper, I
 
     public async Task<IEnumerable<CustomerDto>> GetCustomersAsync(CustomerQueryParameter queryParameter)
     {
-        var customers = Context.Customers
+        var customers = await Context.Customers
             .Include(c => c.IdentityUser)
-            .AsQueryable();
-
-        customers = customers.Filter(queryParameter);
-
-        var resultList = await customers
+            .Filter(queryParameter)
             .AsNoTracking()
             .ToListAsync();
 
-        return Mapper.Map<IEnumerable<CustomerDto>>(resultList);
+        return Mapper.Map<IEnumerable<CustomerDto>>(customers);
     }
 
     public async Task<CustomerDto> UpdateCustomerAsync(Guid customerId, UpdateCustomerDto updateCustomerDto)
     {
-        var validator = ServiceProvider.GetRequiredService<UpdateCustomerValidator>();
-
-        var validationResult = await validator.ValidateAsync(updateCustomerDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(updateCustomerDto);
 
         var customer = await Context.Customers
             .Include(c => c.IdentityUser)
             .FirstOrDefaultAsync(c => c.Id == customerId) ?? throw new NotFoundException(nameof(Customer), customerId);
 
         Mapper.Map(updateCustomerDto, customer);
+
+        Context.Customers.Update(customer);
 
         await Context.SaveChangesAsync();
 

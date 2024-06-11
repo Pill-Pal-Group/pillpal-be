@@ -10,14 +10,7 @@ public class DosageFormRepository(IApplicationDbContext context, IMapper mapper,
 {
     public async Task<DosageFormDto> CreateDosageFormAsync(CreateDosageFormDto createDosageFormDto)
     {
-        var validator = ServiceProvider.GetRequiredService<CreateDosageFormValidator>();
-
-        var validationResult = await validator.ValidateAsync(createDosageFormDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(createDosageFormDto);
 
         var dosageForm = Mapper.Map<DosageForm>(createDosageFormDto);
 
@@ -57,14 +50,7 @@ public class DosageFormRepository(IApplicationDbContext context, IMapper mapper,
 
     public async Task<DosageFormDto> UpdateDosageFormAsync(Guid dosageFormId, UpdateDosageFormDto updateDosageFormDto)
     {
-        var validator = ServiceProvider.GetRequiredService<UpdateDosageFormValidator>();
-
-        var validationResult = await validator.ValidateAsync(updateDosageFormDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(updateDosageFormDto);
 
         var dosageForm = await Context.DosageForms
             .FindAsync(dosageFormId) ?? throw new NotFoundException(nameof(DosageForm), dosageFormId);

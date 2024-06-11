@@ -44,37 +44,12 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         base.OnModelCreating(builder);
 
         #region identity
-        builder.Entity<ApplicationUser>(entity =>
-        {
-            entity.ToTable("Account");
-            entity.Property(e => e.Id).HasColumnName("AccountId");
-        });
+        builder.Entity<ApplicationUser>(entity => entity.ToTable("Account"));
+        builder.Entity<IdentityRole<Guid>>(entity => entity.ToTable("Role"));
+        builder.Entity<IdentityUserRole<Guid>>(entity => entity.ToTable("AccountRole"));
 
-        builder.Entity<IdentityRole<Guid>>(entity =>
-        {
-            entity.ToTable("Role");
-            entity.Property(e => e.Id).HasColumnName("RoleId");
-        });
-
-        builder.Entity<IdentityUserRole<Guid>>(entity =>
-        {
-            entity.ToTable("AccountRole");
-            entity.Property(e => e.UserId).HasColumnName("AccountId");
-            entity.Property(e => e.RoleId).HasColumnName("RoleId");
-        });
-
-        builder.Entity<IdentityUserLogin<Guid>>(entity =>
-        {
-            entity.ToTable("AccountLogin");
-            entity.Property(e => e.UserId).HasColumnName("AccountId");
-        });
-
-        builder.Entity<IdentityUserToken<Guid>>(entity =>
-        {
-            entity.ToTable("AccountToken");
-            entity.Property(e => e.UserId).HasColumnName("AccountId");
-        });
-
+        builder.Ignore<IdentityUserLogin<Guid>>();
+        builder.Ignore<IdentityUserToken<Guid>>();
         builder.Ignore<IdentityUserClaim<Guid>>();
         builder.Ignore<IdentityRoleClaim<Guid>>();
         #endregion

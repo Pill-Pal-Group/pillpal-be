@@ -10,14 +10,7 @@ public class CategoryRepository(IApplicationDbContext context, IMapper mapper, I
 {
     public async Task<CategoryDto> CreateCategoryAsync(CreateCategoryDto createCategoryDto)
     {
-        var validator = ServiceProvider.GetRequiredService<CreateCategoryValidator>();
-
-        var validationResult = await validator.ValidateAsync(createCategoryDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(createCategoryDto);
 
         var category = Mapper.Map<Category>(createCategoryDto);
 
@@ -56,6 +49,7 @@ public class CategoryRepository(IApplicationDbContext context, IMapper mapper, I
     {
         var category = await Context.Categories
             .Where(c => c.Id == categoryId && !c.IsDeleted)
+            .AsNoTracking()
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Category), categoryId);
 
         return Mapper.Map<CategoryDto>(category);
@@ -63,14 +57,7 @@ public class CategoryRepository(IApplicationDbContext context, IMapper mapper, I
 
     public async Task<CategoryDto> UpdateCategoryAsync(Guid categoryId, UpdateCategoryDto updateCategoryDto)
     {
-        var validator = ServiceProvider.GetRequiredService<UpdateCategoryValidator>();
-
-        var validationResult = await validator.ValidateAsync(updateCategoryDto);
-
-        if (!validationResult.IsValid)
-        {
-            throw new ValidationException(validationResult.Errors);
-        }
+        await ValidateAsync(updateCategoryDto);
 
         var category = await Context.Categories
             .Where(c => c.Id == categoryId && !c.IsDeleted)

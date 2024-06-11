@@ -12,7 +12,10 @@ public record MedicineQueryParameter
 public record MedicineIncludeParameter
 {
     /// <example>true</example>
-    public bool IncludeSpecification { get; init; }
+    public bool IncludeCategories { get; init; }
+
+    /// <example>true</example>
+    public bool IncludeSpecifications { get; init; }
 
     /// <example>true</example>
     public bool IncludePharmaceuticalCompanies { get; init; }
@@ -46,7 +49,12 @@ public static class MedicineQueryExtensions
 
     public static IQueryable<Medicine> Include(this IQueryable<Medicine> query, MedicineIncludeParameter includeParameter)
     {
-        if (includeParameter.IncludeSpecification)
+        if (includeParameter.IncludeCategories)
+        {
+            query = query.Include(m => m.Categories);
+        }
+
+        if (includeParameter.IncludeSpecifications)
         {
             query = query.Include(m => m.Specification);
         }
@@ -68,7 +76,9 @@ public static class MedicineQueryExtensions
 
         if (includeParameter.IncludeBrands)
         {
-            query = query.Include(m => m.Brands);
+            query = query
+                .Include(m => m.MedicineInBrands.Where(mib => !mib.IsDeleted))
+                .ThenInclude(m => m.Brand);
         }
 
         return query;
