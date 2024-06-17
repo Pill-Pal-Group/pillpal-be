@@ -1,20 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using PillPal.Application.Common.Interfaces.Auth;
 using System.Text;
 
 namespace PillPal.WebApi.Configuration;
 
 public static class JwtAuthConfigure
 {
-    public static IServiceCollection AddJwtAuth(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddJwtAuth(this IServiceCollection services)
     {
-#pragma warning disable S3928, CA2208
-        var iss = configuration["Jwt:Issuer"] ?? throw new ArgumentNullException("Jwt:Issuer");
-
-        var aud = configuration["Jwt:Audience"] ?? throw new ArgumentNullException("Jwt:Audience");
-
-        var key = configuration["Jwt:SecretKey"] ?? throw new ArgumentNullException("Jwt:SecretKey");
-#pragma warning restore S3928, CA2208
+        var jwtSettings = services.BuildServiceProvider().GetRequiredService<IOptions<JwtSettings>>().Value;
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(option =>
@@ -27,9 +23,9 @@ public static class JwtAuthConfigure
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
 
-                    ValidIssuer = iss,
-                    ValidAudience = aud,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
+                    ValidIssuer = jwtSettings.Issuer,
+                    ValidAudience = jwtSettings.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.SecretKey!)),
                 };
             });
 

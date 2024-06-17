@@ -8,6 +8,7 @@ namespace PillPal.Application.Features.Auths;
 public class AuthRepository(
     IServiceProvider serviceProvider,
     IIdentityService identityService,
+    IFirebaseService firebaseService,
     IJwtService jwtService)
     : BaseRepository(serviceProvider), IAuthService
 {
@@ -71,7 +72,7 @@ public class AuthRepository(
     {
         await ValidateAsync(request);
 
-        var email = jwtService.GetEmailPrincipal(request.Token!);
+        var email = await firebaseService.GetEmailFromTokenAsync(request.Token!);
 
         var user = await identityService.GetUserByEmailAsync(email);
 
