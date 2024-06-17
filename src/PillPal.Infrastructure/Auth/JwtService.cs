@@ -1,40 +1,28 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using PillPal.Application.Common.Interfaces.Auth;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace PillPal.Infrastructure.Auth
 {
     public class JwtService : IJwtService
     {
-        private readonly IConfiguration _configuration;
-        private readonly JwtSecurityTokenHandler _tokenHandler = new();
+        private readonly JwtSettings _settings;
+        private readonly JwtSecurityTokenHandler _tokenHandler;
 
-        public JwtService(IConfiguration configuration)
+        public JwtService(IOptions<JwtSettings> settings)
         {
-            _configuration = configuration;
+            _settings = settings.Value;
+            _tokenHandler = new();
         }
-
-#pragma warning disable S3928, CA2208
-        private string SecretKey => _configuration["Jwt:SecretKey"] ?? throw new ArgumentNullException("Jwt:SecretKey");
-
-        private string Issuer => _configuration["Jwt:Issuer"] ?? throw new ArgumentNullException("Jwt:Issuer");
-
-        private string Audience => _configuration["Jwt:Audience"] ?? throw new ArgumentNullException("Jwt:Audience");
-
-        private double Expires => double.Parse(_configuration["Jwt:Expires"] ?? throw new ArgumentNullException("Jwt:Expires"));
-
-        private string FirebaseProjectId => _configuration["Firebase:ProjectId"] ?? throw new ArgumentNullException("Firebase:ProjectId");
-
-        private string FirebasePublicKey => _configuration["Firebase:PublicKey"] ?? throw new ArgumentNullException("Firebase:PublicKey");
-#pragma warning restore S3928, CA2208
 
         public (string accessToken, int expired) GenerateJwtToken(ApplicationUser user, string role)
         {
-            var signingCredential = new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey)), SecurityAlgorithms.HmacSha256Signature);
+            var signingCredential = new SigningCredentials(
+                new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_settings.SecretKey!)), SecurityAlgorithms.HmacSha256Signature);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -46,15 +34,15 @@ namespace PillPal.Infrastructure.Auth
                     new Claim(ClaimTypes.Role, role)
                 ]),
                 IssuedAt = DateTime.UtcNow,
-                Expires = DateTime.UtcNow.AddMinutes(Expires),
-                Issuer = Issuer,
-                Audience = Audience,
+                Expires = DateTime.UtcNow.AddMinutes(_settings.Expires),
+                Issuer = _settings.Issuer,
+                Audience = _settings.Audience,
                 SigningCredentials = signingCredential
             };
 
             var token = _tokenHandler.CreateToken(tokenDescriptor);
 
-            return (_tokenHandler.WriteToken(token), (int)Expires);
+            return (_tokenHandler.WriteToken(token), (int)_settings.Expires);
         }
 
         public string GenerateRefreshToken(string token)
@@ -83,9 +71,9 @@ namespace PillPal.Infrastructure.Auth
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = Issuer,
-                ValidAudience = Audience,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(SecretKey))
+                ValidIssuer = _settings.Issuer,
+                ValidAudience = _settings.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_settings.SecretKey!))
             };
 
             SecurityToken securityToken;
@@ -99,27 +87,6 @@ namespace PillPal.Infrastructure.Auth
             }
 
             return principal;
-        }
-
-        public string GetEmailPrincipal(string token)
-        {
-            var signingKey = new X509SecurityKey(new X509Certificate2(Convert.FromBase64String(FirebasePublicKey)));
-
-            var validationParameters = new TokenValidationParameters
-            {
-                ValidateIssuer = true,
-                ValidateAudience = false,
-                ValidateIssuerSigningKey = true,
-                ValidateLifetime = true,
-
-                ValidIssuer = $"https://securetoken.google.com/{FirebaseProjectId}",
-                IssuerSigningKey = signingKey,
-                ClockSkew = TimeSpan.Zero
-            };
-
-            var principal = _tokenHandler.ValidateToken(token, validationParameters, out _);
-
-            return principal.FindFirst(ClaimTypes.Email)?.Value!;
         }
     }
 }

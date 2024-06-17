@@ -12,6 +12,7 @@
 
 .sonarqube
 .idea
+.vscode
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

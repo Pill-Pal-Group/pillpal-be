@@ -11,8 +11,6 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("PILLPAL_DB");
-
         services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
         services.AddScoped<ISaveChangesInterceptor, UniqueCodeInterceptor>();
 
@@ -20,7 +18,7 @@ public static class DependencyInjection
         {
             options.AddInterceptors(service.GetServices<ISaveChangesInterceptor>());
 
-            options.UseSqlServer(connectionString);
+            options.UseSqlServer(configuration.GetConnectionString("PILLPAL_DB"));
         });
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>()!);
@@ -38,7 +36,23 @@ public static class DependencyInjection
 
         services.AddTransient<IIdentityService, IdentityService>();
 
+        services.Configure<JwtSettings>(options =>
+        {
+            options.SecretKey = configuration["Jwt:SecretKey"];
+            options.Issuer = configuration["Jwt:Issuer"];
+            options.Audience = configuration["Jwt:Audience"];
+            options.Expires = double.Parse(configuration["Jwt:Expires"]!);
+        });
+
         services.AddTransient<IJwtService, JwtService>();
+
+        services.Configure<FirebaseSettings>(options =>
+        {
+            options.ProjectId = configuration["Firebase:ProjectId"];
+            options.ServiceKey = configuration["Firebase:ServiceKey"];
+        });
+
+        services.AddSingleton<IFirebaseService, FirebaseService>();
 
         return services;
     }

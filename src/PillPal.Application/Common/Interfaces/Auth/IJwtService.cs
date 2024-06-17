@@ -3,6 +3,14 @@ using System.Security.Claims;
 
 namespace PillPal.Application.Common.Interfaces.Auth;
 
+public class JwtSettings
+{
+    public string? SecretKey { get; set; }
+    public string? Issuer { get; set; }
+    public string? Audience { get; set; }
+    public double Expires { get; set; }
+}
+
 public interface IJwtService
 {
     /// <summary>
@@ -16,13 +24,6 @@ public interface IJwtService
     /// <para>Item2 (int): The expiration time of the token in minutes</para>
     /// </returns>
     public (string accessToken, int expired) GenerateJwtToken(ApplicationUser user, string role);
-
-    /// <summary>
-    /// Get the email of the user from the given token
-    /// </summary>
-    /// <param name="token">The token to get the email from</param>
-    /// <returns>The email of the user</returns>
-    public string GetEmailPrincipal(string token);
 
     /// <summary>
     /// Generate a refresh token for the given token

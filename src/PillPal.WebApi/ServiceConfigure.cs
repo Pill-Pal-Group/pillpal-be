@@ -6,7 +6,7 @@ namespace PillPal.WebApi;
 
 public static class ServiceConfigure
 {
-    public static IServiceCollection AddWebServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddWebServices(this IServiceCollection services)
     {
         services.AddScoped<IUser, UserAccessor>();
 
@@ -23,7 +23,7 @@ public static class ServiceConfigure
 
         services.AddSwaggerDoc();
 
-        services.AddJwtAuth(configuration);
+        services.AddJwtAuth();
 
         services.AddAuthorizationPolicy();
 

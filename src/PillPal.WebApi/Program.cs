@@ -16,7 +16,7 @@ public class Program
 
         builder.Services.AddInfrastructureServices(builder.Configuration);
         builder.Services.AddApplicationServices();
-        builder.Services.AddWebServices(builder.Configuration);
+        builder.Services.AddWebServices();
 
         var app = builder.Build();
 
