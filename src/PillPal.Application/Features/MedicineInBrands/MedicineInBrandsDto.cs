@@ -1,6 +1,6 @@
 ﻿using PillPal.Application.Features.Brands;
 
-namespace PillPal.Application.Features.MedicinesInBrands;
+namespace PillPal.Application.Features.MedicineInBrands;
 
 public record MedicineInBrandsDto
 {

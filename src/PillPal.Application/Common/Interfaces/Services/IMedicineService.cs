@@ -1,5 +1,5 @@
-﻿using PillPal.Application.Features.Medicines;
-using PillPal.Application.Features.MedicinesInBrands;
+﻿using PillPal.Application.Features.MedicineInBrands;
+using PillPal.Application.Features.Medicines;
 
 namespace PillPal.Application.Common.Interfaces.Services;
 

@@ -1,7 +1,7 @@
 ﻿using PillPal.Application.Features.ActiveIngredients;
 using PillPal.Application.Features.Categories;
 using PillPal.Application.Features.DosageForms;
-using PillPal.Application.Features.MedicinesInBrands;
+using PillPal.Application.Features.MedicineInBrands;
 using PillPal.Application.Features.PharmaceuticalCompanies;
 using PillPal.Application.Features.Specifications;
 using System.Text.Json.Serialization;
