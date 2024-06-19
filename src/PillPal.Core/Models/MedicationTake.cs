@@ -8,6 +8,5 @@ public class MedicationTake : BaseAuditableEntity
 
     public virtual ICollection<Prescript> Prescripts { get; set; } = default!;
 
-    public Guid MedicineId { get; set; }
-    public virtual Medicine? Medicine { get; set; }
+    public virtual ICollection<PrescriptDetail> PrescriptDetails { get; set; } = default!;
 }

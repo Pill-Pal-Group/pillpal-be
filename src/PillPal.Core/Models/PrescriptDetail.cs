@@ -7,8 +7,8 @@ public class PrescriptDetail : BaseAuditableEntity
     public DateTimeOffset DateEnd { get; set; }
     public int Total { get; set; }
 
-    public Guid MedicineId { get; set; }
-    public virtual Medicine? Medicine { get; set; }
+    public Guid PrescriptId { get; set; }
+    public virtual Prescript? Prescript { get; set; }
 
-    public virtual ICollection<Prescript> Prescripts { get; set; } = default!;
+    public virtual ICollection<MedicationTake> MedicationTakes { get; set; } = default!;
 }
