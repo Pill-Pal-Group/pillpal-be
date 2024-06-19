@@ -28,9 +28,11 @@ public class AuthsController(IAuthService authService)
     ///
     /// </remarks>
     /// <response code="200">If the user is registered successfully</response>
+    /// <response code="409">If the user is already registered</response>
     /// <response code="422">If the input data fail validation</response>
     [HttpPost("register")]
     [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> RegisterAsync(RegisterRequest request)
     {

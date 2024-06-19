@@ -10,7 +10,6 @@ public partial class MapperConfigure : Profile
             .ForMember(c => c.ApplicationUser, dest => dest.MapFrom(src => src.IdentityUser))
             .ReverseMap();
 
-        CreateMap<Customer, CreateCustomerDto>().ReverseMap();
         CreateMap<Customer, UpdateCustomerDto>().ReverseMap();
     }
 }

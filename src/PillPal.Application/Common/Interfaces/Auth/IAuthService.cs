@@ -1,4 +1,5 @@
-﻿using PillPal.Application.Features.Auths;
+﻿using PillPal.Application.Common.Exceptions;
+using PillPal.Application.Features.Auths;
 
 namespace PillPal.Application.Common.Interfaces.Auth;
 
@@ -9,6 +10,7 @@ public interface IAuthService
     /// </summary>
     /// <param name="request">The request to register</param>
     /// <exception cref="ValidationException">Thrown when the request is invalid</exception>
+    /// <exception cref="ConflictException">Thrown when the user is already registered</exception>
     public Task RegisterAsync(RegisterRequest request);
 
     /// <summary>

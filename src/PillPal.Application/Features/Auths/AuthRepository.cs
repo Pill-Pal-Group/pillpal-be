@@ -8,12 +8,12 @@ using System.Security.Claims;
 namespace PillPal.Application.Features.Auths;
 
 public class AuthRepository(
-    ICustomerService customerService,
+    IApplicationDbContext context,
     IServiceProvider serviceProvider,
     IIdentityService identityService,
     IFirebaseService firebaseService,
     IJwtService jwtService)
-    : BaseRepository(serviceProvider), IAuthService
+    : BaseRepository(context, serviceProvider), IAuthService
 {
     public async Task<AccessTokenResponse> LoginAsync(LoginRequest request)
     {
@@ -70,12 +70,12 @@ public class AuthRepository(
 
         var userId = await identityService.CreateUserAsync(request.Email!, request.Password!);
 
-        CreateCustomerDto customer = new()
+        Customer customer = new()
         {
-            IdentityUserId = Guid.Parse(userId)
+            IdentityUserId = Guid.Parse(userId),
         };
 
-        await customerService.CreateCustomerAsync(customer);
+        await Context.Customers.AddAsync(customer);
     }
 
     public async Task<AccessTokenResponse> TokenLoginAsync(TokenLoginRequest request)

@@ -8,19 +8,6 @@ namespace PillPal.Application.Features.Customers;
 public class CustomerRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
     : BaseRepository(context, mapper, serviceProvider), ICustomerService
 {
-    public async Task<CustomerDto> CreateCustomerAsync(CreateCustomerDto createCustomerDto)
-    {
-        await ValidateAsync(createCustomerDto);
-
-        var customer = Mapper.Map<Customer>(createCustomerDto);
-
-        await Context.Customers.AddAsync(customer);
-
-        await Context.SaveChangesAsync();
-
-        return Mapper.Map<CustomerDto>(customer);
-    }
-
     public async Task<CustomerDto> GetCustomerByIdAsync(Guid customerId)
     {
         var customer = await Context.Customers
@@ -48,7 +35,8 @@ public class CustomerRepository(IApplicationDbContext context, IMapper mapper, I
 
         var customer = await Context.Customers
             .Include(c => c.IdentityUser)
-            .FirstOrDefaultAsync(c => c.Id == customerId) ?? throw new NotFoundException(nameof(Customer), customerId);
+            .FirstOrDefaultAsync(c => c.Id == customerId) 
+            ?? throw new NotFoundException(nameof(Customer), customerId);
 
         Mapper.Map(updateCustomerDto, customer);
 
