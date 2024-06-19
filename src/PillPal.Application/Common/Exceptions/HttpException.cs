@@ -7,3 +7,8 @@ public class HttpException(
 {
     public HttpStatusCode StatusCode { get; } = statusCode;
 }
+
+public interface IHasErrors
+{
+    IDictionary<string, string[]> Errors { get; }
+}
