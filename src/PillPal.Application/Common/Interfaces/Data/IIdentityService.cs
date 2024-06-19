@@ -1,4 +1,5 @@
-﻿using PillPal.Core.Identity;
+﻿using PillPal.Application.Common.Exceptions;
+using PillPal.Core.Identity;
 
 namespace PillPal.Application.Common.Interfaces.Data;
 
@@ -26,14 +27,13 @@ public interface IIdentityService
     /// <param name="userName">Username of the user</param>
     /// <param name="password">Password of the user</param>
     /// <returns>
-    /// A tuple containing:
-    /// <para>Item1 (bool): True if the user was created successfully, false otherwise.</para>
-    /// <para>Item2 (string): The user's ID if the user.</para>
+    /// The user's ID if the user.
     /// </returns>
     /// <remarks>
     /// Be noted that the ID still created even if the user was not created successfully
     /// </remarks>
-    Task<(bool, string UserId)> CreateUserAsync(string userName, string password);
+    /// <exception cref="ConflictException">Thrown when the user already exists</exception>
+    Task<string> CreateUserAsync(string userName, string password);
 
     /// <summary>
     /// Create new role, in case the role already exists, return the role ID
