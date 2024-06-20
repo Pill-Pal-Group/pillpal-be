@@ -1,9 +1,11 @@
-﻿namespace PillPal.Application.Common.Mappings;
+﻿using PillPal.Application.Features.MedicationTakes;
+
+namespace PillPal.Application.Common.Mappings;
 
 public partial class MapperConfigure : Profile
 {
     void MedicationTakeProfile()
     {
-        //CreateMap<MedicationTake, MedicationTakeDto>().ReverseMap();
+        CreateMap<MedicationTake, MedicationTakesDto>().ReverseMap();
     }
 }

@@ -10,7 +10,5 @@ public class Prescript : BaseAuditableEntity
     public Guid CustomerId { get; set; }
     public virtual Customer? Customer { get; set; }
 
-    public virtual ICollection<MedicationTake> MedicationTakes { get; set; } = default!;
-
     public virtual ICollection<PrescriptDetail> PrescriptDetails { get; set; } = default!;
 }
