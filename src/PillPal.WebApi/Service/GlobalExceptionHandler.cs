@@ -31,9 +31,9 @@ public class GlobalExceptionHandler(IProblemDetailsService problemDetailsService
             Instance = httpContext.Request.Path
         };
 
-        if (exception is ValidationException validationException)
+        if (exception is IHasErrors errorsException)
         {
-            problemDetails.Extensions.Add("errors", validationException.Errors);
+            problemDetails.Extensions.Add("errors", errorsException.Errors);
         }
 
         if (httpContext.RequestServices.GetRequiredService<IHostEnvironment>().IsDevelopment() ||

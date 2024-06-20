@@ -1,4 +1,5 @@
-﻿using PillPal.Application.Common.Interfaces.Data;
+﻿using PillPal.Application.Common.Exceptions;
+using PillPal.Application.Common.Interfaces.Data;
 
 namespace PillPal.Infrastructure.Identity;
 
@@ -30,7 +31,7 @@ public class IdentityService : IIdentityService
         return (result.Succeeded, role.Id.ToString());
     }
 
-    public async Task<(bool, string UserId)> CreateUserAsync(string userName, string password)
+    public async Task<string> CreateUserAsync(string userName, string password)
     {
         var user = new ApplicationUser
         {
@@ -44,7 +45,12 @@ public class IdentityService : IIdentityService
 
         var result = await _userManager.CreateAsync(user, password);
 
-        return (result.Succeeded, user.Id.ToString());
+        if (!result.Succeeded)
+        {
+            throw new ConflictException(result.Errors);
+        }
+
+        return user.Id.ToString();
     }
 
     public async Task<(ApplicationUser, string role)> GetUserByEmailAsync(string email)

@@ -6,10 +6,12 @@ using PillPal.Application.Features.Brands;
 using PillPal.Application.Features.Categories;
 using PillPal.Application.Features.Customers;
 using PillPal.Application.Features.DosageForms;
+using PillPal.Application.Features.MedicationTakes;
 using PillPal.Application.Features.Medicines;
 using PillPal.Application.Features.Nations;
 using PillPal.Application.Features.PharmaceuticalCompanies;
 using PillPal.Application.Features.PharmacyStores;
+using PillPal.Application.Features.Prescripts;
 using PillPal.Application.Features.Specifications;
 
 namespace PillPal.Application.Configuration;
@@ -26,7 +28,7 @@ public static class DependencyInjection
         services.AddScoped<ICustomerService, CustomerRepository>();
         //services.AddScoped<ICustomerPackageService, >();
         services.AddScoped<IDosageFormService, DosageFormRepository>();
-        //services.AddScoped<IMedicationTakeService, >();
+        services.AddScoped<IMedicationTakeService, MedicationTakeRepository>();
         services.AddScoped<IMedicineService, MedicineRepository>();
         services.AddScoped<INationService, NationRepository>();
         //services.AddScoped<IPackageCategoryService, >();
@@ -34,7 +36,7 @@ public static class DependencyInjection
         services.AddScoped<IPharmaceuticalCompanyService, PharmaceuticalCompanyRepository>();
         services.AddScoped<IPharmacyStoreService, PharmacyStoreRepository>();
         //services.AddScoped<IPrescriptDetailService, >();
-        //services.AddScoped<IPrescriptService, >();
+        services.AddScoped<IPrescriptService, PrescriptRepository>();
         services.AddScoped<ISpecificationService, SpecificationRepository>();
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());

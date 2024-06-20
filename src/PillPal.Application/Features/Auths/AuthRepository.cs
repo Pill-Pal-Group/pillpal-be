@@ -1,16 +1,19 @@
 ﻿using PillPal.Application.Common.Interfaces.Auth;
 using PillPal.Application.Common.Interfaces.Data;
+using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Application.Common.Repositories;
+using PillPal.Application.Features.Customers;
 using System.Security.Claims;
 
 namespace PillPal.Application.Features.Auths;
 
 public class AuthRepository(
+    IApplicationDbContext context,
     IServiceProvider serviceProvider,
     IIdentityService identityService,
     IFirebaseService firebaseService,
     IJwtService jwtService)
-    : BaseRepository(serviceProvider), IAuthService
+    : BaseRepository(context, serviceProvider), IAuthService
 {
     public async Task<AccessTokenResponse> LoginAsync(LoginRequest request)
     {
@@ -65,7 +68,14 @@ public class AuthRepository(
     {
         await ValidateAsync(request);
 
-        await identityService.CreateUserAsync(request.Email!, request.Password!);
+        var userId = await identityService.CreateUserAsync(request.Email!, request.Password!);
+
+        Customer customer = new()
+        {
+            IdentityUserId = Guid.Parse(userId),
+        };
+
+        await Context.Customers.AddAsync(customer);
     }
 
     public async Task<AccessTokenResponse> TokenLoginAsync(TokenLoginRequest request)

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PillPal.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using PillPal.Infrastructure.Persistence;
 namespace PillPal.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240619115255_FixPrescript_MedIntake")]
+    partial class FixPrescript_MedIntake
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,6 +68,21 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                     b.HasIndex("MedicinesId");
 
                     b.ToTable("DosageFormMedicine");
+                });
+
+            modelBuilder.Entity("MedicationTakePrescript", b =>
+                {
+                    b.Property<Guid>("MedicationTakesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PrescriptsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("MedicationTakesId", "PrescriptsId");
+
+                    b.HasIndex("PrescriptsId");
+
+                    b.ToTable("MedicationTakePrescript");
                 });
 
             modelBuilder.Entity("MedicinePharmaceuticalCompany", b =>
@@ -811,6 +829,21 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MedicationTakePrescript", b =>
+                {
+                    b.HasOne("PillPal.Core.Models.MedicationTake", null)
+                        .WithMany()
+                        .HasForeignKey("MedicationTakesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PillPal.Core.Models.Prescript", null)
+                        .WithMany()
+                        .HasForeignKey("PrescriptsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("MedicinePharmaceuticalCompany", b =>
                 {
                     b.HasOne("PillPal.Core.Models.Medicine", null)
@@ -882,7 +915,7 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                     b.HasOne("PillPal.Core.Models.PrescriptDetail", "PrescriptDetail")
                         .WithMany("MedicationTakes")
                         .HasForeignKey("PrescriptDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("PrescriptDetail");

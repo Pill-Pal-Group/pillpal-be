@@ -7,9 +7,6 @@ public record UpdateCustomerDto
 
     /// <example>Q9, HCMC, Vietnam</example>
     public string? Address { get; init; }
-
-    /// <example>00000000-0000-0000-0000-000000000000</example>
-    public Guid IdentityUserId { get; init; }
 }
 
 public class UpdateCustomerValidator : AbstractValidator<UpdateCustomerDto>
@@ -22,8 +19,5 @@ public class UpdateCustomerValidator : AbstractValidator<UpdateCustomerDto>
 
         RuleFor(x => x.Address)
             .MaximumLength(500);
-
-        RuleFor(x => x.IdentityUserId)
-            .NotEmpty();
     }
 }

@@ -18,9 +18,5 @@ public class Medicine : BaseAuditableEntity
 
     public virtual ICollection<ActiveIngredient> ActiveIngredients { get; set; } = default!;
 
-    public virtual ICollection<MedicationTake> MedicationTakes { get; set; } = default!;
-
-    public virtual ICollection<PrescriptDetail> PrescriptDetails { get; set; } = default!;
-
     public virtual ICollection<MedicineInBrand> MedicineInBrands { get; set; } = default!;
 }

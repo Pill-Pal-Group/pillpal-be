@@ -1,6 +1,6 @@
 ﻿using PillPal.Application.Common.Interfaces.Data;
 
-namespace PillPal.Application.Features.MedicinesInBrands;
+namespace PillPal.Application.Features.MedicineInBrands;
 
 public record UpdateMedicineInBrandsDto
 {

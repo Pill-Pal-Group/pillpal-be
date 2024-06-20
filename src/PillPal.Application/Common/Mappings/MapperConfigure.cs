@@ -12,6 +12,7 @@ public partial class MapperConfigure : Profile
         DosageFormProfile();
         IdentityProfile();
         MedicineProfile();
+        MedicationTakeProfile();
         NationProfile();
         PaymentProfile();
         PharmaceuticalCompanyProfile();

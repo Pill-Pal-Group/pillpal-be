@@ -2,8 +2,8 @@
 using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Application.Common.Repositories;
+using PillPal.Application.Features.MedicineInBrands;
 using PillPal.Application.Features.Medicines;
-using PillPal.Application.Features.MedicinesInBrands;
 
 namespace PillPal.Application.Features.Medicines;
 

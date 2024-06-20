@@ -42,33 +42,6 @@ public class CustomersController(ICustomerService customerService)
     }
 
     /// <summary>
-    /// Create a customer
-    /// </summary>
-    /// <param name="createCustomerDto"></param>
-    /// <remarks>
-    /// Sample request:
-    /// 
-    ///     POST /api/customers
-    ///     {
-    ///         "dob": "2002-01-01",
-    ///         "address": "Q9, HCMC, Vietnam",
-    ///         "identityUserId": "00000000-0000-0000-0000-000000000000"
-    ///     }
-    ///     
-    /// </remarks>
-    /// <response code="201">Returns the created customer</response>
-    /// <response code="422">If the input data is invalid</response>
-    [HttpPost(Name = "CreateCustomer")]
-    [ProducesResponseType(typeof(CustomerDto), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
-    public async Task<IActionResult> CreateCustomerAsync(CreateCustomerDto createCustomerDto)
-    {
-        var customer = await customerService.CreateCustomerAsync(createCustomerDto);
-
-        return CreatedAtRoute("GetCustomerById", new { customerId = customer.Id }, customer);
-    }
-
-    /// <summary>
     /// Update a customer
     /// </summary>
     /// <param name="customerId" example="00000000-0000-0000-0000-000000000000"></param>
@@ -79,8 +52,7 @@ public class CustomersController(ICustomerService customerService)
     ///     PUT /api/customers/{customerId}
     ///     {
     ///         "dob": "2002-01-01",
-    ///         "address": "Q9, HCMC, Vietnam",
-    ///         "identityUserId": "00000000-0000-0000-0000-000000000000"
+    ///         "address": "Q9, HCMC, Vietnam"
     ///     }
     ///     
     /// </remarks>
