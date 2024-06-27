@@ -5,19 +5,20 @@
 namespace PillPal.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class AddDefault_MealTimeOffset : Migration
+    public partial class FixMealTimeOffset : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<TimeOnly>(
+            migrationBuilder.AlterColumn<TimeSpan>(
                 name: "MealTimeOffset",
                 table: "Customers",
                 type: "time",
                 nullable: false,
-                defaultValue: new TimeOnly(0, 15, 0),
+                defaultValue: new TimeSpan(0, 0, 15, 0, 0),
                 oldClrType: typeof(TimeOnly),
-                oldType: "time");
+                oldType: "time",
+                oldDefaultValue: new TimeOnly(0, 15, 0));
         }
 
         /// <inheritdoc />
@@ -28,9 +29,10 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                 table: "Customers",
                 type: "time",
                 nullable: false,
-                oldClrType: typeof(TimeOnly),
+                defaultValue: new TimeOnly(0, 15, 0),
+                oldClrType: typeof(TimeSpan),
                 oldType: "time",
-                oldDefaultValue: new TimeOnly(0, 15, 0));
+                oldDefaultValue: new TimeSpan(0, 0, 15, 0, 0));
         }
     }
 }

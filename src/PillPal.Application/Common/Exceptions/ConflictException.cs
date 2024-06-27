@@ -10,7 +10,7 @@ public class ConflictException : HttpException, IHasErrors
     public IDictionary<string, string[]> Errors { get; }
 
     private ConflictException()
-        : base("One or more validation failures have occurred.", 
+        : base("One or more validation failures have occurred.",
         HttpStatusCode.Conflict)
     {
         Errors = new Dictionary<string, string[]>();

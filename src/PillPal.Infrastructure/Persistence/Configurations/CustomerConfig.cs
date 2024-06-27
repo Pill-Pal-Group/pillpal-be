@@ -11,7 +11,7 @@ public class CustomerConfig : IEntityTypeConfiguration<Customer>
             .HasDefaultValue(new TimeOnly(7, 0, 0));
 
         builder.Property(c => c.LunchTime)
-            .HasDefaultValue(new TimeOnly(12, 0, 0));   
+            .HasDefaultValue(new TimeOnly(12, 0, 0));
 
         builder.Property(c => c.AfternoonTime)
             .HasDefaultValue(new TimeOnly(16, 0, 0));
@@ -20,6 +20,6 @@ public class CustomerConfig : IEntityTypeConfiguration<Customer>
             .HasDefaultValue(new TimeOnly(18, 0, 0));
 
         builder.Property(c => c.MealTimeOffset)
-            .HasDefaultValue(new TimeOnly(0, 15, 0));
+            .HasDefaultValue(TimeSpan.FromMinutes(15));
     }
 }

@@ -1,5 +1,4 @@
-﻿using PillPal.Application.Common.Exceptions;
-using PillPal.Application.Common.Interfaces.Data;
+﻿using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Application.Common.Repositories;
 using PillPal.Core.Enums;
@@ -15,7 +14,7 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
             .AsNoTracking()
             .Include(p => p.PrescriptDetails)
             .Include(p => p.Customer)
-            .FirstOrDefaultAsync(p => p.Id == prescriptId && !p.IsDeleted) 
+            .FirstOrDefaultAsync(p => p.Id == prescriptId && !p.IsDeleted)
             ?? throw new NotFoundException(nameof(Prescript), prescriptId);
 
         var allMedicationTakes = new List<MedicationTake>();
@@ -32,7 +31,7 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
             }
 
             var totalDays = (prescriptDetail.DateEnd - prescriptDetail.DateStart).TotalDays;
-            
+
             var dosageDict = new Dictionary<string, double>
             {
                 { "Morning", prescriptDetail.MorningDose },
@@ -52,7 +51,7 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
             for (int i = 0; i < totalDays; i++)
             {
                 var dateTake = prescriptDetail.DateStart.AddDays(i);
-                
+
                 foreach (var dose in dosageDict)
                 {
                     if (dose.Value == 0)
@@ -64,12 +63,12 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
 
                     if (prescriptDetail.DosageInstruction == DosageInstructionEnums.Aftermeal.ToString())
                     {
-                        timeTake = timeTake.AddMinutes(prescript.Customer!.MealTimeOffset.Minute);
+                        timeTake = timeTake.AddMinutes(prescript.Customer!.MealTimeOffset.TotalMinutes);
                     }
 
                     if (prescriptDetail.DosageInstruction == DosageInstructionEnums.Beforemeal.ToString())
                     {
-                        timeTake = timeTake.AddMinutes(-prescript.Customer!.MealTimeOffset.Minute);
+                        timeTake = timeTake.AddMinutes(-prescript.Customer!.MealTimeOffset.TotalMinutes);
                     }
 
                     var medicationTake = new MedicationTake
@@ -98,7 +97,7 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
         var prescript = await Context.Prescripts
             .AsNoTracking()
             .Include(p => p.PrescriptDetails)
-            .FirstOrDefaultAsync(p => p.Id == prescriptId && !p.IsDeleted) 
+            .FirstOrDefaultAsync(p => p.Id == prescriptId && !p.IsDeleted)
             ?? throw new NotFoundException(nameof(Prescript), prescriptId);
 
         var allMedicationTakes = new List<MedicationTakesListDto>();

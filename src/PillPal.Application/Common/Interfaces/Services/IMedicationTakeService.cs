@@ -1,5 +1,4 @@
-﻿using PillPal.Application.Common.Exceptions;
-using PillPal.Application.Features.MedicationTakes;
+﻿using PillPal.Application.Features.MedicationTakes;
 
 namespace PillPal.Application.Common.Interfaces.Services;
 

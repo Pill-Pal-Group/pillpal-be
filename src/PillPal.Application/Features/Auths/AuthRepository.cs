@@ -1,8 +1,6 @@
 ﻿using PillPal.Application.Common.Interfaces.Auth;
 using PillPal.Application.Common.Interfaces.Data;
-using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Application.Common.Repositories;
-using PillPal.Application.Features.Customers;
 using System.Security.Claims;
 
 namespace PillPal.Application.Features.Auths;
@@ -76,6 +74,8 @@ public class AuthRepository(
         };
 
         await Context.Customers.AddAsync(customer);
+
+        await Context.SaveChangesAsync();
     }
 
     public async Task<AccessTokenResponse> TokenLoginAsync(TokenLoginRequest request)
@@ -85,6 +85,18 @@ public class AuthRepository(
         var email = await firebaseService.GetEmailFromTokenAsync(request.Token!);
 
         var user = await identityService.GetUserByEmailAsync(email);
+
+        if (user.newUser)
+        {
+            Customer customer = new()
+            {
+                IdentityUserId = user.Item1.Id,
+            };
+
+            await Context.Customers.AddAsync(customer);
+
+            await Context.SaveChangesAsync();
+        }
 
         var (accessToken, expired) = jwtService.GenerateJwtToken(user.Item1, user.role);
 
