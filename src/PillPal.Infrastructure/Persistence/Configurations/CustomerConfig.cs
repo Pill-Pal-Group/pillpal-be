@@ -7,29 +7,19 @@ public class CustomerConfig : IEntityTypeConfiguration<Customer>
         builder.HasKey(c => c.Id);
         builder.Property(c => c.Id).ValueGeneratedOnAdd();
 
-        //entity.Property(e => e.IdentityUserId).HasColumnName("AccountId");
+        builder.Property(c => c.BreakfastTime)
+            .HasDefaultValue(new TimeOnly(7, 0, 0));
 
-        //entity.HasIndex(e => e.CustomerCode).IsUnique();
-        //entity.HasIndex(e => e.IdentityUserId).IsUnique();
+        builder.Property(c => c.LunchTime)
+            .HasDefaultValue(new TimeOnly(12, 0, 0));   
 
-        //entity.HasOne(d => d.IdentityUser)
-        //    .WithOne(d => d.Customer)
-        //    .HasForeignKey<Customer>(d => d.IdentityUserId)
-        //    .OnDelete(DeleteBehavior.Restrict);
+        builder.Property(c => c.AfternoonTime)
+            .HasDefaultValue(new TimeOnly(16, 0, 0));
 
-        //entity.HasMany(d => d.CustomerPackages)
-        //    .WithOne(p => p.Customer)
-        //    .HasForeignKey(d => d.CustomerId)
-        //    .OnDelete(DeleteBehavior.Restrict);
+        builder.Property(c => c.DinnerTime)
+            .HasDefaultValue(new TimeOnly(18, 0, 0));
 
-        //entity.HasMany(d => d.Prescripts)
-        //    .WithOne(p => p.Customer)
-        //    .HasForeignKey(d => d.CustomerId)
-        //    .OnDelete(DeleteBehavior.Restrict);
-
-        //entity.HasMany(d => d.Schedules)
-        //    .WithOne(p => p.Customer)
-        //    .HasForeignKey(d => d.CustomerId)
-        //    .OnDelete(DeleteBehavior.Restrict);
+        builder.Property(c => c.MealTimeOffset)
+            .HasDefaultValue(new TimeOnly(0, 15, 0));
     }
 }

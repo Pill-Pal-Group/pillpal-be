@@ -35,4 +35,14 @@ public interface IPrescriptService
     /// <exception cref="ValidationException">Thrown when validation fails for the creation data.</exception>
     /// <exception cref="Exceptions.NotFoundException">Thrown if the customer (owner of the prescript) is not found.</exception>
     Task<PrescriptDto> CreatePrescriptAsync(CreatePrescriptDto createPrescriptDto);
+
+    /// <summary>
+    /// Deletes a prescript by its unique identifier. Soft delete.
+    /// </summary>
+    /// <param name="prescriptId">The unique identifier for the prescript.</param>
+    /// <returns>
+    /// The task result.
+    /// </returns>
+    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    Task DeletePrescriptByIdAsync(Guid prescriptId);
 }

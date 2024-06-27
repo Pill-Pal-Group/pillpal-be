@@ -27,6 +27,17 @@ public class PrescriptRepository(IApplicationDbContext context, IMapper mapper, 
         return Mapper.Map<PrescriptDto>(prescript);
     }
 
+    public async Task DeletePrescriptByIdAsync(Guid prescriptId)
+    {
+        var prescript = await Context.Prescripts
+            .Where(p => p.Id == prescriptId && !p.IsDeleted)
+            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Prescript), prescriptId);
+
+        Context.Prescripts.Remove(prescript);
+
+        await Context.SaveChangesAsync();
+    }
+
     public async Task<PrescriptDto> GetPrescriptByIdAsync(Guid prescriptId)
     {
         var prescript = await Context.Prescripts

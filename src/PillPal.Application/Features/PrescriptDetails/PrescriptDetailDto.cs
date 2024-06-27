@@ -11,6 +11,21 @@ public record PrescriptDetailDto
     /// <example>2024-06-29</example>
     public DateTimeOffset DateEnd { get; init; }
 
-    /// <example>10</example>
-    public int Total { get; init; }
+    /// <example>80</example>
+    public int TotalDose { get; init; }
+
+    /// <example>2</example>
+    public double MorningDose { get; set; }
+
+    /// <example>2</example>
+    public double NoonDose { get; set; }
+
+    /// <example>2</example>
+    public double AfternoonDose { get; set; }
+
+    /// <example>2</example>
+    public double NightDose { get; set; }
+
+    /// <example>Aftermeal</example>
+    public string? DosageInstruction { get; init; }
 }
