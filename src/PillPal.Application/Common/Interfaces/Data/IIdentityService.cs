@@ -69,4 +69,22 @@ public interface IIdentityService
     /// <para>Item3 (bool): True if the user is a newly created user, false otherwise</para>
     /// </returns>
     Task<(ApplicationUser, string role, bool newUser)> GetUserByEmailAsync(string email);
+
+    /// <summary>
+    /// Change the password of the user
+    /// </summary>
+    /// <param name="userId">The ID of the user</param>
+    /// <param name="currentPassword">The current password of the user</param>
+    /// <param name="newPassword">The new password of the user</param>
+    /// <exception cref="ConflictException">Thrown if operation fail</exception>
+    Task ChangePasswordAsync(string userId, string currentPassword, string newPassword);
+
+    /// <summary>
+    /// Create a password for the user
+    /// </summary>
+    /// <param name="userId">The ID of the user</param>
+    /// <param name="password">The password of the user</param>
+    /// <exception cref="ConflictException">Thrown if operation failed</exception>
+    /// <exception cref="BadRequestException">Thrown if the password already created</exception>
+    Task CreatePasswordAsync(string userId, string password);
 }
