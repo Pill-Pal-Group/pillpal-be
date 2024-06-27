@@ -1,4 +1,6 @@
-﻿namespace PillPal.Application.Features.PrescriptDetails;
+﻿using PillPal.Core.Enums;
+
+namespace PillPal.Application.Features.PrescriptDetails;
 
 public record CreatePrescriptDetailDto
 {
@@ -11,8 +13,23 @@ public record CreatePrescriptDetailDto
     /// <example>2024-06-29</example>
     public DateTimeOffset DateEnd { get; init; }
 
-    /// <example>10</example>
-    public int Total { get; init; }
+    /// <example>80</example>
+    public int TotalDose { get; init; }
+
+    /// <example>2</example>
+    public double MorningDose { get; set; }
+
+    /// <example>2</example>
+    public double NoonDose { get; set; }
+
+    /// <example>2</example>
+    public double AfternoonDose { get; set; }
+
+    /// <example>2</example>
+    public double NightDose { get; set; }
+
+    /// <example>Aftermeal</example>
+    public string? DosageInstruction { get; init; }
 }
 
 public class CreatePrescriptDetailValidator : AbstractValidator<CreatePrescriptDetailDto>
@@ -31,8 +48,25 @@ public class CreatePrescriptDetailValidator : AbstractValidator<CreatePrescriptD
             .NotEmpty().WithMessage("{PropertyName} is required.")
             .GreaterThan(p => p.DateStart).WithMessage("{PropertyName} must be after {ComparisonValue}.");
 
-        RuleFor(p => p.Total)
+        RuleFor(p => p.TotalDose)
             .NotEmpty().WithMessage("{PropertyName} is required.")
             .GreaterThan(0).WithMessage("{PropertyName} must be greater than 0.");
+
+        RuleFor(p => p.MorningDose)
+            .GreaterThanOrEqualTo(0).WithMessage("{PropertyName} must be greater than or equal to 0.");
+
+        RuleFor(p => p.NoonDose)
+            .GreaterThanOrEqualTo(0).WithMessage("{PropertyName} must be greater than or equal to 0.");
+
+        RuleFor(p => p.AfternoonDose)
+            .GreaterThanOrEqualTo(0).WithMessage("{PropertyName} must be greater than or equal to 0.");
+
+        RuleFor(p => p.NightDose)
+            .GreaterThanOrEqualTo(0).WithMessage("{PropertyName} must be greater than or equal to 0.");
+
+        RuleFor(p => p.DosageInstruction)
+            .NotEmpty().WithMessage("{PropertyName} is required.")
+            .IsEnumName(typeof(DosageInstructionEnums))
+            .WithMessage("{PropertyName} is not valid. Valid values are: Aftermeal, Beforemeal.");
     }
 }

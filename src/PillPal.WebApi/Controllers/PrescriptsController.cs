@@ -63,7 +63,12 @@ public class PrescriptsController(IPrescriptService prescriptService)
     ///                 "medicineName": "Paracetamol",
     ///                 "dateStart": "2024-06-19",
     ///                 "dateEnd": "2024-06-29",
-    ///                 "total": 10
+    ///                 "totalDose": 80,
+    ///                 "morningDose": 2,
+    ///                 "noonDose": 2,
+    ///                 "afternoonDose": 2,
+    ///                 "nightDose": 2,
+    ///                 "dosageInstruction": "Aftermeal"
     ///             }
     ///          ]   
     ///     }

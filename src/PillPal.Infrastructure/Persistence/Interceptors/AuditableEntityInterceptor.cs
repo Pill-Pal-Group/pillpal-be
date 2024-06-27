@@ -45,10 +45,20 @@ public class AuditableEntityInterceptor(IUser user)
             entry.Entity.UpdatedBy = _user.Id;
             entry.Entity.UpdatedAt = utcNow;
 
+            // this code is consider to be remove as line 55 will handle the soft delete
             if (entry.Entity.IsDeleted)
             {
                 entry.Entity.DeletedAt = utcNow;
             }
+        }
+
+        var softDeleteEntries = context.ChangeTracker.Entries<ISoftDelete>();
+
+        foreach (var entry in softDeleteEntries.Where(e => e.State is EntityState.Deleted))
+        {
+            entry.State = EntityState.Modified;
+            entry.Entity.IsDeleted = true;
+            entry.Entity.DeletedAt = DateTime.UtcNow;
         }
     }
 }

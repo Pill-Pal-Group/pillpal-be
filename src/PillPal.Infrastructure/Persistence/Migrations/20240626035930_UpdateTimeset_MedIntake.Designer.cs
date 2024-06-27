@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PillPal.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using PillPal.Infrastructure.Persistence;
 namespace PillPal.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240626035930_UpdateTimeset_MedIntake")]
+    partial class UpdateTimeset_MedIntake
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -311,39 +314,14 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<TimeOnly>("AfternoonTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("time")
-                        .HasDefaultValue(new TimeOnly(16, 0, 0));
-
-                    b.Property<TimeOnly>("BreakfastTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("time")
-                        .HasDefaultValue(new TimeOnly(7, 0, 0));
-
                     b.Property<string>("CustomerCode")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<TimeOnly>("DinnerTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("time")
-                        .HasDefaultValue(new TimeOnly(18, 0, 0));
 
                     b.Property<DateTimeOffset?>("Dob")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<Guid>("IdentityUserId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<TimeOnly>("LunchTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("time")
-                        .HasDefaultValue(new TimeOnly(12, 0, 0));
-
-                    b.Property<TimeOnly>("MealTimeOffset")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("time")
-                        .HasDefaultValue(new TimeOnly(0, 15, 0));
 
                     b.HasKey("Id");
 
@@ -405,6 +383,12 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTimeOffset>("DateTake")
                         .HasColumnType("datetimeoffset");
 
@@ -421,6 +405,12 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TimeTake")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -725,6 +715,12 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                     b.Property<double>("AfternoonDose")
                         .HasColumnType("float");
 
+                    b.Property<DateTimeOffset?>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTimeOffset>("DateEnd")
                         .HasColumnType("datetimeoffset");
 
@@ -758,6 +754,12 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                     b.Property<int>("TotalDose")
                         .HasColumnType("int");
 
+                    b.Property<DateTimeOffset?>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PrescriptId");
@@ -780,6 +782,38 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Specifications");
+                });
+
+            modelBuilder.Entity("PillPal.Core.Models.TimeSet", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<TimeOnly>("Afternoon")
+                        .HasColumnType("time");
+
+                    b.Property<TimeOnly>("Breakfast")
+                        .HasColumnType("time");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<TimeOnly>("Dinner")
+                        .HasColumnType("time");
+
+                    b.Property<TimeOnly>("Lunch")
+                        .HasColumnType("time");
+
+                    b.Property<TimeOnly>("TimeOffset")
+                        .HasColumnType("time");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId")
+                        .IsUnique();
+
+                    b.ToTable("TimeSets");
                 });
 
             modelBuilder.Entity("ActiveIngredientMedicine", b =>
@@ -976,6 +1010,17 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Prescript");
+                });
+
+            modelBuilder.Entity("PillPal.Core.Models.TimeSet", b =>
+                {
+                    b.HasOne("PillPal.Core.Models.Customer", "Customer")
+                        .WithOne()
+                        .HasForeignKey("PillPal.Core.Models.TimeSet", "CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("PillPal.Core.Identity.ApplicationUser", b =>
