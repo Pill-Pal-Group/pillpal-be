@@ -20,7 +20,7 @@ public interface IActiveIngredientService
     /// <returns>
     /// The task result contains the <see cref="ActiveIngredientDto"/> representing the found active ingredient.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task<ActiveIngredientDto> GetActiveIngredientByIdAsync(Guid ingredientId);
 
     /// <summary>
@@ -41,7 +41,7 @@ public interface IActiveIngredientService
     /// <returns>
     /// The task result contains the updated <see cref="ActiveIngredientDto"/>.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     /// <exception cref="ValidationException">Thrown when validation fails for the update information.</exception>
     Task<ActiveIngredientDto> UpdateActiveIngredientAsync(Guid ingredientId, UpdateActiveIngredientDto updateActiveIngredientDto);
 
@@ -52,6 +52,6 @@ public interface IActiveIngredientService
     /// <returns>
     /// A task that represents the asynchronous delete operation.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task DeleteActiveIngredientAsync(Guid ingredientId);
 }

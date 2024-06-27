@@ -1,5 +1,4 @@
-﻿using PillPal.Application.Common.Exceptions;
-using PillPal.Application.Common.Interfaces.Data;
+﻿using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Application.Common.Repositories;
 
@@ -27,9 +26,7 @@ public class NationRepository(IApplicationDbContext context, IMapper mapper, ISe
             .Where(n => n.Id == nationId && !n.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Nation), nationId);
 
-        nation.IsDeleted = true;
-
-        Context.Nations.Update(nation);
+        Context.Nations.Remove(nation);
 
         await Context.SaveChangesAsync();
     }

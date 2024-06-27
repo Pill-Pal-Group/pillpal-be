@@ -1,5 +1,4 @@
-﻿using PillPal.Application.Common.Exceptions;
-using PillPal.Application.Common.Interfaces.Data;
+﻿using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Application.Common.Repositories;
 
@@ -27,9 +26,7 @@ public class BrandRepository(IApplicationDbContext context, IMapper mapper, ISer
             .Where(b => b.Id == brandId && !b.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Brand), brandId);
 
-        brand.IsDeleted = true;
-
-        Context.Brands.Update(brand);
+        Context.Brands.Remove(brand);
 
         await Context.SaveChangesAsync();
     }

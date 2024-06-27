@@ -20,7 +20,7 @@ public interface INationService
     /// <returns>
     /// The task result contains the <see cref="NationDto"/> representing the found nation.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task<NationDto> GetNationByIdAsync(Guid nationId);
 
     /// <summary>
@@ -41,7 +41,7 @@ public interface INationService
     /// <returns>
     /// The task result contains the updated <see cref="NationDto"/>.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     /// <exception cref="ValidationException">Thrown when validation fails for the update information.</exception>
     Task<NationDto> UpdateNationAsync(Guid nationId, UpdateNationDto updateNationDto);
 
@@ -52,6 +52,6 @@ public interface INationService
     /// <returns>
     /// A task that represents the asynchronous delete operation.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task DeleteNationAsync(Guid nationId);
 }

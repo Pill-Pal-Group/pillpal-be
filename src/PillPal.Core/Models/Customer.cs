@@ -5,6 +5,11 @@ public class Customer : BaseEntity
     public string? CustomerCode { get; set; }
     public DateTimeOffset? Dob { get; set; }
     public string? Address { get; set; }
+    public TimeOnly BreakfastTime { get; set; }
+    public TimeOnly LunchTime { get; set; }
+    public TimeOnly AfternoonTime { get; set; }
+    public TimeOnly DinnerTime { get; set; }
+    public TimeSpan MealTimeOffset { get; set; }
 
     public virtual ICollection<Prescript> Prescripts { get; set; } = default!;
 

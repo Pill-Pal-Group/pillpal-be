@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PillPal.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using PillPal.Infrastructure.Persistence;
 namespace PillPal.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240626044334_RemoveTimeset_MovToCustomer")]
+    partial class RemoveTimeset_MovToCustomer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -312,22 +315,16 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<TimeOnly>("AfternoonTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("time")
-                        .HasDefaultValue(new TimeOnly(16, 0, 0));
+                        .HasColumnType("time");
 
                     b.Property<TimeOnly>("BreakfastTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("time")
-                        .HasDefaultValue(new TimeOnly(7, 0, 0));
+                        .HasColumnType("time");
 
                     b.Property<string>("CustomerCode")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<TimeOnly>("DinnerTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("time")
-                        .HasDefaultValue(new TimeOnly(18, 0, 0));
+                        .HasColumnType("time");
 
                     b.Property<DateTimeOffset?>("Dob")
                         .HasColumnType("datetimeoffset");
@@ -336,14 +333,10 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<TimeOnly>("LunchTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("time")
-                        .HasDefaultValue(new TimeOnly(12, 0, 0));
+                        .HasColumnType("time");
 
-                    b.Property<TimeSpan>("MealTimeOffset")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("time")
-                        .HasDefaultValue(new TimeSpan(0, 0, 15, 0, 0));
+                    b.Property<TimeOnly>("MealTimeOffset")
+                        .HasColumnType("time");
 
                     b.HasKey("Id");
 

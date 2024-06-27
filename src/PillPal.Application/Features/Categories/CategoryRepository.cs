@@ -1,5 +1,4 @@
-﻿using PillPal.Application.Common.Exceptions;
-using PillPal.Application.Common.Interfaces.Data;
+﻿using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Application.Common.Repositories;
 
@@ -27,9 +26,7 @@ public class CategoryRepository(IApplicationDbContext context, IMapper mapper, I
             .Where(c => c.Id == categoryId && !c.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Category), categoryId);
 
-        category.IsDeleted = true;
-
-        Context.Categories.Update(category);
+        Context.Categories.Remove(category);
 
         await Context.SaveChangesAsync();
     }

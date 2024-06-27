@@ -1,5 +1,4 @@
-﻿using PillPal.Application.Common.Exceptions;
-using PillPal.Application.Features.MedicationTakes;
+﻿using PillPal.Application.Features.MedicationTakes;
 
 namespace PillPal.Application.Common.Interfaces.Services;
 
@@ -22,8 +21,18 @@ public interface IMedicationTakeService
     /// <param name="prescriptId"></param>
     /// <param name="dateTake"></param>
     /// <returns>
-    /// The task result contains a collection of <see cref="MedicationTakesDto"/> objects.
+    /// The task result contains a collection of <see cref="MedicationTakesListDto"/> objects.
     /// </returns>
     /// <exception cref="NotFoundException">Thrown when the prescript is not found.</exception>
-    Task<IEnumerable<MedicationTakesDto>> GetMedicationTakesAsync(Guid prescriptId, DateTimeOffset? dateTake);
+    Task<IEnumerable<MedicationTakesListDto>> GetMedicationTakesAsync(Guid prescriptId, DateTimeOffset? dateTake);
+
+    /// <summary>
+    /// Removes a Medication Take by performing a soft delete.
+    /// </summary>
+    /// <param name="medicationTakeId">The unique identifier for the Medication Take to delete.</param>
+    /// <returns>
+    /// A task that represents the asynchronous delete operation.
+    /// </returns>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
+    Task DeleteMedicationTakeAsync(Guid medicationTakeId);
 }

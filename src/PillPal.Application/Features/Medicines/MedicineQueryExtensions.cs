@@ -6,6 +6,13 @@ public record MedicineQueryParameter
 {
     /// <example>MED6060-555555</example>
     public string? MedicineCode { get; init; }
+
+    /// <example>00000000-0000-0000-0000-000000000000</example>
+    public Guid? Brand { get; init; }
+
+    /// <example>Paracetamol</example>
+    public string? MedicineName { get; set; }
+
     public bool? RequirePrescript { get; init; }
 }
 
@@ -34,6 +41,16 @@ public static class MedicineQueryExtensions
 {
     public static IQueryable<Medicine> Filter(this IQueryable<Medicine> query, MedicineQueryParameter queryParameter)
     {
+        if (queryParameter.MedicineName is not null)
+        {
+            query = query.Where(m => m.MedicineName!.Contains(queryParameter.MedicineName));
+        }
+
+        if (queryParameter.Brand is not null)
+        {
+            query = query.Where(m => m.MedicineInBrands.Any(mib => mib.Brand!.Id == queryParameter.Brand));
+        }
+
         if (queryParameter.MedicineCode is not null)
         {
             query = query.Where(m => m.MedicineCode!.Contains(queryParameter.MedicineCode));

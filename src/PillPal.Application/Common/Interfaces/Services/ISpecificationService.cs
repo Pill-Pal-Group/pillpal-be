@@ -19,7 +19,7 @@ public interface ISpecificationService
     /// <returns>
     /// The task result contains the <see cref="SpecificationDto"/> representing the found specification.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task<SpecificationDto> GetSpecificationByIdAsync(Guid specificationId);
 
     /// <summary>
@@ -40,7 +40,7 @@ public interface ISpecificationService
     /// <returns>
     /// The task result contains the updated <see cref="SpecificationDto"/>.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     /// <exception cref="ValidationException">Thrown when validation fails for the update information.</exception>
     Task<SpecificationDto> UpdateSpecificationAsync(Guid specificationId, UpdateSpecificationDto updateSpecificationDto);
 
@@ -51,6 +51,6 @@ public interface ISpecificationService
     /// <returns>
     /// A task that represents the asynchronous delete operation.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task DeleteSpecificationAsync(Guid specificationId);
 }

@@ -1,7 +1,7 @@
-﻿using PillPal.Application.Common.Exceptions;
-using PillPal.Application.Common.Interfaces.Data;
+﻿using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Application.Common.Repositories;
+using PillPal.Core.Enums;
 
 namespace PillPal.Application.Features.MedicationTakes;
 
@@ -11,9 +11,11 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
     public async Task<IEnumerable<MedicationTakesDto>> CreateMedicationTakeAsync(Guid prescriptId)
     {
         var prescript = await Context.Prescripts
-            .Where(p => p.Id == prescriptId && !p.IsDeleted)
+            .AsNoTracking()
             .Include(p => p.PrescriptDetails)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Prescript), prescriptId);
+            .Include(p => p.Customer)
+            .FirstOrDefaultAsync(p => p.Id == prescriptId && !p.IsDeleted)
+            ?? throw new NotFoundException(nameof(Prescript), prescriptId);
 
         var allMedicationTakes = new List<MedicationTake>();
 
@@ -29,23 +31,56 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
             }
 
             var totalDays = (prescriptDetail.DateEnd - prescriptDetail.DateStart).TotalDays;
-            var doesPerTake = prescriptDetail.Total / totalDays;
+
+            var dosageDict = new Dictionary<string, double>
+            {
+                { "Morning", prescriptDetail.MorningDose },
+                { "Noon", prescriptDetail.NoonDose },
+                { "Afternoon", prescriptDetail.AfternoonDose },
+                { "Night", prescriptDetail.NightDose }
+            };
+
+            var timeTakeDict = new Dictionary<string, TimeOnly>
+            {
+                { "Morning", prescript.Customer!.BreakfastTime },
+                { "Noon", prescript.Customer!.LunchTime },
+                { "Afternoon", prescript.Customer!.AfternoonTime },
+                { "Night", prescript.Customer!.DinnerTime }
+            };
 
             for (int i = 0; i < totalDays; i++)
             {
                 var dateTake = prescriptDetail.DateStart.AddDays(i);
-                var timeTake = "3meal";
-                var dose = doesPerTake.ToString();
 
-                var medicationTake = new MedicationTake
+                foreach (var dose in dosageDict)
                 {
-                    DateTake = dateTake,
-                    TimeTake = timeTake,
-                    Dose = dose,
-                    PrescriptDetailId = prescriptDetail.Id
-                };
+                    if (dose.Value == 0)
+                    {
+                        continue;
+                    }
 
-                allMedicationTakes.Add(medicationTake);
+                    var timeTake = timeTakeDict[dose.Key];
+
+                    if (prescriptDetail.DosageInstruction == DosageInstructionEnums.Aftermeal.ToString())
+                    {
+                        timeTake = timeTake.AddMinutes(prescript.Customer!.MealTimeOffset.TotalMinutes);
+                    }
+
+                    if (prescriptDetail.DosageInstruction == DosageInstructionEnums.Beforemeal.ToString())
+                    {
+                        timeTake = timeTake.AddMinutes(-prescript.Customer!.MealTimeOffset.TotalMinutes);
+                    }
+
+                    var medicationTake = new MedicationTake
+                    {
+                        DateTake = dateTake,
+                        TimeTake = timeTake.ToShortTimeString(),
+                        Dose = dose.Value.ToString(),
+                        PrescriptDetailId = prescriptDetail.Id
+                    };
+
+                    allMedicationTakes.Add(medicationTake);
+                }
             }
 
         }
@@ -57,19 +92,22 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
         return Mapper.Map<IEnumerable<MedicationTakesDto>>(allMedicationTakes);
     }
 
-    public async Task<IEnumerable<MedicationTakesDto>> GetMedicationTakesAsync(Guid prescriptId, DateTimeOffset? dateTake)
+    public async Task<IEnumerable<MedicationTakesListDto>> GetMedicationTakesAsync(Guid prescriptId, DateTimeOffset? dateTake)
     {
         var prescript = await Context.Prescripts
-            .Where(p => p.Id == prescriptId && !p.IsDeleted)
+            .AsNoTracking()
             .Include(p => p.PrescriptDetails)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Prescript), prescriptId);
-        
-        var allMedicationTakes = new List<MedicationTake>();
+            .FirstOrDefaultAsync(p => p.Id == prescriptId && !p.IsDeleted)
+            ?? throw new NotFoundException(nameof(Prescript), prescriptId);
+
+        var allMedicationTakes = new List<MedicationTakesListDto>();
 
         foreach (var prescriptDetail in prescript.PrescriptDetails)
         {
+            var medicineName = prescriptDetail.MedicineName;
+
             var medicationTakesQuery = Context.MedicationTakes
-                .Where(mt => mt.PrescriptDetailId == prescriptDetail.Id);
+                .Where(mt => mt.PrescriptDetailId == prescriptDetail.Id && !mt.IsDeleted);
 
             if (dateTake.HasValue)
             {
@@ -81,9 +119,24 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
                 .AsNoTracking()
                 .ToListAsync();
 
-            allMedicationTakes.AddRange(medicationTakes);
+            allMedicationTakes.Add(new MedicationTakesListDto
+            {
+                MedicineName = medicineName,
+                MedicationTakes = Mapper.Map<IEnumerable<MedicationTakesDto>>(medicationTakes)
+            });
         }
-        
-        return Mapper.Map<IEnumerable<MedicationTakesDto>>(allMedicationTakes);
+
+        return allMedicationTakes;
+    }
+
+    public async Task DeleteMedicationTakeAsync(Guid medicationTakeId)
+    {
+        var medicationTake = await Context.MedicationTakes
+            .FirstOrDefaultAsync(mt => mt.Id == medicationTakeId && !mt.IsDeleted)
+            ?? throw new NotFoundException(nameof(MedicationTake), medicationTakeId);
+
+        Context.MedicationTakes.Remove(medicationTake);
+
+        await Context.SaveChangesAsync();
     }
 }

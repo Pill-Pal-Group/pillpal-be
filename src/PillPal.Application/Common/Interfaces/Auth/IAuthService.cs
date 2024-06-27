@@ -1,5 +1,4 @@
-﻿using PillPal.Application.Common.Exceptions;
-using PillPal.Application.Features.Auths;
+﻿using PillPal.Application.Features.Auths;
 
 namespace PillPal.Application.Common.Interfaces.Auth;
 

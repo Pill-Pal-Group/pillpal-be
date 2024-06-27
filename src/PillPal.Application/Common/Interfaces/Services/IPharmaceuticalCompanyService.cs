@@ -19,7 +19,7 @@ public interface IPharmaceuticalCompanyService
     /// <returns>
     /// The task result contains the <see cref="PharmaceuticalCompanyDto"/> representing the found pharmaceutical company.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task<PharmaceuticalCompanyDto> GetPharmaceuticalCompanyByIdAsync(Guid companyId);
 
     /// <summary>
@@ -40,7 +40,7 @@ public interface IPharmaceuticalCompanyService
     /// <returns>
     /// The task result contains the updated <see cref="PharmaceuticalCompanyDto"/>.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     /// <exception cref="ValidationException">Thrown when validation fails for the update information.</exception>
     Task<PharmaceuticalCompanyDto> UpdatePharmaceuticalCompanyAsync(Guid companyId, UpdatePharmaceuticalCompanyDto updatePharmaceuticalCompanyDto);
 
@@ -51,6 +51,6 @@ public interface IPharmaceuticalCompanyService
     /// <returns>
     /// A task that represents the asynchronous delete operation.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task DeletePharmaceuticalCompanyAsync(Guid companyId);
 }

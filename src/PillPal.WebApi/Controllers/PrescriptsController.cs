@@ -63,7 +63,12 @@ public class PrescriptsController(IPrescriptService prescriptService)
     ///                 "medicineName": "Paracetamol",
     ///                 "dateStart": "2024-06-19",
     ///                 "dateEnd": "2024-06-29",
-    ///                 "total": 10
+    ///                 "totalDose": 80,
+    ///                 "morningDose": 2,
+    ///                 "noonDose": 2,
+    ///                 "afternoonDose": 2,
+    ///                 "nightDose": 2,
+    ///                 "dosageInstruction": "Aftermeal"
     ///             }
     ///          ]   
     ///     }
@@ -80,5 +85,22 @@ public class PrescriptsController(IPrescriptService prescriptService)
         var prescript = await prescriptService.CreatePrescriptAsync(createPrescriptDto);
 
         return CreatedAtRoute("GetPrescriptById", new { prescriptId = prescript.Id }, prescript);
+    }
+
+    /// <summary>
+    /// Deletes a prescript by its unique identifier. Soft delete.
+    /// </summary>
+    /// <param name="prescriptId" example="00000000-0000-0000-0000-000000000000"></param>
+    /// <response code="204">No content</response>
+    /// <response code="404">If the prescript is not found</response>
+    [AuthorizeRoles(Role.Customer)]
+    [HttpDelete("{prescriptId:guid}", Name = "DeletePrescriptById")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeletePrescriptByIdAsync(Guid prescriptId)
+    {
+        await prescriptService.DeletePrescriptByIdAsync(prescriptId);
+
+        return NoContent();
     }
 }

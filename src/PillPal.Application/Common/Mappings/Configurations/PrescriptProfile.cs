@@ -8,7 +8,7 @@ public partial class MapperConfigure : Profile
     void PrescriptProfile()
     {
         CreateMap<Prescript, PrescriptDto>().ReverseMap();
-        
+
         CreateMap<PrescriptDetail, PrescriptDetailDto>().ReverseMap();
 
         CreateMap<Prescript, CreatePrescriptDto>().ReverseMap();

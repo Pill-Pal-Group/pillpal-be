@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PillPal.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using PillPal.Infrastructure.Persistence;
 namespace PillPal.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240627052741_AddDefault_MealTimeOffset")]
+    partial class AddDefault_MealTimeOffset
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -340,10 +343,10 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                         .HasColumnType("time")
                         .HasDefaultValue(new TimeOnly(12, 0, 0));
 
-                    b.Property<TimeSpan>("MealTimeOffset")
+                    b.Property<TimeOnly>("MealTimeOffset")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("time")
-                        .HasDefaultValue(new TimeSpan(0, 0, 15, 0, 0));
+                        .HasDefaultValue(new TimeOnly(0, 15, 0));
 
                     b.HasKey("Id");
 

@@ -1,6 +1,6 @@
 ﻿namespace PillPal.Core.Models;
 
-public class MedicationTake : BaseAuditableEntity
+public class MedicationTake : BaseEntity, ISoftDelete
 {
     public DateTimeOffset DateTake { get; set; }
     public string? TimeTake { get; set; }
@@ -8,4 +8,7 @@ public class MedicationTake : BaseAuditableEntity
 
     public Guid PrescriptDetailId { get; set; }
     public virtual PrescriptDetail? PrescriptDetail { get; set; }
+
+    public bool IsDeleted { get; set; }
+    public DateTimeOffset? DeletedAt { get; set; }
 }

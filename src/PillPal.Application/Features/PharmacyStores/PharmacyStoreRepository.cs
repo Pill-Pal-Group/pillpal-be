@@ -1,5 +1,4 @@
-﻿using PillPal.Application.Common.Exceptions;
-using PillPal.Application.Common.Interfaces.Data;
+﻿using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Application.Common.Repositories;
 
@@ -27,9 +26,7 @@ public class PharmacyStoreRepository(IApplicationDbContext context, IMapper mapp
             .Where(c => c.Id == pharmacyStoreId && !c.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmacyStore), pharmacyStoreId);
 
-        pharmacyStore.IsDeleted = true;
-
-        Context.PharmacyStores.Update(pharmacyStore);
+        Context.PharmacyStores.Remove(pharmacyStore);
 
         await Context.SaveChangesAsync();
     }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using PillPal.Application.Common.Exceptions;
-using ValidationException = PillPal.Application.Common.Exceptions.ValidationException;
 
 namespace PillPal.WebApi.Service;
 

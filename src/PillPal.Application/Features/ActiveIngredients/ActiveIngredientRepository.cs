@@ -1,5 +1,4 @@
-﻿using PillPal.Application.Common.Exceptions;
-using PillPal.Application.Common.Interfaces.Data;
+﻿using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Application.Common.Repositories;
 
@@ -27,9 +26,7 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
             .Where(ai => ai.Id == ingredientId && !ai.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(ActiveIngredient), ingredientId);
 
-        activeIngredient.IsDeleted = true;
-
-        Context.ActiveIngredients.Update(activeIngredient);
+        Context.ActiveIngredients.Remove(activeIngredient);
 
         await Context.SaveChangesAsync();
     }

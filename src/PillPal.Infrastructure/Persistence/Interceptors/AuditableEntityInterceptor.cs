@@ -13,6 +13,8 @@ public class AuditableEntityInterceptor(IUser user)
     {
         UpdateEntites(eventData.Context);
 
+        DeleteEntites(eventData.Context);
+
         return base.SavingChanges(eventData, result);
     }
 
@@ -22,6 +24,8 @@ public class AuditableEntityInterceptor(IUser user)
         CancellationToken cancellationToken = default)
     {
         UpdateEntites(eventData.Context);
+
+        DeleteEntites(eventData.Context);
 
         return base.SavingChangesAsync(eventData, result, cancellationToken);
     }
@@ -44,11 +48,20 @@ public class AuditableEntityInterceptor(IUser user)
 
             entry.Entity.UpdatedBy = _user.Id;
             entry.Entity.UpdatedAt = utcNow;
+        }
+    }
 
-            if (entry.Entity.IsDeleted)
-            {
-                entry.Entity.DeletedAt = utcNow;
-            }
+    public void DeleteEntites(DbContext? context)
+    {
+        if (context == null) return;
+
+        var entries = context.ChangeTracker.Entries<ISoftDelete>();
+
+        foreach (var entry in entries.Where(e => e.State is EntityState.Deleted))
+        {
+            entry.State = EntityState.Modified;
+            entry.Entity.IsDeleted = true;
+            entry.Entity.DeletedAt = DateTime.UtcNow;
         }
     }
 }

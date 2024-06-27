@@ -20,7 +20,7 @@ public interface ICategoryService
     /// <returns>
     /// The task result contains the <see cref="CategoryDto"/> representing the found category.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task<CategoryDto> GetCategoryByIdAsync(Guid categoryId);
 
     /// <summary>
@@ -41,7 +41,7 @@ public interface ICategoryService
     /// <returns>
     /// The task result contains the updated <see cref="CategoryDto"/>.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     /// <exception cref="ValidationException">Thrown when validation fails for the update information.</exception>
     Task<CategoryDto> UpdateCategoryAsync(Guid categoryId, UpdateCategoryDto updateCategoryDto);
 
@@ -52,6 +52,6 @@ public interface ICategoryService
     /// <returns>
     /// A task that represents the asynchronous delete operation.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task DeleteCategoryAsync(Guid categoryId);
 }
