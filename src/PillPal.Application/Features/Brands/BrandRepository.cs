@@ -27,9 +27,7 @@ public class BrandRepository(IApplicationDbContext context, IMapper mapper, ISer
             .Where(b => b.Id == brandId && !b.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Brand), brandId);
 
-        brand.IsDeleted = true;
-
-        Context.Brands.Update(brand);
+        Context.Brands.Remove(brand);
 
         await Context.SaveChangesAsync();
     }

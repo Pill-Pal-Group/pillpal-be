@@ -27,9 +27,7 @@ public class CategoryRepository(IApplicationDbContext context, IMapper mapper, I
             .Where(c => c.Id == categoryId && !c.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Category), categoryId);
 
-        category.IsDeleted = true;
-
-        Context.Categories.Update(category);
+        Context.Categories.Remove(category);
 
         await Context.SaveChangesAsync();
     }

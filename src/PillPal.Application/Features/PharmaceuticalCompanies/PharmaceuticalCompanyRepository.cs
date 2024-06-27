@@ -27,9 +27,7 @@ public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMap
             .Where(b => b.Id == companyId && !b.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmaceuticalCompany), companyId);
 
-        pharmaceuticalCompany.IsDeleted = true;
-
-        Context.PharmaceuticalCompanies.Update(pharmaceuticalCompany);
+        Context.PharmaceuticalCompanies.Remove(pharmaceuticalCompany);
 
         await Context.SaveChangesAsync();
     }

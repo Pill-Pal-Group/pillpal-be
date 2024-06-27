@@ -27,9 +27,7 @@ public class PharmacyStoreRepository(IApplicationDbContext context, IMapper mapp
             .Where(c => c.Id == pharmacyStoreId && !c.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmacyStore), pharmacyStoreId);
 
-        pharmacyStore.IsDeleted = true;
-
-        Context.PharmacyStores.Update(pharmacyStore);
+        Context.PharmacyStores.Remove(pharmacyStore);
 
         await Context.SaveChangesAsync();
     }

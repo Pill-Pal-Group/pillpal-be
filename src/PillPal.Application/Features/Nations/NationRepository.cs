@@ -27,9 +27,7 @@ public class NationRepository(IApplicationDbContext context, IMapper mapper, ISe
             .Where(n => n.Id == nationId && !n.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Nation), nationId);
 
-        nation.IsDeleted = true;
-
-        Context.Nations.Update(nation);
+        Context.Nations.Remove(nation);
 
         await Context.SaveChangesAsync();
     }

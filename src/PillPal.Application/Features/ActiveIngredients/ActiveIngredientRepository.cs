@@ -27,9 +27,7 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
             .Where(ai => ai.Id == ingredientId && !ai.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(ActiveIngredient), ingredientId);
 
-        activeIngredient.IsDeleted = true;
-
-        Context.ActiveIngredients.Update(activeIngredient);
+        Context.ActiveIngredients.Remove(activeIngredient);
 
         await Context.SaveChangesAsync();
     }
