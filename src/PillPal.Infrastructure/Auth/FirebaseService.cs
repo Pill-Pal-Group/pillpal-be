@@ -12,8 +12,7 @@ public class FirebaseService : IFirebaseService
     {
         FirebaseApp.Create(new AppOptions
         {
-            Credential = GoogleCredential.FromJson(settings.Value.ServiceKey!),
-            ProjectId = settings.Value.ProjectId
+            Credential = GoogleCredential.FromJson(settings.Value.ServiceKey!)
         });
     }
 
