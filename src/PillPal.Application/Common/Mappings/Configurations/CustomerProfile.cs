@@ -24,7 +24,7 @@ public partial class MapperConfigure : Profile
             .ForMember(c => c.AfternoonTime, dest => dest.MapFrom(src => src.AfternoonTime.ToString("HH:mm")))
             .ForMember(c => c.DinnerTime, dest => dest.MapFrom(src => src.DinnerTime.ToString("HH:mm")))
             .ReverseMap();
-        
+
         CreateMap<UpdateCustomerMealTimeDto, Customer>()
             .ForMember(c => c.MealTimeOffset, dest => dest.MapFrom(src => TimeSpan.Parse(src.MealTimeOffset!)))
             .ForMember(c => c.BreakfastTime, dest => dest.MapFrom(src => TimeOnly.Parse(src.BreakfastTime!)))

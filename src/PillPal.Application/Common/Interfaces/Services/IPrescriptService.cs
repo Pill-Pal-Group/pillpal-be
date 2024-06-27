@@ -22,7 +22,7 @@ public interface IPrescriptService
     /// <returns>
     /// The task result contains the <see cref="PrescriptDto"/> representing the found prescript.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task<PrescriptDto> GetPrescriptByIdAsync(Guid prescriptId);
 
     /// <summary>
@@ -33,7 +33,7 @@ public interface IPrescriptService
     /// The task result contains the created <see cref="PrescriptDto"/>.
     /// </returns>
     /// <exception cref="ValidationException">Thrown when validation fails for the creation data.</exception>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the customer (owner of the prescript) is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the customer (owner of the prescript) is not found.</exception>
     Task<PrescriptDto> CreatePrescriptAsync(CreatePrescriptDto createPrescriptDto);
 
     /// <summary>
@@ -43,6 +43,6 @@ public interface IPrescriptService
     /// <returns>
     /// The task result.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task DeletePrescriptByIdAsync(Guid prescriptId);
 }

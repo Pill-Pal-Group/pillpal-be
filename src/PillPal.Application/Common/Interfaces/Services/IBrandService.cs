@@ -20,7 +20,7 @@ public interface IBrandService
     /// <returns>
     /// The task result contains the <see cref="BrandDto"/> representing the found brand.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task<BrandDto> GetBrandByIdAsync(Guid brandId);
 
     /// <summary>
@@ -41,7 +41,7 @@ public interface IBrandService
     /// <returns>
     /// The task result contains the updated <see cref="BrandDto"/>.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     /// <exception cref="ValidationException">Thrown when validation fails for the update information.</exception>
     Task<BrandDto> UpdateBrandAsync(Guid brandId, UpdateBrandDto updateBrandDto);
 
@@ -52,6 +52,6 @@ public interface IBrandService
     /// <returns>
     /// A task that represents the asynchronous delete operation.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task DeleteBrandAsync(Guid brandId);
 }

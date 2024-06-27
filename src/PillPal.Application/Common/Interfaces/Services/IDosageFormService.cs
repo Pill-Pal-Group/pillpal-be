@@ -19,7 +19,7 @@ public interface IDosageFormService
     /// <returns>
     /// The task result contains the <see cref="DosageFormDto"/> representing the found dosage form.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task<DosageFormDto> GetDosageFormByIdAsync(Guid dosageFormId);
 
     /// <summary>
@@ -40,7 +40,7 @@ public interface IDosageFormService
     /// <returns>
     /// The task result contains the updated <see cref="DosageFormDto"/>.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     /// <exception cref="ValidationException">Thrown when validation fails for the update information.</exception>
     Task<DosageFormDto> UpdateDosageFormAsync(Guid dosageFormId, UpdateDosageFormDto updateDosageFormDto);
 
@@ -51,6 +51,6 @@ public interface IDosageFormService
     /// <returns>
     /// A task that represents the asynchronous delete operation.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task DeleteDosageFormAsync(Guid dosageFormId);
 }

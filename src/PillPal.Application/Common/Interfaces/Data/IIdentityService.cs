@@ -1,5 +1,4 @@
-﻿using PillPal.Application.Common.Exceptions;
-using PillPal.Core.Identity;
+﻿using PillPal.Core.Identity;
 
 namespace PillPal.Application.Common.Interfaces.Data;
 

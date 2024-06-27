@@ -19,7 +19,7 @@ public interface IPharmacyStoreService
     /// <returns>
     /// The task result contains the <see cref="PharmacyStoreDto"/> representing the found pharmacy store.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task<PharmacyStoreDto> GetPharmacyStoreByIdAsync(Guid pharmacyStoreId);
 
     /// <summary>
@@ -40,7 +40,7 @@ public interface IPharmacyStoreService
     /// <returns>
     /// The task result contains the updated <see cref="PharmacyStoreDto"/>.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     /// <exception cref="ValidationException">Thrown when validation fails for the update information.</exception>
     Task<PharmacyStoreDto> UpdatePharmacyStoreAsync(Guid pharmacyStoreId, UpdatePharmacyStoreDto updatePharmacyStoreDto);
 
@@ -51,6 +51,6 @@ public interface IPharmacyStoreService
     /// <returns>
     /// A task that represents the asynchronous delete operation.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task DeletePharmacyStoreAsync(Guid pharmacyStoreId);
 }

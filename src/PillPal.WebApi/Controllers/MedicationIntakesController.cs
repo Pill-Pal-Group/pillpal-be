@@ -30,7 +30,7 @@ public class MedicationIntakesController(IMedicationTakeService medicationTakeSe
 
         return Ok(medicationTakes);
     }
-    
+
     /// <summary>
     /// Create Medication Take from given Prescript
     /// </summary>

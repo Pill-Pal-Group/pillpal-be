@@ -12,7 +12,7 @@ public record MedicineQueryParameter
 
     /// <example>Paracetamol</example>
     public string? MedicineName { get; set; }
-    
+
     public bool? RequirePrescript { get; init; }
 }
 
