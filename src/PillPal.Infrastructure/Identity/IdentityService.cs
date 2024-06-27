@@ -53,9 +53,11 @@ public class IdentityService : IIdentityService
         return user.Id.ToString();
     }
 
-    public async Task<(ApplicationUser, string role)> GetUserByEmailAsync(string email)
+    public async Task<(ApplicationUser, string role, bool newUser)> GetUserByEmailAsync(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
+
+        bool newUser = false;
 
         if (user == null)
         {
@@ -68,12 +70,14 @@ public class IdentityService : IIdentityService
             user = await _userManager.FindByEmailAsync(email);
 
             await _userManager.AddToRoleAsync(user!, Role.Customer);
+
+            newUser = true;
         }
 
         var role = await _userManager.GetRolesAsync(user!)
             .ContinueWith(task => task.Result.FirstOrDefault());
 
-        return (user!, role!);
+        return (user!, role!, newUser);
     }
 
     public async Task<string?> GetUserNameAsync(string userId)

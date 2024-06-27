@@ -66,6 +66,7 @@ public interface IIdentityService
     /// A tuple containing:
     /// <para>Item1 (ApplicationUser): The user with the given email</para>
     /// <para>Item2 (string): The role of the user</para>
+    /// <para>Item3 (bool): True if the user is a newly created user, false otherwise</para>
     /// </returns>
-    Task<(ApplicationUser, string role)> GetUserByEmailAsync(string email);
+    Task<(ApplicationUser, string role, bool newUser)> GetUserByEmailAsync(string email);
 }
