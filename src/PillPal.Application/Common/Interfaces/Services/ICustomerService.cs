@@ -11,20 +11,28 @@ public interface ICustomerService
     /// <returns>
     /// The task result contains the <see cref="CustomerDto"/> representing the found customer.
     /// </returns>
-    /// <exception cref="Exceptions.NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task<CustomerDto> GetCustomerByIdAsync(Guid customerId);
+
+    /// <summary>
+    /// Gets the customer information.
+    /// </summary>
+    /// <returns>
+    /// The task result contains the <see cref="CustomerDto"/> representing the customer information.
+    /// </returns>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
+    Task<CustomerDto> GetCustomerInfoAsync();
 
     /// <summary>
     /// Updates an existing customer information.
     /// </summary>
-    /// <param name="customerId">The unique identifier for the customer to update.</param>
     /// <param name="updateCustomerDto">The DTO containing update information for the customer.</param>
     /// <returns>
     /// The task result contains the updated <see cref="CustomerDto"/>.
     /// </returns>
     /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     /// <exception cref="ValidationException">Thrown when validation fails for the update information.</exception>
-    Task<CustomerDto> UpdateCustomerAsync(Guid customerId, UpdateCustomerDto updateCustomerDto);
+    Task<CustomerDto> UpdateCustomerAsync(UpdateCustomerDto updateCustomerDto);
 
     /// <summary>
     /// Retrieves all customers.
@@ -38,12 +46,11 @@ public interface ICustomerService
     /// <summary>
     /// Updates the meal time information for a customer.
     /// </summary>
-    /// <param name="customerId">The unique identifier for the customer to update.</param>
     /// <param name="updateCustomerMealTimeDto">The DTO containing update information for the meal time.</param>
     /// <returns>
     /// The task result contains the updated <see cref="CustomerMealTimeDto"/>.
     /// </returns>
     /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     /// <exception cref="ValidationException">Thrown when validation fails for the update information.</exception>
-    Task<CustomerMealTimeDto> UpdateCustomerMealTimeAsync(Guid customerId, UpdateCustomerMealTimeDto updateCustomerMealTimeDto);
+    Task<CustomerMealTimeDto> UpdateCustomerMealTimeAsync(UpdateCustomerMealTimeDto updateCustomerMealTimeDto);
 }
