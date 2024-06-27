@@ -13,7 +13,8 @@ public class CustomerRepository(IApplicationDbContext context, IMapper mapper, I
         var customer = await Context.Customers
             .Include(c => c.IdentityUser)
             .AsNoTracking()
-            .FirstOrDefaultAsync(c => c.Id == customerId) ?? throw new NotFoundException(nameof(Customer), customerId);
+            .FirstOrDefaultAsync(c => c.Id == customerId) 
+            ?? throw new NotFoundException(nameof(Customer), customerId);
 
         return Mapper.Map<CustomerDto>(customer);
     }
@@ -40,10 +41,29 @@ public class CustomerRepository(IApplicationDbContext context, IMapper mapper, I
 
         Mapper.Map(updateCustomerDto, customer);
 
+        customer.IdentityUser!.PhoneNumber = updateCustomerDto.PhoneNumber;
+
         Context.Customers.Update(customer);
 
         await Context.SaveChangesAsync();
 
         return Mapper.Map<CustomerDto>(customer);
+    }
+
+    public async Task<CustomerMealTimeDto> UpdateCustomerMealTimeAsync(Guid customerId, UpdateCustomerMealTimeDto updateCustomerMealTimeDto)
+    {
+        await ValidateAsync(updateCustomerMealTimeDto);
+
+        var customer = await Context.Customers
+            .FirstOrDefaultAsync(c => c.Id == customerId) 
+            ?? throw new NotFoundException(nameof(Customer), customerId);
+
+        Mapper.Map(updateCustomerMealTimeDto, customer);
+
+        Context.Customers.Update(customer);
+
+        await Context.SaveChangesAsync();
+
+        return Mapper.Map<CustomerMealTimeDto>(customer);
     }
 }

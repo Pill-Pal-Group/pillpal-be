@@ -20,6 +20,6 @@ public class CustomerConfig : IEntityTypeConfiguration<Customer>
             .HasDefaultValue(new TimeOnly(18, 0, 0));
 
         builder.Property(c => c.MealTimeOffset)
-            .HasDefaultValue(new TimeOnly(0, 15, 0));
+            .HasDefaultValue(TimeSpan.FromMinutes(15));
     }
 }

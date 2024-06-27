@@ -9,7 +9,7 @@ public class Customer : BaseEntity
     public TimeOnly LunchTime { get; set; }
     public TimeOnly AfternoonTime { get; set; }
     public TimeOnly DinnerTime { get; set; }
-    public TimeOnly MealTimeOffset { get; set; }
+    public TimeSpan MealTimeOffset { get; set; }
 
     public virtual ICollection<Prescript> Prescripts { get; set; } = default!;
 

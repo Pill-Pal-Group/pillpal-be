@@ -64,12 +64,12 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
 
                     if (prescriptDetail.DosageInstruction == DosageInstructionEnums.Aftermeal.ToString())
                     {
-                        timeTake = timeTake.AddMinutes(prescript.Customer!.MealTimeOffset.Minute);
+                        timeTake = timeTake.AddMinutes(prescript.Customer!.MealTimeOffset.TotalMinutes);
                     }
 
                     if (prescriptDetail.DosageInstruction == DosageInstructionEnums.Beforemeal.ToString())
                     {
-                        timeTake = timeTake.AddMinutes(-prescript.Customer!.MealTimeOffset.Minute);
+                        timeTake = timeTake.AddMinutes(-prescript.Customer!.MealTimeOffset.TotalMinutes);
                     }
 
                     var medicationTake = new MedicationTake
