@@ -108,8 +108,7 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
             var medicineName = prescriptDetail.MedicineName;
 
             var medicationTakesQuery = Context.MedicationTakes
-                .Where(mt => mt.PrescriptDetailId == prescriptDetail.Id
-                        && !mt.IsDeleted);
+                .Where(mt => mt.PrescriptDetailId == prescriptDetail.Id && !mt.IsDeleted);
 
             if (dateTake.HasValue)
             {
