@@ -73,7 +73,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             .Where(m => m.Id == medicineId && !m.IsDeleted)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Medicine), medicineId);
 
-        medicine.IsDeleted = true;
+        Context.Medicines.Remove(medicine);
 
         await Context.SaveChangesAsync();
     }
@@ -151,9 +151,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             .Where(mib => mib.MedicineId == medicineId && mib.BrandId == brandId)
             .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(MedicineInBrand), medicineId);
 
-        medicineInBrand.IsDeleted = true;
-
-        Context.MedicineInBrands.Update(medicineInBrand);
+        Context.MedicineInBrands.Remove(medicineInBrand);
 
         await Context.SaveChangesAsync();
     }
