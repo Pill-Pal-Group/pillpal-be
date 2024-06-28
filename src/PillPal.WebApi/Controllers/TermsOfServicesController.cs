@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Features.TermsOfServices;
-using PillPal.Core.Constant;
+﻿using PillPal.Application.Features.TermsOfServices;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -99,7 +95,7 @@ public class TermsOfServicesController(ITermsOfService termsOfService)
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> CreateBulkTermsOfServiceAsync(IEnumerable<CreateTermsOfServiceDto> createTermsOfServiceDtos)
     {
-        var response = await termsOfService.CreateBulkTermsOfServiceAsync(createTermsOfServiceDtos);
+        var response = await termsOfService.CreateBulkTermsOfServicesAsync(createTermsOfServiceDtos);
 
         return CreatedAtRoute("GetTermsOfServices", response);
     }

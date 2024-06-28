@@ -34,6 +34,16 @@ public interface INationService
     Task<NationDto> CreateNationAsync(CreateNationDto createNationDto);
 
     /// <summary>
+    /// Creates multiple nations.
+    /// </summary>
+    /// <param name="createNationDtos">The DTOs containing the creation data for the nations.</param>
+    /// <returns>
+    /// The task result contains a collection of <see cref="NationDto"/> objects.
+    /// </returns>
+    /// <exception cref="ValidationException">Thrown when validation fails for the creation data.</exception>
+    Task<IEnumerable<NationDto>> CreateBulkNationsAsync(IEnumerable<CreateNationDto> createNationDtos);
+
+    /// <summary>
     /// Updates an existing nation.
     /// </summary>
     /// <param name="nationId">The unique identifier for the nation to update.</param>

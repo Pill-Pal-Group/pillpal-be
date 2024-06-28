@@ -7,6 +7,19 @@ namespace PillPal.Application.Features.Nations;
 public class NationRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
     : BaseRepository(context, mapper, serviceProvider), INationService
 {
+    public async Task<IEnumerable<NationDto>> CreateBulkNationsAsync(IEnumerable<CreateNationDto> createNationDtos)
+    {
+        await ValidateListAsync(createNationDtos);
+
+        var nations = Mapper.Map<IEnumerable<Nation>>(createNationDtos);
+
+        await Context.Nations.AddRangeAsync(nations);
+
+        await Context.SaveChangesAsync();
+
+        return Mapper.Map<IEnumerable<NationDto>>(nations);
+    }
+
     public async Task<NationDto> CreateNationAsync(CreateNationDto createNationDto)
     {
         await ValidateAsync(createNationDto);

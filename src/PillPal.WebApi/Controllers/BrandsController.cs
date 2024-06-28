@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Features.Brands;
+﻿using PillPal.Application.Features.Brands;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -58,6 +56,7 @@ public class BrandsController(IBrandService brandService)
     /// </remarks>
     /// <response code="201">Returns the created brand</response>
     /// <response code="422">If the input data is invalid</response>
+    [Authorize(Policy.Administrative)]
     [HttpPost(Name = "CreateBrand")]
     [ProducesResponseType(typeof(BrandDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -66,6 +65,41 @@ public class BrandsController(IBrandService brandService)
         var brand = await brandService.CreateBrandAsync(createBrandDto);
 
         return CreatedAtAction("GetBrandById", new { brandId = brand.Id }, brand);
+    }
+
+    /// <summary>
+    /// Create multiple brands
+    /// </summary>
+    /// <param name="createBrandDtos"></param>
+    /// <remarks>
+    /// Sample request:
+    /// 
+    ///     POST /api/brands/bulk
+    ///     [
+    ///         {
+    ///             "brandName": "Brand Name 1",
+    ///             "brandUrl": "Brand Url 1",
+    ///             "brandLogo": "Brand Logo 1"
+    ///         },
+    ///         {
+    ///             "brandName": "Brand Name 2",
+    ///             "brandUrl": "Brand Url 2",
+    ///             "brandLogo": "Brand Logo 2"
+    ///         }
+    ///     ]
+    ///     
+    /// </remarks>
+    /// <response code="201">Returns the created brands</response>
+    /// <response code="422">If the input data is invalid</response>
+    [Authorize(Policy.Administrative)]
+    [HttpPost("bulk", Name = "CreateBulkBrands")]
+    [ProducesResponseType(typeof(IEnumerable<BrandDto>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+    public async Task<IActionResult> CreateBulkBrandsAsync(IEnumerable<CreateBrandDto> createBrandDtos)
+    {
+        var brands = await brandService.CreateBulkBrandsAsync(createBrandDtos);
+
+        return CreatedAtAction("GetBrands", brands);
     }
 
     /// <summary>
@@ -87,6 +121,7 @@ public class BrandsController(IBrandService brandService)
     /// <response code="200">Returns the updated brand</response>
     /// <response code="404">If the brand is not found</response>
     /// <response code="422">If the input data is invalid</response>
+    [Authorize(Policy.Administrative)]
     [HttpPut("{brandId:guid}", Name = "UpdateBrand")]
     [ProducesResponseType(typeof(BrandDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -104,6 +139,7 @@ public class BrandsController(IBrandService brandService)
     /// <param name="brandId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the brand is not found</response>
+    [Authorize(Policy.Administrative)]
     [HttpDelete("{brandId:guid}", Name = "DeleteBrand")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

@@ -20,6 +20,19 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
         return Mapper.Map<ActiveIngredientDto>(activeIngredient);
     }
 
+    public async Task<IEnumerable<ActiveIngredientDto>> CreateBulkActiveIngredientsAsync(IEnumerable<CreateActiveIngredientDto> createActiveIngredientDtos)
+    {
+        await ValidateListAsync(createActiveIngredientDtos);
+
+        var activeIngredients = Mapper.Map<IEnumerable<ActiveIngredient>>(createActiveIngredientDtos);
+
+        await Context.ActiveIngredients.AddRangeAsync(activeIngredients);
+
+        await Context.SaveChangesAsync();
+
+        return Mapper.Map<IEnumerable<ActiveIngredientDto>>(activeIngredients);
+    }
+
     public async Task DeleteActiveIngredientAsync(Guid ingredientId)
     {
         var activeIngredient = await Context.ActiveIngredients

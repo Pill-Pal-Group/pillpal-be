@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Features.ActiveIngredients;
+﻿using PillPal.Application.Features.ActiveIngredients;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -57,6 +55,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// </remarks>
     /// <response code="201">Returns the created active ingredient</response>
     /// <response code="422">If the input data is invalid</response>
+    [Authorize(Policy.Administrative)]
     [HttpPost(Name = "CreateActiveIngredient")]
     [ProducesResponseType(typeof(ActiveIngredientDto), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateActiveIngredientAsync(CreateActiveIngredientDto createActiveIngredientDto)
@@ -64,6 +63,39 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
         var activeIngredient = await activeIngredientService.CreateActiveIngredientAsync(createActiveIngredientDto);
 
         return CreatedAtRoute("GetActiveIngredientById", new { activeIngredientId = activeIngredient.Id }, activeIngredient);
+    }
+
+    /// <summary>
+    /// Create multiple active ingredients
+    /// </summary>
+    /// <param name="createActiveIngredientDtos"></param>
+    /// <remarks>
+    /// Sample request:
+    /// 
+    ///     POST /api/active-ingredients/bulk
+    ///     [
+    ///         {
+    ///             "ingredientName": "Ingredient Name 1",
+    ///             "ingredientInformation": "Ingredient Information 1"
+    ///         },
+    ///         {
+    ///             "ingredientName": "Ingredient Name 2",
+    ///             "ingredientInformation": "Ingredient Information 2"
+    ///         }
+    ///     ]
+    ///     
+    /// </remarks>
+    /// <response code="201">Returns the created active ingredients</response>
+    /// <response code="422">If the input data is invalid</response>
+    [Authorize(Policy.Administrative)]
+    [HttpPost("bulk", Name = "CreateBulkActiveIngredients")]
+    [ProducesResponseType(typeof(IEnumerable<ActiveIngredientDto>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+    public async Task<IActionResult> CreateBulkActiveIngredientsAsync(IEnumerable<CreateActiveIngredientDto> createActiveIngredientDtos)
+    {
+        var activeIngredients = await activeIngredientService.CreateBulkActiveIngredientsAsync(createActiveIngredientDtos);
+
+        return CreatedAtRoute("GetActiveIngredients", activeIngredients);
     }
 
     /// <summary>
@@ -84,6 +116,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// <response code="200">Returns the updated active ingredient</response>
     /// <response code="404">If the active ingredient is not found</response>
     /// <response code="422">If the input data is invalid</response>
+    [Authorize(Policy.Administrative)]
     [HttpPut("{activeIngredientId:guid}", Name = "UpdateActiveIngredient")]
     [ProducesResponseType(typeof(ActiveIngredientDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -101,6 +134,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// <param name="activeIngredientId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the active ingredient is not found</response>
+    [Authorize(Policy.Administrative)]
     [HttpDelete("{activeIngredientId:guid}", Name = "DeleteActiveIngredient")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

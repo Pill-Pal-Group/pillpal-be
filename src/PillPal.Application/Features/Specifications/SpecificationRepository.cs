@@ -62,4 +62,17 @@ public class SpecificationRepository(IApplicationDbContext context, IMapper mapp
 
         return Mapper.Map<SpecificationDto>(specification);
     }
+
+    public async Task<IEnumerable<SpecificationDto>> CreateBulkSpecificationsAsync(IEnumerable<CreateSpecificationDto> createSpecificationDtos)
+    {
+        await ValidateListAsync(createSpecificationDtos);
+
+        var specifications = Mapper.Map<IEnumerable<Specification>>(createSpecificationDtos);
+
+        await Context.Specifications.AddRangeAsync(specifications);
+
+        await Context.SaveChangesAsync();
+
+        return Mapper.Map<IEnumerable<SpecificationDto>>(specifications);
+    }
 }
