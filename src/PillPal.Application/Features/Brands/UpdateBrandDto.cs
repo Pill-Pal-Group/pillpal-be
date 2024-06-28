@@ -19,7 +19,7 @@ public class UpdateBrandValidator : AbstractValidator<UpdateBrandDto>
         RuleFor(x => x.BrandName)
             .NotEmpty()
             .MaximumLength(100);
-            
+
         RuleFor(x => x.BrandUrl)
             .NotEmpty()
             .MaximumLength(500);
