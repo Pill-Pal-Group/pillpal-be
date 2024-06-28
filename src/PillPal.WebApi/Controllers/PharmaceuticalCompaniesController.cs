@@ -55,6 +55,7 @@ public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pha
     /// </remarks>
     /// <response code="201">Returns the created pharmaceutical company</response>
     /// <response code="422">If the input data is invalid</response>
+    [Authorize(Policy.Administrative)]
     [HttpPost(Name = "CreatePharmaceuticalCompany")]
     [ProducesResponseType(typeof(PharmaceuticalCompanyDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -83,6 +84,7 @@ public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pha
     /// <response code="200">Returns the updated pharmaceutical company</response>
     /// <response code="404">If the pharmaceutical company is not found</response>
     /// <response code="422">If the input data is invalid</response>
+    [Authorize(Policy.Administrative)]
     [HttpPut("{pharmaceuticalCompanyId:guid}", Name = "UpdatePharmaceuticalCompany")]
     [ProducesResponseType(typeof(PharmaceuticalCompanyDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -100,6 +102,7 @@ public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pha
     /// <param name="pharmaceuticalCompanyId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the pharmaceutical company is not found</response>
+    [Authorize(Policy.Administrative)]
     [HttpDelete("{pharmaceuticalCompanyId:guid}", Name = "DeletePharmaceuticalCompany")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

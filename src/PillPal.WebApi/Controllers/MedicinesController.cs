@@ -73,6 +73,7 @@ public class MedicinesController(IMedicineService medicineService)
     /// </remarks>
     /// <response code="201">Returns the created medicine</response>
     /// <response code="422">If the input data is invalid</response>
+    [Authorize(Policy.Administrative)]
     [HttpPost(Name = "CreateMedicine")]
     [ProducesResponseType(typeof(MedicineDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -102,6 +103,7 @@ public class MedicinesController(IMedicineService medicineService)
     /// <response code="201">Returns the created medicine in brand</response>
     /// <response code="404">If the medicine id is not found</response>
     /// <response code="422">If the input data is invalid</response>
+    [Authorize(Policy.Administrative)]
     [HttpPost("{medicineId:guid}/brands", Name = "CreateMedicineInBrand")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -146,6 +148,7 @@ public class MedicinesController(IMedicineService medicineService)
     /// <response code="200">Returns the updated medicine</response>
     /// <response code="404">If the medicine is not found</response>
     /// <response code="422">If the input data is invalid</response>
+    [Authorize(Policy.Administrative)]
     [HttpPut("{medicineId:guid}", Name = "UpdateMedicine")]
     [ProducesResponseType(typeof(MedicineDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -176,6 +179,7 @@ public class MedicinesController(IMedicineService medicineService)
     /// <response code="204">No content</response>
     /// <response code="404">If the medicine is not found</response>
     /// <response code="422">If the input data is invalid</response>
+    [Authorize(Policy.Administrative)]
     [HttpPut("{medicineId:guid}/brands", Name = "UpdateMedicineInBrand")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -194,6 +198,7 @@ public class MedicinesController(IMedicineService medicineService)
     /// <param name="medicineId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the medicine is not found</response>
+    [Authorize(Policy.Administrative)]
     [HttpDelete("{medicineId:guid}", Name = "DeleteMedicine")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -211,6 +216,7 @@ public class MedicinesController(IMedicineService medicineService)
     /// <param name="brandId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the medicine is not found</response>
+    [Authorize(Policy.Administrative)]
     [HttpDelete("{medicineId:guid}/brands/{brandId:guid}", Name = "DeleteMedicineInBrand")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
