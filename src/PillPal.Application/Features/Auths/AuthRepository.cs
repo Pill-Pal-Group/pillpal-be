@@ -10,9 +10,24 @@ public class AuthRepository(
     IServiceProvider serviceProvider,
     IIdentityService identityService,
     IFirebaseService firebaseService,
-    IJwtService jwtService)
+    IJwtService jwtService,
+    IUser user)
     : BaseRepository(context, serviceProvider), IAuthService
 {
+    public async Task ChangePasswordAsync(ChangePasswordRequest request)
+    {
+        await ValidateAsync(request);
+
+        await identityService.ChangePasswordAsync(user.Id!.ToString(), request.CurrentPassword!, request.NewPassword!);
+    }
+
+    public async Task CreatePasswordAsync(CreatePasswordRequest request)
+    {
+        await ValidateAsync(request);
+
+        await identityService.CreatePasswordAsync(user.Id!.ToString(), request.Password!);
+    }
+
     public async Task<AccessTokenResponse> LoginAsync(LoginRequest request)
     {
         await ValidateAsync(request);

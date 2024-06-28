@@ -1,10 +1,11 @@
 ﻿using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Application.Common.Repositories;
+using PillPal.Core.Identity;
 
 namespace PillPal.Application.Features.Customers;
 
-public class CustomerRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
+public class CustomerRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider, IUser user)
     : BaseRepository(context, mapper, serviceProvider), ICustomerService
 {
     public async Task<CustomerDto> GetCustomerByIdAsync(Guid customerId)
@@ -14,6 +15,17 @@ public class CustomerRepository(IApplicationDbContext context, IMapper mapper, I
             .AsNoTracking()
             .FirstOrDefaultAsync(c => c.Id == customerId)
             ?? throw new NotFoundException(nameof(Customer), customerId);
+
+        return Mapper.Map<CustomerDto>(customer);
+    }
+
+    public async Task<CustomerDto> GetCustomerInfoAsync()
+    {
+        var customer = await Context.Customers
+            .Include(c => c.IdentityUser)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.IdentityUserId == Guid.Parse(user.Id!))
+            ?? throw new NotFoundException(nameof(ApplicationUser), user.Id!);
 
         return Mapper.Map<CustomerDto>(customer);
     }
@@ -29,14 +41,14 @@ public class CustomerRepository(IApplicationDbContext context, IMapper mapper, I
         return Mapper.Map<IEnumerable<CustomerDto>>(customers);
     }
 
-    public async Task<CustomerDto> UpdateCustomerAsync(Guid customerId, UpdateCustomerDto updateCustomerDto)
+    public async Task<CustomerDto> UpdateCustomerAsync(UpdateCustomerDto updateCustomerDto)
     {
         await ValidateAsync(updateCustomerDto);
 
         var customer = await Context.Customers
             .Include(c => c.IdentityUser)
-            .FirstOrDefaultAsync(c => c.Id == customerId)
-            ?? throw new NotFoundException(nameof(Customer), customerId);
+            .FirstOrDefaultAsync(c => c.IdentityUserId == Guid.Parse(user.Id!))
+            ?? throw new NotFoundException(nameof(ApplicationUser), user.Id!);
 
         Mapper.Map(updateCustomerDto, customer);
 
@@ -49,13 +61,13 @@ public class CustomerRepository(IApplicationDbContext context, IMapper mapper, I
         return Mapper.Map<CustomerDto>(customer);
     }
 
-    public async Task<CustomerMealTimeDto> UpdateCustomerMealTimeAsync(Guid customerId, UpdateCustomerMealTimeDto updateCustomerMealTimeDto)
+    public async Task<CustomerMealTimeDto> UpdateCustomerMealTimeAsync(UpdateCustomerMealTimeDto updateCustomerMealTimeDto)
     {
         await ValidateAsync(updateCustomerMealTimeDto);
 
         var customer = await Context.Customers
-            .FirstOrDefaultAsync(c => c.Id == customerId)
-            ?? throw new NotFoundException(nameof(Customer), customerId);
+            .FirstOrDefaultAsync(c => c.IdentityUserId == Guid.Parse(user.Id!))
+            ?? throw new NotFoundException(nameof(ApplicationUser), user.Id!);
 
         Mapper.Map(updateCustomerMealTimeDto, customer);
 

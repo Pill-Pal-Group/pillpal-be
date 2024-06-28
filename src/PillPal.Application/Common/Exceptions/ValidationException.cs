@@ -23,4 +23,10 @@ public class ValidationException : HttpException, IHasErrors
             .GroupBy(e => e.PropertyName, e => e.ErrorMessage)
             .ToDictionary(failureGroup => failureGroup.Key, failureGroup => failureGroup.ToArray());
     }
+
+    public ValidationException(IDictionary<string, string[]> errors)
+        : this()
+    {
+        Errors = errors;
+    }
 }

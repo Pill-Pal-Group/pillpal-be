@@ -13,6 +13,7 @@ using PillPal.Application.Features.PharmaceuticalCompanies;
 using PillPal.Application.Features.PharmacyStores;
 using PillPal.Application.Features.Prescripts;
 using PillPal.Application.Features.Specifications;
+using PillPal.Application.Features.TermsOfServices;
 
 namespace PillPal.Application.Configuration;
 
@@ -38,6 +39,7 @@ public static class DependencyInjection
         //services.AddScoped<IPrescriptDetailService, >();
         services.AddScoped<IPrescriptService, PrescriptRepository>();
         services.AddScoped<ISpecificationService, SpecificationRepository>();
+        services.AddScoped<ITermsOfService, TermsOfServiceRepository>();
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

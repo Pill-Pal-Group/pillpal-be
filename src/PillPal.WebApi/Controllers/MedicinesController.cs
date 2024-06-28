@@ -54,9 +54,6 @@ public class MedicinesController(IMedicineService medicineService)
     ///
     ///     POST /api/medicines
     ///     {
-    ///         "medicineName": "Medicine Name",
-    ///         "requirePrescript": true,
-    ///         "image": "Image Url",
     ///         "specificationId": "6b4aadb0-8189-467a-8aba-6572d3d4b972",
     ///         "categories": [
     ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
@@ -70,6 +67,9 @@ public class MedicinesController(IMedicineService medicineService)
     ///         "activeIngredients": [
     ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
     ///         ],
+    ///         "medicineName": "Medicine Name",
+    ///         "requirePrescript": true,
+    ///         "image": "Image Url"
     ///     }
     ///
     /// </remarks>
@@ -126,9 +126,6 @@ public class MedicinesController(IMedicineService medicineService)
     ///
     ///     PUT /api/medicines/{medicineId}
     ///     {
-    ///         "medicineName": "Medicine Name",
-    ///         "requirePrescript": true,
-    ///         "image": "Image Url",
     ///         "specificationId": "6b4aadb0-8189-467a-8aba-6572d3d4b972",
     ///         "categories": [
     ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
@@ -142,6 +139,9 @@ public class MedicinesController(IMedicineService medicineService)
     ///         "activeIngredients": [
     ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
     ///         ],
+    ///         "medicineName": "Medicine Name",
+    ///         "requirePrescript": true,
+    ///         "image": "Image Url"
     ///     }
     ///
     /// </remarks>

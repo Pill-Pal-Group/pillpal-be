@@ -49,6 +49,9 @@ public class UniqueCodeInterceptor : SaveChangesInterceptor
                     case PharmaceuticalCompany pharmaceuticalCompany:
                         pharmaceuticalCompany.CompanyCode = GenerateUniqueCodeUtility(EntityCode.PharmaceuticalCompanyCodePrefix);
                         break;
+                    case TermsOfService termsOfService:
+                        termsOfService.TosCode = GenerateUniqueCodeUtility(EntityCode.TermsOfServiceCodePrefix);
+                        break;
                 }
             }
         }

@@ -27,6 +27,14 @@ public class BaseRepository
         ServiceProvider = serviceProvider;
     }
 
+    /// <summary>
+    /// Validate a DTO.
+    /// </summary>
+    /// <typeparam name="T">Type of DTO class, this class must have validator associate with</typeparam>
+    /// <param name="dto">DTO object</param>
+    /// <exception cref="ValidationException">
+    /// Thrown when one or more validation failures have occurred.
+    /// </exception>
     protected async Task ValidateAsync<T>(T dto)
     {
         var validator = ServiceProvider.GetRequiredService<IValidator<T>>();
@@ -36,6 +44,47 @@ public class BaseRepository
         if (!validationResult.IsValid)
         {
             throw new ValidationException(validationResult.Errors);
+        }
+    }
+
+    /// <summary>
+    /// Validate a list of DTOs.
+    /// </summary>
+    /// <typeparam name="T">Type of DTO class, this class must have validator associate with</typeparam>
+    /// <param name="dtos">List of DTOs</param>
+    /// <exception cref="ValidationException">
+    /// Thrown when one or more validation failures have occurred.
+    /// Exception thrown as a dictionary with key is the name of the dto class and value is the array of error messages.
+    /// </exception>
+    protected async Task ValidateListAsync<T>(IEnumerable<T> dtos)
+    {
+        var validator = ServiceProvider.GetRequiredService<IValidator<T>>();
+
+        var errorDict = new Dictionary<string, string[]>();
+
+        // index for error key, which is the name of the dto class
+        int index = 0;
+
+        foreach (var dto in dtos)
+        {
+            var validationResult = await validator.ValidateAsync(dto);
+
+            if (!validationResult.IsValid)
+            {
+                // key is the name of the dto class
+                string key = $"{typeof(T).Name}[{index}]";
+
+                // value is the array of error messages
+                // adding by dto key with index
+                errorDict[key] = validationResult.Errors.Select(e => e.ErrorMessage).ToArray();
+            }
+
+            index++;
+        }
+
+        if (errorDict.Any())
+        {
+            throw new ValidationException(errorDict);
         }
     }
 

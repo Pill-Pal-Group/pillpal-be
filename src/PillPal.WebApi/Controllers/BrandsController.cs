@@ -50,6 +50,7 @@ public class BrandsController(IBrandService brandService)
     /// 
     ///     POST /api/brands
     ///     {
+    ///         "brandName": "Brand Name",
     ///         "brandUrl": "Brand Url",
     ///         "brandLogo": "Brand Logo"
     ///     }
@@ -77,6 +78,7 @@ public class BrandsController(IBrandService brandService)
     /// 
     ///     PUT /api/brands/{brandId}
     ///     {
+    ///         "brandName": "Brand Name",
     ///         "brandUrl": "Brand Url",
     ///         "brandLogo": "Brand Logo"
     ///     }

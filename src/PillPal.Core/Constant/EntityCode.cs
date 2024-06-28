@@ -8,4 +8,5 @@ public static class EntityCode
     public const string CustomerCodePrefix = "CUS";
     public const string MedicineCodePrefix = "MED";
     public const string PharmaceuticalCompanyCodePrefix = "PHC";
+    public const string TermsOfServiceCodePrefix = "TOS";
 }
