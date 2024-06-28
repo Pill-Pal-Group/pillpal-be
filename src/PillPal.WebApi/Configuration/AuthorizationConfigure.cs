@@ -1,6 +1,4 @@
-﻿using PillPal.Core.Constant;
-
-namespace PillPal.WebApi.Configuration;
+﻿namespace PillPal.WebApi.Configuration;
 
 public static class AuthorizationConfigure
 {

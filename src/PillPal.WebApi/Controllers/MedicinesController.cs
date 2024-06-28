@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Features.MedicineInBrands;
+﻿using PillPal.Application.Features.MedicineInBrands;
 using PillPal.Application.Features.Medicines;
 
 namespace PillPal.WebApi.Controllers;

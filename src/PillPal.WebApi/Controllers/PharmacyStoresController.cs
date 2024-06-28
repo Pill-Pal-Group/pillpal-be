@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Features.PharmacyStores;
+﻿using PillPal.Application.Features.PharmacyStores;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -57,6 +55,7 @@ public class PharmacyStoresController(IPharmacyStoreService pharmacyStoreService
     /// </remarks>
     /// <response code="201">Returns the created pharmacy store</response>
     /// <response code="422">If the input data is invalid</response>
+    [Authorize(Policy.Administrative)]
     [HttpPost(Name = "CreatePharmacyStore")]
     [ProducesResponseType(typeof(PharmacyStoreDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -86,6 +85,7 @@ public class PharmacyStoresController(IPharmacyStoreService pharmacyStoreService
     /// <response code="200">Returns the updated pharmacy store</response>
     /// <response code="404">If the pharmacy store is not found</response>
     /// <response code="422">If the input data is invalid</response>
+    [Authorize(Policy.Administrative)]
     [HttpPut("{pharmacyStoreId:guid}", Name = "UpdatePharmacyStore")]
     [ProducesResponseType(typeof(PharmacyStoreDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -103,6 +103,7 @@ public class PharmacyStoresController(IPharmacyStoreService pharmacyStoreService
     /// <param name="pharmacyStoreId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the pharmacy store is not found</response>
+    [Authorize(Policy.Administrative)]
     [HttpDelete("{pharmacyStoreId:guid}", Name = "DeletePharmacyStore")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using PillPal.Core.Constant;
-
-namespace PillPal.WebApi.Controllers;
+﻿namespace PillPal.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

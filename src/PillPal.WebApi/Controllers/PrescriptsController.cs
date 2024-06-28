@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Features.Prescripts;
-using PillPal.Core.Constant;
+﻿using PillPal.Application.Features.Prescripts;
 
 namespace PillPal.WebApi.Controllers;
 
