@@ -51,14 +51,14 @@ public class UpdateMedicineValidator : AbstractValidator<UpdateMedicineDto>
             .NotEmpty()
             .WithMessage("Categories are required.")
             .ForEach(rule => rule
-                .MustAsync((id, cancellationToken) => _context.Categories.AnyAsync(c => c.Id == id, cancellationToken))
+                .MustAsync((id, cancellationToken) => _context.Categories.AnyAsync(c => c.Id == id && !c.IsDeleted, cancellationToken))
                 .WithMessage("Category with Id {PropertyValue} does not exist."));
 
         RuleFor(x => x.PharmaceuticalCompanies)
             .NotEmpty()
             .WithMessage("Pharmaceutical companies are required.")
             .ForEach(rule => rule
-                .MustAsync((id, cancellationToken) => _context.PharmaceuticalCompanies.AnyAsync(pc => pc.Id == id, cancellationToken))
+                .MustAsync((id, cancellationToken) => _context.PharmaceuticalCompanies.AnyAsync(pc => pc.Id == id && !pc.IsDeleted, cancellationToken))
                 .WithMessage("Pharmaceutical company with Id {PropertyValue} does not exist."));
 
         RuleFor(x => x.DosageForms)
@@ -72,7 +72,7 @@ public class UpdateMedicineValidator : AbstractValidator<UpdateMedicineDto>
             .NotEmpty()
             .WithMessage("Active ingredients are required.")
             .ForEach(rule => rule
-                .MustAsync((id, cancellationToken) => _context.ActiveIngredients.AnyAsync(ai => ai.Id == id, cancellationToken))
+                .MustAsync((id, cancellationToken) => _context.ActiveIngredients.AnyAsync(ai => ai.Id == id && !ai.IsDeleted, cancellationToken))
                 .WithMessage("Active ingredient with Id {PropertyValue} does not exist."));
     }
 }
