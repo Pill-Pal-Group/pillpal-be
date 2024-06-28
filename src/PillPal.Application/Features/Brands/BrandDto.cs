@@ -8,6 +8,9 @@ public record BrandDto
     /// <example>BRD6060-555555</example>
     public string? BrandCode { get; init; }
 
+    /// <example>Pharmacity</example>
+    public string? BrandName { get; init; }
+
     /// <example>https://monke.com/brand</example>
     public string? BrandUrl { get; init; }
 

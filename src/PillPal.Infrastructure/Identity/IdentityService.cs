@@ -15,6 +15,35 @@ public class IdentityService : IIdentityService
         _roleManager = roleManager;
     }
 
+    public async Task ChangePasswordAsync(string userId, string currentPassword, string newPassword)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+
+        var result = await _userManager.ChangePasswordAsync(user!, currentPassword, newPassword);
+
+        if (!result.Succeeded)
+        {
+            throw new ConflictException(result.Errors);
+        }
+    }
+
+    public async Task CreatePasswordAsync(string userId, string password)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        
+        if (await _userManager.HasPasswordAsync(user!))
+        {
+            throw new BadRequestException("Password already created");
+        }
+
+        var result = await _userManager.AddPasswordAsync(user!, password);
+
+        if (!result.Succeeded)
+        {
+            throw new ConflictException(result.Errors);
+        }
+    }
+
     public async Task<(bool, string roleId)> CreateRoleAsync(string roleName)
     {
         var roleExist = await _roleManager.FindByNameAsync(roleName);

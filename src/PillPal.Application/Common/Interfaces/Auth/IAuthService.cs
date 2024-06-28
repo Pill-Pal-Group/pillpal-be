@@ -36,4 +36,21 @@ public interface IAuthService
     /// <exception cref="ValidationException">Thrown when the request is invalid</exception>
     /// <exception cref="UnauthorizedAccessException">Thrown when the token is invalid</exception>
     public Task<AccessTokenResponse> RefreshTokenAsync(RefreshRequest refreshToken);
+
+    /// <summary>
+    /// Change the password of the user
+    /// </summary>
+    /// <param name="request">The request to change the password</param>
+    /// <exception cref="ValidationException">Thrown when the request is invalid</exception>
+    /// <exception cref="ConflictException">Thrown when the operation failed</exception>
+    public Task ChangePasswordAsync(ChangePasswordRequest request);
+
+    /// <summary>
+    /// Create a new password for the user
+    /// </summary>
+    /// <param name="request">The request to create the password</param>
+    /// <exception cref="ValidationException">Thrown when the request is invalid</exception>
+    /// <exception cref="ConflictException">Thrown when the operation failed</exception>
+    /// <exception cref="BadRequestException">Thrown when the password is already created</exception>
+    public Task CreatePasswordAsync(CreatePasswordRequest request);
 }
