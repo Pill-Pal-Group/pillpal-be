@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Application.Features.MedicationTakes;
 using PillPal.Core.Constant;
@@ -38,7 +39,7 @@ public class MedicationIntakesController(IMedicationTakeService medicationTakeSe
     /// <response code="201">Returns the created Medication Take</response>
     /// <response code="400">If the Medication Take is already created</response>
     /// <response code="404">If the prescript is not found</response>
-    [AuthorizeRoles(Role.Customer)]
+    [Authorize(Policy.Customer)]
     [HttpPost("{prescriptId:guid}", Name = "CreateMedicationTake")]
     [ProducesResponseType(typeof(IEnumerable<MedicationTakesDto>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -55,7 +56,7 @@ public class MedicationIntakesController(IMedicationTakeService medicationTakeSe
     /// <param name="medicationTakeId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the Medication Take is not found</response>
-    [AuthorizeRoles(Role.Customer)]
+    [Authorize(Policy.Customer)]
     [HttpDelete("{medicationTakeId:guid}", Name = "DeleteMedicationTake")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

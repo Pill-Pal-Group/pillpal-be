@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Application.Features.TermsOfServices;
 using PillPal.Core.Constant;
@@ -59,7 +60,7 @@ public class TermsOfServicesController(ITermsOfService termsOfService)
     /// </remarks>
     /// <response code="201">Returns the created terms of service</response>
     /// <response code="422">If the input data is invalid</response>
-    [AuthorizeRoles(Role.Admin, Role.Manager)]
+    [Authorize(Policy.Administrative)]
     [HttpPost(Name = "CreateTermsOfService")]
     [ProducesResponseType(typeof(TermsOfServiceDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -92,7 +93,7 @@ public class TermsOfServicesController(ITermsOfService termsOfService)
     /// </remarks>
     /// <response code="201">Returns the created terms of services</response>
     /// <response code="422">If the input data is invalid</response>
-    [AuthorizeRoles(Role.Admin, Role.Manager)]
+    [Authorize(Policy.Administrative)]
     [HttpPost("bulk", Name = "CreateBulkTermsOfService")]
     [ProducesResponseType(typeof(IEnumerable<TermsOfServiceDto>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -121,7 +122,7 @@ public class TermsOfServicesController(ITermsOfService termsOfService)
     /// <response code="200">Returns the updated terms of service</response>
     /// <response code="404">If the terms of service is not found</response>
     /// <response code="422">If the input data is invalid</response>
-    [AuthorizeRoles(Role.Admin, Role.Manager)]
+    [Authorize(Policy.Administrative)]
     [HttpPut("{termsOfServiceId:guid}", Name = "UpdateTermsOfService")]
     [ProducesResponseType(typeof(TermsOfServiceDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -139,7 +140,7 @@ public class TermsOfServicesController(ITermsOfService termsOfService)
     /// <param name="termsOfServiceId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the terms of service is not found</response>
-    [AuthorizeRoles(Role.Admin, Role.Manager)]
+    [Authorize(Policy.Administrative)]
     [HttpDelete("{termsOfServiceId:guid}", Name = "DeleteTermsOfService")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

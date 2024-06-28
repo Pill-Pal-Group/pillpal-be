@@ -12,7 +12,7 @@ public class TestAuthsController : ControllerBase
     /// Allow only admin role
     /// </summary>
     [HttpGet("admin-only")]
-    [AuthorizeRoles(Role.Admin)]
+    [Authorize(Policy.Admin)]
     public string TestAdmin()
     {
         return "admin verified";
@@ -22,7 +22,7 @@ public class TestAuthsController : ControllerBase
     /// Allow only customer role
     /// </summary>
     [HttpGet("customer-only")]
-    [AuthorizeRoles(Role.Customer)]
+    [Authorize(Policy.Customer)]
     public string TestCustomer()
     {
         return "customer verified";
@@ -32,27 +32,17 @@ public class TestAuthsController : ControllerBase
     /// Allow only manager role
     /// </summary>
     [HttpGet("manager-only")]
-    [AuthorizeRoles(Role.Manager)]
+    [Authorize(Policy.Manager)]
     public string TestManager()
     {
         return "manager verified";
     }
 
     /// <summary>
-    /// Allow both admin and customer role
-    /// </summary>
-    [HttpGet("both-admin-customer")]
-    [AuthorizeRoles(Role.Admin, Role.Customer)]
-    public string TestAdminCus()
-    {
-        return "both admin and customer allow";
-    }
-
-    /// <summary>
     /// Allow both admin and manager role
     /// </summary>
     [HttpGet("both-admin-manager")]
-    [AuthorizeRoles(Role.Admin, Role.Manager)]
+    [Authorize(Policy.Administrative)]
     public string TestAdminMng()
     {
         return "both admin and manager allow";
@@ -62,7 +52,7 @@ public class TestAuthsController : ControllerBase
     /// Allow all roles admin, manager and customer
     /// </summary>
     [HttpGet("all-three")]
-    [AuthorizeRoles(Role.Admin, Role.Manager, Role.Customer)]
+    [Authorize]
     public string TestAllThreee()
     {
         return "all roles admin, manager and customer allow";
