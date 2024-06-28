@@ -19,5 +19,6 @@ public partial class MapperConfigure : Profile
         PharmacyStoreProfile();
         PrescriptProfile();
         SpecificationProfile();
+        TermsOfServiceProfile();
     }
 }

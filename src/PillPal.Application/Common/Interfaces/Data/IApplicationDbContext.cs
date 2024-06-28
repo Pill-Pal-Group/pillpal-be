@@ -19,6 +19,7 @@ public interface IApplicationDbContext
     DbSet<Prescript> Prescripts { get; }
     DbSet<PrescriptDetail> PrescriptDetails { get; }
     DbSet<Specification> Specifications { get; }
+    DbSet<TermsOfService> TermsOfServices { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

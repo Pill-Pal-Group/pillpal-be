@@ -30,7 +30,7 @@ public class IdentityService : IIdentityService
     public async Task CreatePasswordAsync(string userId, string password)
     {
         var user = await _userManager.FindByIdAsync(userId);
-        
+
         if (await _userManager.HasPasswordAsync(user!))
         {
             throw new BadRequestException("Password already created");
