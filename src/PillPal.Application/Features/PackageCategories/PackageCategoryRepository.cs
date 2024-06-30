@@ -37,7 +37,7 @@ public class PackageCategoryRepository(IApplicationDbContext context, IMapper ma
     public async Task DeletePackageAsync(Guid id)
     {
         var packageCategory = await Context.PackageCategories
-            .ExcludeDeleted()
+            .Where(p => !p.IsDeleted)
             .FirstOrDefaultAsync(p => p.Id == id) 
             ?? throw new NotFoundException(nameof(PackageCategory), id);
 
@@ -76,7 +76,7 @@ public class PackageCategoryRepository(IApplicationDbContext context, IMapper ma
         await ValidateAsync(updatePackageCategoryDto);
 
         var packageCategory = await Context.PackageCategories
-            .ExcludeDeleted()
+            .Where(p => !p.IsDeleted)
             .FirstOrDefaultAsync(p => p.Id == id) 
             ?? throw new NotFoundException(nameof(PackageCategory), id);
 

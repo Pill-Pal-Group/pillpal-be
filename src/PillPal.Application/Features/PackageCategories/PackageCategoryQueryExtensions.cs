@@ -16,11 +16,4 @@ public static class PackageCategoryQueryExtensions
         
         return query;
     }
-
-    public static IQueryable<PackageCategory> ExcludeDeleted(this IQueryable<PackageCategory> query)
-    {
-        query = query.Where(p => !p.IsDeleted);
-
-        return query;
-    }
 }

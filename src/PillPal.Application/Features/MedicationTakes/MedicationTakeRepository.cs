@@ -14,7 +14,8 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
             .AsNoTracking()
             .Include(p => p.PrescriptDetails)
             .Include(p => p.Customer)
-            .FirstOrDefaultAsync(p => p.Id == prescriptId && !p.IsDeleted)
+            .Where(p => !p.IsDeleted)
+            .FirstOrDefaultAsync(p => p.Id == prescriptId)
             ?? throw new NotFoundException(nameof(Prescript), prescriptId);
 
         var allMedicationTakes = new List<MedicationTake>();
@@ -97,7 +98,8 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
         var prescript = await Context.Prescripts
             .AsNoTracking()
             .Include(p => p.PrescriptDetails)
-            .FirstOrDefaultAsync(p => p.Id == prescriptId && !p.IsDeleted)
+            .Where(p => !p.IsDeleted)
+            .FirstOrDefaultAsync(p => p.Id == prescriptId)
             ?? throw new NotFoundException(nameof(Prescript), prescriptId);
 
         var allMedicationTakes = new List<MedicationTakesListDto>();
@@ -132,7 +134,8 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
     public async Task DeleteMedicationTakeAsync(Guid medicationTakeId)
     {
         var medicationTake = await Context.MedicationTakes
-            .FirstOrDefaultAsync(mt => mt.Id == medicationTakeId && !mt.IsDeleted)
+            .Where(mt => !mt.IsDeleted)
+            .FirstOrDefaultAsync(mt => mt.Id == medicationTakeId)
             ?? throw new NotFoundException(nameof(MedicationTake), medicationTakeId);
 
         Context.MedicationTakes.Remove(medicationTake);

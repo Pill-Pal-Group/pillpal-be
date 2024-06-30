@@ -23,8 +23,9 @@ public class PharmacyStoreRepository(IApplicationDbContext context, IMapper mapp
     public async Task DeletePharmacyStoreAsync(Guid pharmacyStoreId)
     {
         var pharmacyStore = await Context.PharmacyStores
-            .Where(c => c.Id == pharmacyStoreId && !c.IsDeleted)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmacyStore), pharmacyStoreId);
+            .Where(c => !c.IsDeleted)
+            .FirstOrDefaultAsync(c => c.Id == pharmacyStoreId) 
+            ?? throw new NotFoundException(nameof(PharmacyStore), pharmacyStoreId);
 
         Context.PharmacyStores.Remove(pharmacyStore);
 
@@ -35,9 +36,10 @@ public class PharmacyStoreRepository(IApplicationDbContext context, IMapper mapp
     {
         var pharmacyStore = await Context.PharmacyStores
             .Include(c => c.Brand)
-            .Where(c => c.Id == pharmacyStoreId && !c.IsDeleted)
+            .Where(c => !c.IsDeleted)
             .AsNoTracking()
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmacyStore), pharmacyStoreId);
+            .FirstOrDefaultAsync(c => c.Id == pharmacyStoreId) 
+            ?? throw new NotFoundException(nameof(PharmacyStore), pharmacyStoreId);
 
         return Mapper.Map<PharmacyStoreDto>(pharmacyStore);
     }
@@ -58,8 +60,9 @@ public class PharmacyStoreRepository(IApplicationDbContext context, IMapper mapp
         await ValidateAsync(updatePharmacyStoreDto);
 
         var pharmacyStore = await Context.PharmacyStores
-            .Where(c => c.Id == pharmacyStoreId && !c.IsDeleted)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(PharmacyStore), pharmacyStoreId);
+            .Where(c => !c.IsDeleted)
+            .FirstOrDefaultAsync(c => c.Id == pharmacyStoreId) 
+            ?? throw new NotFoundException(nameof(PharmacyStore), pharmacyStoreId);
 
         pharmacyStore = Mapper.Map(updatePharmacyStoreDto, pharmacyStore);
 

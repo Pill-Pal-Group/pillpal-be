@@ -36,8 +36,9 @@ public class NationRepository(IApplicationDbContext context, IMapper mapper, ISe
     public async Task DeleteNationAsync(Guid nationId)
     {
         var nation = await Context.Nations
-            .Where(n => n.Id == nationId && !n.IsDeleted)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Nation), nationId);
+            .Where(n => !n.IsDeleted)
+            .FirstOrDefaultAsync(n => n.Id == nationId) 
+            ?? throw new NotFoundException(nameof(Nation), nationId);
 
         Context.Nations.Remove(nation);
 
@@ -47,9 +48,10 @@ public class NationRepository(IApplicationDbContext context, IMapper mapper, ISe
     public async Task<NationDto> GetNationByIdAsync(Guid nationId)
     {
         var nation = await Context.Nations
-            .Where(n => n.Id == nationId && !n.IsDeleted)
+            .Where(n => !n.IsDeleted)
             .AsNoTracking()
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Nation), nationId);
+            .FirstOrDefaultAsync(n => n.Id == nationId) 
+            ?? throw new NotFoundException(nameof(Nation), nationId);
 
         return Mapper.Map<NationDto>(nation);
     }
@@ -70,8 +72,9 @@ public class NationRepository(IApplicationDbContext context, IMapper mapper, ISe
         await ValidateAsync(updateNationDto);
 
         var nation = await Context.Nations
-            .Where(n => n.Id == nationId && !n.IsDeleted)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Nation), nationId);
+            .Where(n => !n.IsDeleted)
+            .FirstOrDefaultAsync(n => n.Id == nationId) 
+            ?? throw new NotFoundException(nameof(Nation), nationId);
 
         Mapper.Map(updateNationDto, nation);
 
