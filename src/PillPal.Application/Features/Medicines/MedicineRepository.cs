@@ -41,8 +41,9 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         var medicineInBrand = Mapper.Map<MedicineInBrand>(createMedicineInBrandDto);
 
         var medicine = await Context.Medicines
-            .Where(m => m.Id == medicineId && !m.IsDeleted)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Medicine), medicineId);
+            .Where(m => !m.IsDeleted)
+            .FirstOrDefaultAsync(m => m.Id == medicineId) 
+            ?? throw new NotFoundException(nameof(Medicine), medicineId);
 
         medicineInBrand.Medicine = medicine;
 
@@ -56,8 +57,8 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         await ValidateAsync(updateMedicineInBrandDto);
 
         var medicineInBrand = await Context.MedicineInBrands
-            .Where(mib => mib.MedicineId == medicineId && mib.BrandId == updateMedicineInBrandDto.BrandId)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(MedicineInBrand), medicineId);
+            .FirstOrDefaultAsync(mib => mib.MedicineId == medicineId && mib.BrandId == updateMedicineInBrandDto.BrandId) 
+            ?? throw new NotFoundException(nameof(MedicineInBrand), medicineId);
 
         Mapper.Map(updateMedicineInBrandDto, medicineInBrand);
 
@@ -69,8 +70,9 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
     public async Task DeleteMedicineAsync(Guid medicineId)
     {
         var medicine = await Context.Medicines
-            .Where(m => m.Id == medicineId && !m.IsDeleted)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Medicine), medicineId);
+            .Where(m => !m.IsDeleted)
+            .FirstOrDefaultAsync(m => m.Id == medicineId) 
+            ?? throw new NotFoundException(nameof(Medicine), medicineId);
 
         Context.Medicines.Remove(medicine);
 
@@ -80,7 +82,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
     public async Task<MedicineDto> GetMedicineByIdAsync(Guid medicineId)
     {
         var medicine = await Context.Medicines
-            .Where(m => m.Id == medicineId && !m.IsDeleted)
+            .Where(m => !m.IsDeleted)
             .Include(m => m.Specification)
             .Include(m => m.Categories)
             .Include(m => m.PharmaceuticalCompanies)
@@ -89,7 +91,8 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             .Include(m => m.MedicineInBrands.Where(mib => !mib.IsDeleted))
             .ThenInclude(mib => mib.Brand)
             .AsNoTracking()
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Medicine), medicineId);
+            .FirstOrDefaultAsync(m => m.Id == medicineId) 
+            ?? throw new NotFoundException(nameof(Medicine), medicineId);
 
         return Mapper.Map<MedicineDto>(medicine);
     }
@@ -112,13 +115,14 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         await ValidateAsync(updateMedicineDto);
 
         var medicine = await Context.Medicines
-            .Where(m => m.Id == medicineId && !m.IsDeleted)
+            .Where(m => !m.IsDeleted)
             .Include(m => m.Categories)
             .Include(m => m.Specification)
             .Include(m => m.PharmaceuticalCompanies)
             .Include(m => m.DosageForms)
             .Include(m => m.ActiveIngredients)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Medicine), medicineId);
+            .FirstOrDefaultAsync(m => m.Id == medicineId) 
+            ?? throw new NotFoundException(nameof(Medicine), medicineId);
 
         Mapper.Map(updateMedicineDto, medicine);
 
@@ -147,8 +151,8 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
     public async Task DeleteMedicineInBrandAsync(Guid medicineId, Guid brandId)
     {
         var medicineInBrand = await Context.MedicineInBrands
-            .Where(mib => mib.MedicineId == medicineId && mib.BrandId == brandId)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(MedicineInBrand), medicineId);
+            .FirstOrDefaultAsync(mib => mib.MedicineId == medicineId && mib.BrandId == brandId) 
+            ?? throw new NotFoundException(nameof(MedicineInBrand), medicineId);
 
         Context.MedicineInBrands.Remove(medicineInBrand);
 

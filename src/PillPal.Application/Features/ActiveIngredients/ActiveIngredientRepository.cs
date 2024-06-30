@@ -36,8 +36,9 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
     public async Task DeleteActiveIngredientAsync(Guid ingredientId)
     {
         var activeIngredient = await Context.ActiveIngredients
-            .Where(ai => ai.Id == ingredientId && !ai.IsDeleted)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(ActiveIngredient), ingredientId);
+            .Where(ai => !ai.IsDeleted)
+            .FirstOrDefaultAsync(ai => ai.Id == ingredientId) 
+            ?? throw new NotFoundException(nameof(ActiveIngredient), ingredientId);
 
         Context.ActiveIngredients.Remove(activeIngredient);
 
@@ -47,9 +48,10 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
     public async Task<ActiveIngredientDto> GetActiveIngredientByIdAsync(Guid ingredientId)
     {
         var activeIngredient = await Context.ActiveIngredients
-            .Where(ai => ai.Id == ingredientId && !ai.IsDeleted)
+            .Where(ai => !ai.IsDeleted)
             .AsNoTracking()
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(ActiveIngredient), ingredientId);
+            .FirstOrDefaultAsync(ai => ai.Id == ingredientId) 
+            ?? throw new NotFoundException(nameof(ActiveIngredient), ingredientId);
 
         return Mapper.Map<ActiveIngredientDto>(activeIngredient);
     }
@@ -70,8 +72,9 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
         await ValidateAsync(updateActiveIngredientDto);
 
         var activeIngredient = await Context.ActiveIngredients
-            .Where(ai => ai.Id == ingredientId && !ai.IsDeleted)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(ActiveIngredient), ingredientId);
+            .Where(ai => !ai.IsDeleted)
+            .FirstOrDefaultAsync(ai => ai.Id == ingredientId) 
+            ?? throw new NotFoundException(nameof(ActiveIngredient), ingredientId);
 
         activeIngredient = Mapper.Map(updateActiveIngredientDto, activeIngredient);
 

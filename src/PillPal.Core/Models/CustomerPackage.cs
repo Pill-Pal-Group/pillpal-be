@@ -2,7 +2,9 @@
 
 public class CustomerPackage : BaseEntity
 {
+    public int Duration { get; set; }
     public int RemainDay { get; set; }
+    public decimal Price { get; set; }
 
     public Guid CustomerId { get; set; }
     public virtual Customer? Customer { get; set; }

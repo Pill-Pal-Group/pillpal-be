@@ -31,5 +31,8 @@ public record CustomerDto
     /// <example>15</example>
     public string? MealTimeOffset { get; init; }
 
+    /// <example>3</example>
+    public int LockoutCount { get; init; }
+
     public AccountDto ApplicationUser { get; init; } = default!;
 }
