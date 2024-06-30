@@ -44,6 +44,8 @@ public class CategoriesController(ICategoryService categoryService)
     /// </summary>
     /// <param name="createCategoryDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     POST /api/categories
@@ -70,6 +72,8 @@ public class CategoriesController(ICategoryService categoryService)
     /// </summary>
     /// <param name="createCategoryDtos"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     POST /api/categories/bulk
@@ -102,6 +106,8 @@ public class CategoriesController(ICategoryService categoryService)
     /// <param name="categoryId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateCategoryDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     PUT /api/categories/{categoryId}
@@ -128,6 +134,7 @@ public class CategoriesController(ICategoryService categoryService)
     /// <summary>
     /// Delete a category (soft delete)
     /// </summary>
+    /// <remarks>Requires administrative policy (e.g. Admin, Manager)</remarks>
     /// <param name="categoryId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the category is not found</response>

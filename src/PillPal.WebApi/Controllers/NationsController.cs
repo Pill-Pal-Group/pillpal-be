@@ -44,6 +44,8 @@ public class NationsController(INationService nationService)
     /// </summary>
     /// <param name="createNationDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     POST /api/nations
@@ -71,6 +73,8 @@ public class NationsController(INationService nationService)
     /// </summary>
     /// <param name="createNationDtos"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     POST /api/nations/bulk
@@ -105,6 +109,8 @@ public class NationsController(INationService nationService)
     /// <param name="nationId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateNationDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     ///     
     ///     PUT /api/nations/{nationId}
@@ -132,6 +138,7 @@ public class NationsController(INationService nationService)
     /// <summary>
     /// Delete a nation (soft delete)
     /// </summary>
+    /// <remarks>Requires administrative policy (e.g. Admin, Manager)</remarks>
     /// <param name="nationId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the nation is not found</response>

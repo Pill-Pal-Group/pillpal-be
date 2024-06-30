@@ -128,6 +128,8 @@ public class AuthsController(IAuthService authService)
     /// </summary>
     /// <param name="request"></param>
     /// <remarks>
+    /// Requires authentication
+    /// 
     /// Sample request:
     /// 
     ///     PUT /api/auths/change-password
@@ -158,6 +160,8 @@ public class AuthsController(IAuthService authService)
     /// </summary>
     /// <param name="request"></param>
     /// <remarks>
+    /// Requires authentication
+    /// 
     /// Sample request:
     /// 
     ///     PUT /api/auths/create-password

@@ -45,6 +45,8 @@ public class TermsOfServicesController(ITermsOfService termsOfService)
     /// </summary>
     /// <param name="createTermsOfServiceDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     POST /api/terms-of-services
@@ -72,6 +74,8 @@ public class TermsOfServicesController(ITermsOfService termsOfService)
     /// </summary>
     /// <param name="createTermsOfServiceDtos"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     POST /api/terms-of-services/bulk
@@ -106,6 +110,8 @@ public class TermsOfServicesController(ITermsOfService termsOfService)
     /// <param name="termsOfServiceId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateTermsOfServiceDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     PUT /api/terms-of-services/{termsOfServiceId}
@@ -133,6 +139,7 @@ public class TermsOfServicesController(ITermsOfService termsOfService)
     /// <summary>
     /// Delete a terms of service
     /// </summary>
+    /// <remarks>Requires administrative policy (e.g. Admin, Manager)</remarks>
     /// <param name="termsOfServiceId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the terms of service is not found</response>

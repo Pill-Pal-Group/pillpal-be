@@ -44,6 +44,8 @@ public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pha
     /// </summary>
     /// <param name="createPharmaceuticalCompanyDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     POST /api/pharmaceutical-companies
@@ -72,6 +74,8 @@ public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pha
     /// <param name="pharmaceuticalCompanyId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updatePharmaceuticalCompanyDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     PUT /api/pharmaceutical-companies/{pharmaceuticalCompanyId}
@@ -99,6 +103,7 @@ public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pha
     /// <summary>
     /// Delete a pharmaceutical company (soft delete)
     /// </summary>
+    /// <remarks>Requires administrative policy (e.g. Admin, Manager)</remarks>
     /// <param name="pharmaceuticalCompanyId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the pharmaceutical company is not found</response>

@@ -44,6 +44,8 @@ public class DosageFormsController(IDosageFormService dosageFormService)
     /// </summary>
     /// <param name="createDosageFormDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     POST /api/dosage-forms
@@ -70,6 +72,8 @@ public class DosageFormsController(IDosageFormService dosageFormService)
     /// </summary>
     /// <param name="createDosageFormDtos"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     POST /api/dosage-forms/bulk
@@ -102,6 +106,8 @@ public class DosageFormsController(IDosageFormService dosageFormService)
     /// <param name="dosageFormId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateDosageFormDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     PUT /api/dosage-forms/{dosageFormId}
@@ -128,6 +134,7 @@ public class DosageFormsController(IDosageFormService dosageFormService)
     /// <summary>
     /// Delete a dosage form
     /// </summary>
+    /// <remarks>Requires administrative policy (e.g. Admin, Manager)</remarks>
     /// <param name="dosageFormId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the dosage form is not found</response>

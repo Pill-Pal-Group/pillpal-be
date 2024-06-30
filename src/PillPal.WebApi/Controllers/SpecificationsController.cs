@@ -43,6 +43,8 @@ public class SpecificationsController(ISpecificationService specificationService
     /// </summary>
     /// <param name="createSpecificationDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     POST /api/specifications
@@ -70,6 +72,8 @@ public class SpecificationsController(ISpecificationService specificationService
     /// </summary>
     /// <param name="createSpecificationDtos"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     POST /api/specifications/bulk
@@ -104,6 +108,8 @@ public class SpecificationsController(ISpecificationService specificationService
     /// <param name="specificationId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateSpecificationDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     PUT /api/specifications/{specificationId}
@@ -131,6 +137,7 @@ public class SpecificationsController(ISpecificationService specificationService
     /// <summary>
     /// Delete a specification
     /// </summary>
+    /// <remarks>Requires administrative policy (e.g. Admin, Manager)</remarks>
     /// <param name="specificationId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the specification is not found</response>

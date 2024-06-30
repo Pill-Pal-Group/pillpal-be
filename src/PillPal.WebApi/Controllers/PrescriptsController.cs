@@ -47,6 +47,8 @@ public class PrescriptsController(IPrescriptService prescriptService)
     /// </summary>
     /// <param name="createPrescriptDto"></param>
     /// <remarks>
+    /// Requires customer policy
+    /// 
     /// Sample request:
     /// 
     ///     POST /api/prescripts
@@ -87,6 +89,7 @@ public class PrescriptsController(IPrescriptService prescriptService)
     /// <summary>
     /// Deletes a prescript by its unique identifier. Soft delete.
     /// </summary>
+    /// <remarks>Requires customer policy</remarks>
     /// <param name="prescriptId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the prescript is not found</response>

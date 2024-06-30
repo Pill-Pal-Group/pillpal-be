@@ -12,6 +12,7 @@ public class CustomersController(ICustomerService customerService)
     /// <summary>
     /// Get customer informations
     /// </summary>
+    /// <remarks>Requires customer policy</remarks>
     /// <response code="200">Returns a customer informations</response>
     [Authorize(Policy.Customer)]
     [HttpGet("info", Name = "GetCustomerInfo")]
@@ -28,6 +29,8 @@ public class CustomersController(ICustomerService customerService)
     /// </summary>
     /// <param name="updateCustomerDto"></param>
     /// <remarks>
+    /// Requires customer policy
+    /// 
     /// Sample request:
     /// 
     ///     PUT /api/customers
@@ -58,6 +61,8 @@ public class CustomersController(ICustomerService customerService)
     /// </summary>
     /// <param name="updateCustomerMealTimeDto"></param>
     /// <remarks>
+    /// Requires customer policy
+    /// 
     /// Sample request:
     /// 
     ///     PUT /api/customers/meal-time

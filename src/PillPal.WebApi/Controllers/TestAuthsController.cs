@@ -7,6 +7,7 @@ public class TestAuthsController : ControllerBase
     /// <summary>
     /// Allow only admin role
     /// </summary>
+    /// <remarks>Requires admin policy</remarks>
     [HttpGet("admin-only")]
     [Authorize(Policy.Admin)]
     public string TestAdmin()
@@ -17,6 +18,7 @@ public class TestAuthsController : ControllerBase
     /// <summary>
     /// Allow only customer role
     /// </summary>
+    /// <remarks>Requires customer policy</remarks>
     [HttpGet("customer-only")]
     [Authorize(Policy.Customer)]
     public string TestCustomer()
@@ -27,6 +29,7 @@ public class TestAuthsController : ControllerBase
     /// <summary>
     /// Allow only manager role
     /// </summary>
+    /// <remarks>Requires manager policy</remarks>
     [HttpGet("manager-only")]
     [Authorize(Policy.Manager)]
     public string TestManager()
@@ -37,6 +40,7 @@ public class TestAuthsController : ControllerBase
     /// <summary>
     /// Allow both admin and manager role
     /// </summary>
+    /// <remarks>Requires administrative policy (e.g. Admin, Manager)</remarks>
     [HttpGet("both-admin-manager")]
     [Authorize(Policy.Administrative)]
     public string TestAdminMng()
@@ -47,6 +51,7 @@ public class TestAuthsController : ControllerBase
     /// <summary>
     /// Allow all roles admin, manager and customer
     /// </summary>
+    /// <remarks>Requires authentication</remarks>
     [HttpGet("all-three")]
     [Authorize]
     public string TestAllThreee()

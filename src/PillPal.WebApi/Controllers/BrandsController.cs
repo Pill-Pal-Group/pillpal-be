@@ -44,6 +44,8 @@ public class BrandsController(IBrandService brandService)
     /// </summary>
     /// <param name="createBrandDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     POST /api/brands
@@ -72,6 +74,8 @@ public class BrandsController(IBrandService brandService)
     /// </summary>
     /// <param name="createBrandDtos"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     POST /api/brands/bulk
@@ -108,6 +112,8 @@ public class BrandsController(IBrandService brandService)
     /// <param name="brandId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateBrandDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     PUT /api/brands/{brandId}
@@ -136,6 +142,7 @@ public class BrandsController(IBrandService brandService)
     /// <summary>
     /// Delete a brand (soft delete)
     /// </summary>
+    /// <remarks>Requires administrative policy (e.g. Admin, Manager)</remarks>
     /// <param name="brandId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the brand is not found</response>

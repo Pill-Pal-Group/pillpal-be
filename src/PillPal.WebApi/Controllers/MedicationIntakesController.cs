@@ -31,6 +31,7 @@ public class MedicationIntakesController(IMedicationTakeService medicationTakeSe
     /// <summary>
     /// Create Medication Take from given Prescript
     /// </summary>
+    /// <remarks>Requires customer policy</remarks>
     /// <param name="prescriptId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="201">Returns the created Medication Take</response>
     /// <response code="400">If the Medication Take is already created</response>
@@ -49,6 +50,7 @@ public class MedicationIntakesController(IMedicationTakeService medicationTakeSe
     /// <summary>
     /// Removes a Medication Take by performing a soft delete.
     /// </summary>
+    /// <remarks>Requires customer policy</remarks>
     /// <param name="medicationTakeId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the Medication Take is not found</response>

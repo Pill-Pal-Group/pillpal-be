@@ -48,6 +48,8 @@ public class MedicinesController(IMedicineService medicineService)
     /// </summary>
     /// <param name="createMedicineDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     ///
     ///     POST /api/medicines
@@ -90,6 +92,8 @@ public class MedicinesController(IMedicineService medicineService)
     /// <param name="medicineId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="createMedicineInBrandDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     ///
     ///     POST /api/medicines/{medicineId}/brands
@@ -122,6 +126,8 @@ public class MedicinesController(IMedicineService medicineService)
     /// <param name="medicineId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateMedicineDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     ///
     ///     PUT /api/medicines/{medicineId}
@@ -166,6 +172,8 @@ public class MedicinesController(IMedicineService medicineService)
     /// <param name="medicineId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateMedicineInBrandDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     ///
     ///     PUT /api/medicines/{medicineId}/brands
@@ -195,6 +203,7 @@ public class MedicinesController(IMedicineService medicineService)
     /// <summary>
     /// Delete a medicine (soft delete)
     /// </summary>
+    /// <remarks>Requires administrative policy (e.g. Admin, Manager)</remarks>
     /// <param name="medicineId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the medicine is not found</response>
@@ -212,6 +221,7 @@ public class MedicinesController(IMedicineService medicineService)
     /// <summary>
     /// Delete a medicine in a brand (soft delete)
     /// </summary>
+    /// <remarks>Requires administrative policy (e.g. Admin, Manager)</remarks>
     /// <param name="medicineId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="brandId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>

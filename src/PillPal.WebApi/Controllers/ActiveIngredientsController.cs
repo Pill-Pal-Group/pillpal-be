@@ -44,6 +44,8 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// </summary>
     /// <param name="createActiveIngredientDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     POST /api/active-ingredients
@@ -70,6 +72,8 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// </summary>
     /// <param name="createActiveIngredientDtos"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     POST /api/active-ingredients/bulk
@@ -104,6 +108,8 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// <param name="activeIngredientId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateActiveIngredientDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     ///     
     ///     PUT /api/active-ingredients/{activeIngredientId}
@@ -131,6 +137,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// <summary>
     /// Delete an active ingredient (soft delete)
     /// </summary>
+    /// <remarks>Requires administrative policy (e.g. Admin, Manager)</remarks>
     /// <param name="activeIngredientId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the active ingredient is not found</response>

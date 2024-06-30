@@ -43,6 +43,8 @@ public class PharmacyStoresController(IPharmacyStoreService pharmacyStoreService
     /// </summary>
     /// <param name="createPharmacyStoreDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     POST /api/pharmacy-stores
@@ -72,6 +74,8 @@ public class PharmacyStoresController(IPharmacyStoreService pharmacyStoreService
     /// <param name="pharmacyStoreId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updatePharmacyStoreDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     PUT /api/pharmacy-stores/{pharmacyStoreId}
@@ -100,6 +104,7 @@ public class PharmacyStoresController(IPharmacyStoreService pharmacyStoreService
     /// <summary>
     /// Delete a pharmacy store (soft delete)
     /// </summary>
+    /// <remarks>Requires administrative policy (e.g. Admin, Manager)</remarks>
     /// <param name="pharmacyStoreId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the pharmacy store is not found</response>
