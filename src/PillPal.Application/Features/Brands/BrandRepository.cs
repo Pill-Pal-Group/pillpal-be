@@ -20,6 +20,19 @@ public class BrandRepository(IApplicationDbContext context, IMapper mapper, ISer
         return Mapper.Map<BrandDto>(brand);
     }
 
+    public async Task<IEnumerable<BrandDto>> CreateBulkBrandsAsync(IEnumerable<CreateBrandDto> createBrandDtos)
+    {
+        await ValidateListAsync(createBrandDtos);
+
+        var brands = Mapper.Map<IEnumerable<Brand>>(createBrandDtos);
+
+        await Context.Brands.AddRangeAsync(brands);
+
+        await Context.SaveChangesAsync();
+
+        return Mapper.Map<IEnumerable<BrandDto>>(brands);
+    }
+
     public async Task DeleteBrandAsync(Guid brandId)
     {
         var brand = await Context.Brands

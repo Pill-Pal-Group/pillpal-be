@@ -34,6 +34,16 @@ public interface ICategoryService
     Task<CategoryDto> CreateCategoryAsync(CreateCategoryDto createCategoryDto);
 
     /// <summary>
+    /// Creates multiple categories.
+    /// </summary>
+    /// <param name="createCategoryDtos">The DTOs containing the creation data for the categories.</param>
+    /// <returns>
+    /// The task result contains a collection of <see cref="CategoryDto"/> objects.
+    /// </returns>
+    /// <exception cref="ValidationException">Thrown when validation fails for the creation data.</exception>
+    Task<IEnumerable<CategoryDto>> CreateBulkCategoriesAsync(IEnumerable<CreateCategoryDto> createCategoryDtos);
+
+    /// <summary>
     /// Updates an existing category.
     /// </summary>
     /// <param name="categoryId">The unique identifier for the category to update.</param>

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Features.Categories;
+﻿using PillPal.Application.Features.Categories;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -46,6 +44,8 @@ public class CategoriesController(ICategoryService categoryService)
     /// </summary>
     /// <param name="createCategoryDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     POST /api/categories
@@ -56,6 +56,7 @@ public class CategoriesController(ICategoryService categoryService)
     /// </remarks>
     /// <response code="201">Returns the created category</response>
     /// <response code="422">If the input data is invalid</response>
+    [Authorize(Policy.Administrative)]
     [HttpPost(Name = "CreateCategory")]
     [ProducesResponseType(typeof(CategoryDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -67,11 +68,46 @@ public class CategoriesController(ICategoryService categoryService)
     }
 
     /// <summary>
+    /// Create multiple categories
+    /// </summary>
+    /// <param name="createCategoryDtos"></param>
+    /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
+    /// Sample request:
+    /// 
+    ///     POST /api/categories/bulk
+    ///     [
+    ///         {
+    ///             "categoryName": "Category Name 1"
+    ///         },
+    ///         {
+    ///             "categoryName": "Category Name 2"
+    ///         }
+    ///     ]
+    ///     
+    /// </remarks>
+    /// <response code="201">Returns the created categories</response>
+    /// <response code="422">If the input data is invalid</response>
+    [Authorize(Policy.Administrative)]
+    [HttpPost("bulk", Name = "CreateBulkCategories")]
+    [ProducesResponseType(typeof(IEnumerable<CategoryDto>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+    public async Task<IActionResult> CreateBulkCategoriesAsync(IEnumerable<CreateCategoryDto> createCategoryDtos)
+    {
+        var categories = await categoryService.CreateBulkCategoriesAsync(createCategoryDtos);
+
+        return CreatedAtRoute("GetCategories", categories);
+    }
+
+    /// <summary>
     /// Update a category
     /// </summary>
     /// <param name="categoryId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="updateCategoryDto"></param>
     /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
     /// Sample request:
     /// 
     ///     PUT /api/categories/{categoryId}
@@ -83,6 +119,7 @@ public class CategoriesController(ICategoryService categoryService)
     /// <response code="200">Returns the updated category</response>
     /// <response code="404">If the category is not found</response>
     /// <response code="422">If the input data is invalid</response>
+    [Authorize(Policy.Administrative)]
     [HttpPut("{categoryId:guid}", Name = "UpdateCategory")]
     [ProducesResponseType(typeof(CategoryDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -97,9 +134,11 @@ public class CategoriesController(ICategoryService categoryService)
     /// <summary>
     /// Delete a category (soft delete)
     /// </summary>
+    /// <remarks>Requires administrative policy (e.g. Admin, Manager)</remarks>
     /// <param name="categoryId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the category is not found</response>
+    [Authorize(Policy.Administrative)]
     [HttpDelete("{categoryId:guid}", Name = "DeleteCategory")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

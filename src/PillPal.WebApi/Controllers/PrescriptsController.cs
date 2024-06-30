@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Features.Prescripts;
-using PillPal.Core.Constant;
+﻿using PillPal.Application.Features.Prescripts;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -50,6 +47,8 @@ public class PrescriptsController(IPrescriptService prescriptService)
     /// </summary>
     /// <param name="createPrescriptDto"></param>
     /// <remarks>
+    /// Requires customer policy
+    /// 
     /// Sample request:
     /// 
     ///     POST /api/prescripts
@@ -76,7 +75,7 @@ public class PrescriptsController(IPrescriptService prescriptService)
     /// </remarks>
     /// <response code="201">Returns the created prescript</response>
     /// <response code="422">If the input data is invalid</response>
-    [AuthorizeRoles(Role.Customer)]
+    [Authorize(Policy.Customer)]
     [HttpPost(Name = "CreatePrescript")]
     [ProducesResponseType(typeof(PrescriptDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -90,10 +89,11 @@ public class PrescriptsController(IPrescriptService prescriptService)
     /// <summary>
     /// Deletes a prescript by its unique identifier. Soft delete.
     /// </summary>
+    /// <remarks>Requires customer policy</remarks>
     /// <param name="prescriptId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="204">No content</response>
     /// <response code="404">If the prescript is not found</response>
-    [AuthorizeRoles(Role.Customer)]
+    [Authorize(Policy.Customer)]
     [HttpDelete("{prescriptId:guid}", Name = "DeletePrescriptById")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

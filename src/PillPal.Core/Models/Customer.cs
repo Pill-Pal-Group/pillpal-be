@@ -10,6 +10,7 @@ public class Customer : BaseEntity
     public TimeOnly AfternoonTime { get; set; }
     public TimeOnly DinnerTime { get; set; }
     public TimeSpan MealTimeOffset { get; set; }
+    public int LockoutCount { get; set; }
 
     public virtual ICollection<Prescript> Prescripts { get; set; } = default!;
 

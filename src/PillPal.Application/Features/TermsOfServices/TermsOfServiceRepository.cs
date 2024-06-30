@@ -7,7 +7,7 @@ namespace PillPal.Application.Features.TermsOfServices;
 public class TermsOfServiceRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
     : BaseRepository(context, mapper, serviceProvider), ITermsOfService
 {
-    public async Task<IEnumerable<TermsOfServiceDto>> CreateBulkTermsOfServiceAsync(IEnumerable<CreateTermsOfServiceDto> createTermsOfServiceDtos)
+    public async Task<IEnumerable<TermsOfServiceDto>> CreateBulkTermsOfServicesAsync(IEnumerable<CreateTermsOfServiceDto> createTermsOfServiceDtos)
     {
         await ValidateListAsync(createTermsOfServiceDtos);
 

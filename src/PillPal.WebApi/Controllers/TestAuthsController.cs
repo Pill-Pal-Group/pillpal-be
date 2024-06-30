@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using PillPal.Core.Constant;
-
-namespace PillPal.WebApi.Controllers;
+﻿namespace PillPal.WebApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -11,8 +7,9 @@ public class TestAuthsController : ControllerBase
     /// <summary>
     /// Allow only admin role
     /// </summary>
+    /// <remarks>Requires admin policy</remarks>
     [HttpGet("admin-only")]
-    [AuthorizeRoles(Role.Admin)]
+    [Authorize(Policy.Admin)]
     public string TestAdmin()
     {
         return "admin verified";
@@ -21,8 +18,9 @@ public class TestAuthsController : ControllerBase
     /// <summary>
     /// Allow only customer role
     /// </summary>
+    /// <remarks>Requires customer policy</remarks>
     [HttpGet("customer-only")]
-    [AuthorizeRoles(Role.Customer)]
+    [Authorize(Policy.Customer)]
     public string TestCustomer()
     {
         return "customer verified";
@@ -31,28 +29,20 @@ public class TestAuthsController : ControllerBase
     /// <summary>
     /// Allow only manager role
     /// </summary>
+    /// <remarks>Requires manager policy</remarks>
     [HttpGet("manager-only")]
-    [AuthorizeRoles(Role.Manager)]
+    [Authorize(Policy.Manager)]
     public string TestManager()
     {
         return "manager verified";
     }
 
     /// <summary>
-    /// Allow both admin and customer role
-    /// </summary>
-    [HttpGet("both-admin-customer")]
-    [AuthorizeRoles(Role.Admin, Role.Customer)]
-    public string TestAdminCus()
-    {
-        return "both admin and customer allow";
-    }
-
-    /// <summary>
     /// Allow both admin and manager role
     /// </summary>
+    /// <remarks>Requires administrative policy (e.g. Admin, Manager)</remarks>
     [HttpGet("both-admin-manager")]
-    [AuthorizeRoles(Role.Admin, Role.Manager)]
+    [Authorize(Policy.Administrative)]
     public string TestAdminMng()
     {
         return "both admin and manager allow";
@@ -61,8 +51,9 @@ public class TestAuthsController : ControllerBase
     /// <summary>
     /// Allow all roles admin, manager and customer
     /// </summary>
+    /// <remarks>Requires authentication</remarks>
     [HttpGet("all-three")]
-    [AuthorizeRoles(Role.Admin, Role.Manager, Role.Customer)]
+    [Authorize]
     public string TestAllThreee()
     {
         return "all roles admin, manager and customer allow";

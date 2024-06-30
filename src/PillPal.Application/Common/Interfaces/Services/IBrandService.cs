@@ -34,6 +34,16 @@ public interface IBrandService
     Task<BrandDto> CreateBrandAsync(CreateBrandDto createBrandDto);
 
     /// <summary>
+    /// Creates multiple brands.
+    /// </summary>
+    /// <param name="createBrandDtos">The DTOs containing the creation data for the brands.</param>
+    /// <returns>
+    /// The task result contains a collection of <see cref="BrandDto"/> objects.
+    /// </returns>
+    /// <exception cref="ValidationException">Thrown when validation fails for the creation data.</exception>
+    Task<IEnumerable<BrandDto>> CreateBulkBrandsAsync(IEnumerable<CreateBrandDto> createBrandDtos);
+
+    /// <summary>
     /// Updates an existing brand.
     /// </summary>
     /// <param name="brandId">The unique identifier for the brand to update.</param>

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
 using PillPal.Application.Common.Exceptions;
 
 namespace PillPal.WebApi.Service;

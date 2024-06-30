@@ -7,6 +7,19 @@ namespace PillPal.Application.Features.DosageForms;
 public class DosageFormRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
     : BaseRepository(context, mapper, serviceProvider), IDosageFormService
 {
+    public async Task<IEnumerable<DosageFormDto>> CreateBulkDosageFormsAsync(IEnumerable<CreateDosageFormDto> createDosageFormDtos)
+    {
+        await ValidateListAsync(createDosageFormDtos);
+
+        var dosageForms = Mapper.Map<IEnumerable<DosageForm>>(createDosageFormDtos);
+
+        await Context.DosageForms.AddRangeAsync(dosageForms);
+
+        await Context.SaveChangesAsync();
+
+        return Mapper.Map<IEnumerable<DosageFormDto>>(dosageForms);
+    }
+
     public async Task<DosageFormDto> CreateDosageFormAsync(CreateDosageFormDto createDosageFormDto)
     {
         await ValidateAsync(createDosageFormDto);

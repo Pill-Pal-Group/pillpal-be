@@ -33,6 +33,16 @@ public interface IDosageFormService
     Task<DosageFormDto> CreateDosageFormAsync(CreateDosageFormDto createDosageFormDto);
 
     /// <summary>
+    /// Creates multiple dosage forms.
+    /// </summary>
+    /// <param name="createDosageFormDtos">The DTOs containing the creation data for the dosage forms.</param>
+    /// <returns>
+    /// The task result contains a collection of <see cref="DosageFormDto"/> objects.
+    /// </returns>
+    /// <exception cref="ValidationException">Thrown when validation fails for the creation data.</exception>
+    Task<IEnumerable<DosageFormDto>> CreateBulkDosageFormsAsync(IEnumerable<CreateDosageFormDto> createDosageFormDtos);
+
+    /// <summary>
     /// Updates an existing dosage form.
     /// </summary>
     /// <param name="dosageFormId">The unique identifier for the dosage form to update.</param>

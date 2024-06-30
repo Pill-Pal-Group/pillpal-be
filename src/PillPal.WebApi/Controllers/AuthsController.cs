@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using PillPal.Application.Common.Interfaces.Auth;
+﻿using PillPal.Application.Common.Interfaces.Auth;
 using PillPal.Application.Features.Auths;
 using LoginRequest = PillPal.Application.Features.Auths.LoginRequest;
 using RegisterRequest = PillPal.Application.Features.Auths.RegisterRequest;
@@ -47,6 +45,8 @@ public class AuthsController(IAuthService authService)
     /// </summary>
     /// <param name="request"></param>
     /// <remarks>
+    /// For every 5 failed login attempts, the account will be locked for 30 minutes
+    /// 
     /// Sample request:
     ///
     ///     POST /api/auths/login
@@ -128,6 +128,8 @@ public class AuthsController(IAuthService authService)
     /// </summary>
     /// <param name="request"></param>
     /// <remarks>
+    /// Requires authentication
+    /// 
     /// Sample request:
     /// 
     ///     PUT /api/auths/change-password
@@ -158,6 +160,8 @@ public class AuthsController(IAuthService authService)
     /// </summary>
     /// <param name="request"></param>
     /// <remarks>
+    /// Requires authentication
+    /// 
     /// Sample request:
     /// 
     ///     PUT /api/auths/create-password

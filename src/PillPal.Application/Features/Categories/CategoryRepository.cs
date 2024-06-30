@@ -7,6 +7,19 @@ namespace PillPal.Application.Features.Categories;
 public class CategoryRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
     : BaseRepository(context, mapper, serviceProvider), ICategoryService
 {
+    public async Task<IEnumerable<CategoryDto>> CreateBulkCategoriesAsync(IEnumerable<CreateCategoryDto> createCategoryDtos)
+    {
+        await ValidateListAsync(createCategoryDtos);
+
+        var categories = Mapper.Map<IEnumerable<Category>>(createCategoryDtos);
+
+        await Context.Categories.AddRangeAsync(categories);
+
+        await Context.SaveChangesAsync();
+
+        return Mapper.Map<IEnumerable<CategoryDto>>(categories);
+    }
+
     public async Task<CategoryDto> CreateCategoryAsync(CreateCategoryDto createCategoryDto)
     {
         await ValidateAsync(createCategoryDto);

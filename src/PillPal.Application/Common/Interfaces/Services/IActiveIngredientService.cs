@@ -34,6 +34,16 @@ public interface IActiveIngredientService
     Task<ActiveIngredientDto> CreateActiveIngredientAsync(CreateActiveIngredientDto createActiveIngredientDto);
 
     /// <summary>
+    /// Creates multiple active ingredients.
+    /// </summary>
+    /// <param name="createActiveIngredientDtos">The DTOs containing the creation data for the active ingredients.</param>
+    /// <returns>
+    /// The task result contains a collection of <see cref="ActiveIngredientDto"/> objects.
+    /// </returns>
+    /// <exception cref="ValidationException">Thrown when validation fails for the creation data.</exception>
+    Task<IEnumerable<ActiveIngredientDto>> CreateBulkActiveIngredientsAsync(IEnumerable<CreateActiveIngredientDto> createActiveIngredientDtos);
+
+    /// <summary>
     /// Updates an existing active ingredient.
     /// </summary>
     /// <param name="ingredientId">The unique identifier for the ingredient to update.</param>

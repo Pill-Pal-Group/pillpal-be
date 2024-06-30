@@ -2,7 +2,7 @@
 
 public record CreateNationDto
 {
-    /// <example>VN</example>
+    /// <example>VNR</example>
     public string? NationCode { get; init; }
 
     /// <example>Vietnam</example>

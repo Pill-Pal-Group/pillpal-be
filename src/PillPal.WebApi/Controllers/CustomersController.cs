@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Features.Customers;
-using PillPal.Core.Constant;
+﻿using PillPal.Application.Features.Customers;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -13,42 +10,11 @@ public class CustomersController(ICustomerService customerService)
     : ControllerBase
 {
     /// <summary>
-    /// Get all customers
+    /// Get customer informations
     /// </summary>
-    /// <param name="queryParameter"></param>
-    /// <response code="200">Returns a list of customers</response>
-    [AuthorizeRoles(Role.Admin, Role.Manager)]
-    [HttpGet(Name = "GetCustomers")]
-    [ProducesResponseType(typeof(IEnumerable<CustomerDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetCustomersAsync([FromQuery] CustomerQueryParameter queryParameter)
-    {
-        var customers = await customerService.GetCustomersAsync(queryParameter);
-
-        return Ok(customers);
-    }
-
-    /// <summary>
-    /// Get a customer by id
-    /// </summary>
-    /// <param name="customerId" example="00000000-0000-0000-0000-000000000000"></param>
-    /// <response code="200">Returns a customer</response>
-    /// <response code="404">If the customer is not found</response>
-    [AuthorizeRoles(Role.Admin, Role.Manager)]
-    [HttpGet("{customerId:guid}", Name = "GetCustomerById")]
-    [ProducesResponseType(typeof(CustomerDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetCustomerByIdAsync(Guid customerId)
-    {
-        var customer = await customerService.GetCustomerByIdAsync(customerId);
-
-        return Ok(customer);
-    }
-
-    /// <summary>
-    /// Get a customer informations
-    /// </summary>
+    /// <remarks>Requires customer policy</remarks>
     /// <response code="200">Returns a customer informations</response>
-    [AuthorizeRoles(Role.Customer)]
+    [Authorize(Policy.Customer)]
     [HttpGet("info", Name = "GetCustomerInfo")]
     [ProducesResponseType(typeof(CustomerDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCustomerInfoAsync()
@@ -59,10 +25,12 @@ public class CustomersController(ICustomerService customerService)
     }
 
     /// <summary>
-    /// Update a customer
+    /// Update customer informations
     /// </summary>
     /// <param name="updateCustomerDto"></param>
     /// <remarks>
+    /// Requires customer policy
+    /// 
     /// Sample request:
     /// 
     ///     PUT /api/customers
@@ -76,7 +44,7 @@ public class CustomersController(ICustomerService customerService)
     /// <response code="200">Returns the updated customer</response>
     /// <response code="404">If the customer is not found</response>
     /// <response code="422">If the input data is invalid</response>
-    [AuthorizeRoles(Role.Customer)]
+    [Authorize(Policy.Customer)]
     [HttpPut(Name = "UpdateCustomer")]
     [ProducesResponseType(typeof(CustomerDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -89,10 +57,12 @@ public class CustomersController(ICustomerService customerService)
     }
 
     /// <summary>
-    /// Update a customer meal time
+    /// Update customer meal time
     /// </summary>
     /// <param name="updateCustomerMealTimeDto"></param>
     /// <remarks>
+    /// Requires customer policy
+    /// 
     /// Sample request:
     /// 
     ///     PUT /api/customers/meal-time
@@ -108,7 +78,7 @@ public class CustomersController(ICustomerService customerService)
     /// <response code="200">Returns the updated customer meal time</response>
     /// <response code="404">If the customer is not found</response>
     /// <response code="422">If the input data is invalid</response>
-    [AuthorizeRoles(Role.Customer)]
+    [Authorize(Policy.Customer)]
     [HttpPut("meal-time", Name = "UpdateCustomerMealTime")]
     [ProducesResponseType(typeof(CustomerMealTimeDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
