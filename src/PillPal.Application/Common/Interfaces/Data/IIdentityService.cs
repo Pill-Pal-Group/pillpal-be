@@ -87,4 +87,34 @@ public interface IIdentityService
     /// <exception cref="ConflictException">Thrown if operation failed</exception>
     /// <exception cref="BadRequestException">Thrown if the password already created</exception>
     Task CreatePasswordAsync(string userId, string password);
+
+    /// <summary>
+    /// Get the user with the given ID
+    /// </summary>
+    /// <param name="id">The ID of the user</param>
+    /// <returns>The user with the given ID</returns>
+    /// <exception cref="NotFoundException">Thrown if the user not found</exception>
+    Task<ApplicationUser> GetAccountAsync(Guid id);
+
+    /// <summary>
+    /// Get all users with the given role
+    /// </summary>
+    /// <param name="role">The role of the users</param>
+    /// <returns>The users with the given role</returns>
+    Task<IEnumerable<ApplicationUser>> GetAccountsAsync(string role);
+
+    /// <summary>
+    /// Lock the account of the user with the given ID and lockout end time
+    /// </summary>
+    /// <param name="userId">The ID of the user</param>
+    /// <param name="lockoutEnd">The end time of the lockout</param>
+    /// <exception cref="BadRequestException">Thrown if the account is already locked</exception>
+    Task LockAccountAsync(Guid userId, DateTimeOffset lockoutEnd);
+
+    /// <summary>
+    /// Unlock the account of the user with the given ID
+    /// </summary>
+    /// <param name="userId">The ID of the user</param>
+    /// <exception cref="BadRequestException">Thrown if the account is already unlocked or not locked</exception>
+    Task UnlockAccountAsync(Guid userId);
 }

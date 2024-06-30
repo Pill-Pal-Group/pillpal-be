@@ -10,39 +10,7 @@ public class CustomersController(ICustomerService customerService)
     : ControllerBase
 {
     /// <summary>
-    /// Get all customers
-    /// </summary>
-    /// <param name="queryParameter"></param>
-    /// <response code="200">Returns a list of customers</response>
-    [Authorize(Policy.Administrative)]
-    [HttpGet(Name = "GetCustomers")]
-    [ProducesResponseType(typeof(IEnumerable<CustomerDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetCustomersAsync([FromQuery] CustomerQueryParameter queryParameter)
-    {
-        var customers = await customerService.GetCustomersAsync(queryParameter);
-
-        return Ok(customers);
-    }
-
-    /// <summary>
-    /// Get a customer by id
-    /// </summary>
-    /// <param name="customerId" example="00000000-0000-0000-0000-000000000000"></param>
-    /// <response code="200">Returns a customer</response>
-    /// <response code="404">If the customer is not found</response>
-    [Authorize(Policy.Administrative)]
-    [HttpGet("{customerId:guid}", Name = "GetCustomerById")]
-    [ProducesResponseType(typeof(CustomerDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetCustomerByIdAsync(Guid customerId)
-    {
-        var customer = await customerService.GetCustomerByIdAsync(customerId);
-
-        return Ok(customer);
-    }
-
-    /// <summary>
-    /// Get a customer informations
+    /// Get customer informations
     /// </summary>
     /// <response code="200">Returns a customer informations</response>
     [Authorize(Policy.Customer)]
@@ -56,7 +24,7 @@ public class CustomersController(ICustomerService customerService)
     }
 
     /// <summary>
-    /// Update a customer
+    /// Update customer informations
     /// </summary>
     /// <param name="updateCustomerDto"></param>
     /// <remarks>
@@ -86,7 +54,7 @@ public class CustomersController(ICustomerService customerService)
     }
 
     /// <summary>
-    /// Update a customer meal time
+    /// Update customer meal time
     /// </summary>
     /// <param name="updateCustomerMealTimeDto"></param>
     /// <remarks>

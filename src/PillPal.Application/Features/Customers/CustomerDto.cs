@@ -1,4 +1,4 @@
-﻿using PillPal.Application.Features.Identities;
+﻿using PillPal.Application.Features.Accounts;
 
 namespace PillPal.Application.Features.Customers;
 
@@ -31,5 +31,5 @@ public record CustomerDto
     /// <example>15</example>
     public string? MealTimeOffset { get; init; }
 
-    public ApplicationUserDto ApplicationUser { get; init; } = default!;
+    public AccountDto ApplicationUser { get; init; } = default!;
 }

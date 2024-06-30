@@ -4,13 +4,13 @@ public partial class MapperConfigure : Profile
 {
     public MapperConfigure()
     {
+        AccountProfile();
         ActiveIngredientProfile();
         BrandProfile();
         CategoryProfile();
         CustomerPackageProfile();
         CustomerProfile();
         DosageFormProfile();
-        IdentityProfile();
         MedicineProfile();
         MedicationTakeProfile();
         NationProfile();

@@ -45,6 +45,8 @@ public class AuthsController(IAuthService authService)
     /// </summary>
     /// <param name="request"></param>
     /// <remarks>
+    /// For every 5 failed login attempts, the account will be locked for 30 minutes
+    /// 
     /// Sample request:
     ///
     ///     POST /api/auths/login

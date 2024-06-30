@@ -30,6 +30,10 @@ public static class DependencyInjection
             op.Password.RequireNonAlphanumeric = true;
             op.Password.RequireUppercase = true;
             op.Password.RequiredLength = 6;
+
+            op.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+            op.Lockout.MaxFailedAccessAttempts = 5;
+            op.Lockout.AllowedForNewUsers = true;
         })
         .AddRoles<IdentityRole<Guid>>()
         .AddEntityFrameworkStores<ApplicationDbContext>();
