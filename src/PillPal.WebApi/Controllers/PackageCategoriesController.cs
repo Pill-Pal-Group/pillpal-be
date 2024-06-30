@@ -157,6 +157,7 @@ public class PackageCategoriesController(IPackageCategoryService packageCategory
     /// <param name="packageCategoryId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <remarks>
     /// Requires administrative policy (e.g. Admin, Manager)
+    /// </remarks>
     /// <response code="204">No content</response>
     /// <response code="404">If the package category is not found</response>
     [Authorize(Policy.Administrative)]
