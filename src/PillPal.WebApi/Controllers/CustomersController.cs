@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PillPal.Application.Common.Interfaces.Services;
+﻿using PillPal.Application.Features.CustomerPackages;
 using PillPal.Application.Features.Customers;
-using PillPal.Core.Constant;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -9,46 +7,15 @@ namespace PillPal.WebApi.Controllers;
 [Route("api/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
-public class CustomersController(ICustomerService customerService)
+public class CustomersController(ICustomerService customerService, ICustomerPackageService customerPackageService)
     : ControllerBase
 {
     /// <summary>
-    /// Get all customers
+    /// Get customer informations
     /// </summary>
-    /// <param name="queryParameter"></param>
-    /// <response code="200">Returns a list of customers</response>
-    [AuthorizeRoles(Role.Admin, Role.Manager)]
-    [HttpGet(Name = "GetCustomers")]
-    [ProducesResponseType(typeof(IEnumerable<CustomerDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetCustomersAsync([FromQuery] CustomerQueryParameter queryParameter)
-    {
-        var customers = await customerService.GetCustomersAsync(queryParameter);
-
-        return Ok(customers);
-    }
-
-    /// <summary>
-    /// Get a customer by id
-    /// </summary>
-    /// <param name="customerId" example="00000000-0000-0000-0000-000000000000"></param>
-    /// <response code="200">Returns a customer</response>
-    /// <response code="404">If the customer is not found</response>
-    [AuthorizeRoles(Role.Admin, Role.Manager)]
-    [HttpGet("{customerId:guid}", Name = "GetCustomerById")]
-    [ProducesResponseType(typeof(CustomerDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetCustomerByIdAsync(Guid customerId)
-    {
-        var customer = await customerService.GetCustomerByIdAsync(customerId);
-
-        return Ok(customer);
-    }
-
-    /// <summary>
-    /// Get a customer informations
-    /// </summary>
+    /// <remarks>Requires customer policy</remarks>
     /// <response code="200">Returns a customer informations</response>
-    [AuthorizeRoles(Role.Customer)]
+    [Authorize(Policy.Customer)]
     [HttpGet("info", Name = "GetCustomerInfo")]
     [ProducesResponseType(typeof(CustomerDto), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCustomerInfoAsync()
@@ -59,10 +26,45 @@ public class CustomersController(ICustomerService customerService)
     }
 
     /// <summary>
-    /// Update a customer
+    /// Get customer packages
+    /// </summary>
+    /// <remarks>Requires customer policy</remarks>
+    /// <response code="200">Returns a list of customer packages</response>
+    [Authorize(Policy.Customer)]
+    [HttpGet("packages", Name = "GetOwnCustomerPackages")]
+    [ProducesResponseType(typeof(IEnumerable<CustomerPackageDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetCustomerPackagesAsync()
+    {
+        var customerPackages = await customerPackageService.GetCustomerPackagesAsync(isCustomer: true);
+
+        return Ok(customerPackages);
+    }
+
+    /// <summary>
+    /// Get customer package by id
+    /// </summary>
+    /// <param name="packageId" example="00000000-0000-0000-0000-000000000000"></param>
+    /// <remarks>Requires customer policy</remarks>
+    /// <response code="200">Returns a customer package</response>
+    /// <response code="404">If the customer package is not found</response>
+    [Authorize(Policy.Customer)]
+    [HttpGet("packages/{packageId}", Name = "GetOwnCustomerPackage")]
+    [ProducesResponseType(typeof(CustomerPackageDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCustomerPackageAsync(Guid packageId)
+    {
+        var customerPackage = await customerPackageService.GetCustomerPackageAsync(packageId, isCustomer: true);
+
+        return Ok(customerPackage);
+    }
+
+    /// <summary>
+    /// Update customer informations
     /// </summary>
     /// <param name="updateCustomerDto"></param>
     /// <remarks>
+    /// Requires customer policy
+    /// 
     /// Sample request:
     /// 
     ///     PUT /api/customers
@@ -76,7 +78,7 @@ public class CustomersController(ICustomerService customerService)
     /// <response code="200">Returns the updated customer</response>
     /// <response code="404">If the customer is not found</response>
     /// <response code="422">If the input data is invalid</response>
-    [AuthorizeRoles(Role.Customer)]
+    [Authorize(Policy.Customer)]
     [HttpPut(Name = "UpdateCustomer")]
     [ProducesResponseType(typeof(CustomerDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -89,10 +91,12 @@ public class CustomersController(ICustomerService customerService)
     }
 
     /// <summary>
-    /// Update a customer meal time
+    /// Update customer meal time
     /// </summary>
     /// <param name="updateCustomerMealTimeDto"></param>
     /// <remarks>
+    /// Requires customer policy
+    /// 
     /// Sample request:
     /// 
     ///     PUT /api/customers/meal-time
@@ -108,7 +112,7 @@ public class CustomersController(ICustomerService customerService)
     /// <response code="200">Returns the updated customer meal time</response>
     /// <response code="404">If the customer is not found</response>
     /// <response code="422">If the input data is invalid</response>
-    [AuthorizeRoles(Role.Customer)]
+    [Authorize(Policy.Customer)]
     [HttpPut("meal-time", Name = "UpdateCustomerMealTime")]
     [ProducesResponseType(typeof(CustomerMealTimeDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]

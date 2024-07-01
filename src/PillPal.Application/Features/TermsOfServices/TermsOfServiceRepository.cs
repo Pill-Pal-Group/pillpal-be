@@ -7,7 +7,7 @@ namespace PillPal.Application.Features.TermsOfServices;
 public class TermsOfServiceRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
     : BaseRepository(context, mapper, serviceProvider), ITermsOfService
 {
-    public async Task<IEnumerable<TermsOfServiceDto>> CreateBulkTermsOfServiceAsync(IEnumerable<CreateTermsOfServiceDto> createTermsOfServiceDtos)
+    public async Task<IEnumerable<TermsOfServiceDto>> CreateBulkTermsOfServicesAsync(IEnumerable<CreateTermsOfServiceDto> createTermsOfServiceDtos)
     {
         await ValidateListAsync(createTermsOfServiceDtos);
 
@@ -36,8 +36,8 @@ public class TermsOfServiceRepository(IApplicationDbContext context, IMapper map
     public async Task DeleteTermsOfServiceAsync(Guid termsOfServiceId)
     {
         var tos = await Context.TermsOfServices
-            .Where(t => t.Id == termsOfServiceId && !t.IsDeleted)
-            .FirstOrDefaultAsync()
+            .Where(t => !t.IsDeleted)
+            .FirstOrDefaultAsync(t => t.Id == termsOfServiceId)
             ?? throw new NotFoundException(nameof(TermsOfService), termsOfServiceId);
 
         Context.TermsOfServices.Remove(tos);
@@ -48,9 +48,9 @@ public class TermsOfServiceRepository(IApplicationDbContext context, IMapper map
     public async Task<TermsOfServiceDto> GetTermsOfServiceByIdAsync(Guid termsOfServiceId)
     {
         var tos = await Context.TermsOfServices
-            .Where(t => t.Id == termsOfServiceId && !t.IsDeleted)
+            .Where(t => !t.IsDeleted)
             .AsNoTracking()
-            .FirstOrDefaultAsync()
+            .FirstOrDefaultAsync(t => t.Id == termsOfServiceId)
             ?? throw new NotFoundException(nameof(TermsOfService), termsOfServiceId);
 
         return Mapper.Map<TermsOfServiceDto>(tos);
@@ -72,8 +72,8 @@ public class TermsOfServiceRepository(IApplicationDbContext context, IMapper map
         await ValidateAsync(updateTermsOfServiceDto);
 
         var tos = await Context.TermsOfServices
-            .Where(t => t.Id == termsOfServiceId && !t.IsDeleted)
-            .FirstOrDefaultAsync()
+            .Where(t => !t.IsDeleted)
+            .FirstOrDefaultAsync(t => t.Id == termsOfServiceId)
             ?? throw new NotFoundException(nameof(TermsOfService), termsOfServiceId);
 
         Mapper.Map(updateTermsOfServiceDto, tos);

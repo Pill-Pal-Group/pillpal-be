@@ -2,7 +2,11 @@
 
 public class CustomerPackage : BaseEntity
 {
-    public int RemainDay { get; set; }
+    public int Duration { get; set; }
+    public DateTimeOffset StartDate { get; set; }
+    public DateTimeOffset EndDate { get; set; }
+    public decimal Price { get; set; }
+    public bool IsExpired { get; set; }
 
     public Guid CustomerId { get; set; }
     public virtual Customer? Customer { get; set; }

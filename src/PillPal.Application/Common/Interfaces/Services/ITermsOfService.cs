@@ -41,7 +41,7 @@ public interface ITermsOfService
     /// The task result contains a collection of <see cref="TermsOfServiceDto"/> objects.
     /// </returns>
     /// <exception cref="ValidationException">Thrown when validation fails for the creation data.</exception>
-    Task<IEnumerable<TermsOfServiceDto>> CreateBulkTermsOfServiceAsync(IEnumerable<CreateTermsOfServiceDto> createTermsOfServiceDtos);
+    Task<IEnumerable<TermsOfServiceDto>> CreateBulkTermsOfServicesAsync(IEnumerable<CreateTermsOfServiceDto> createTermsOfServiceDtos);
 
     /// <summary>
     /// Updates an existing terms of service.

@@ -338,6 +338,9 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("IdentityUserId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("LockoutCount")
+                        .HasColumnType("int");
+
                     b.Property<TimeOnly>("LunchTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("time")
@@ -365,6 +368,15 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
+                    b.Property<DateTimeOffset>("EndDate")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<bool>("IsExpired")
+                        .HasColumnType("bit");
+
                     b.Property<Guid?>("PackageCategoryId")
                         .HasColumnType("uniqueidentifier");
 
@@ -374,8 +386,11 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("PaymentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("RemainDay")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTimeOffset>("StartDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
 
@@ -559,7 +574,13 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("PackageTime")
+                    b.Property<string>("PackageDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PackageDuration")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PackageName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")

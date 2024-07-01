@@ -7,6 +7,19 @@ namespace PillPal.Application.Features.Categories;
 public class CategoryRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
     : BaseRepository(context, mapper, serviceProvider), ICategoryService
 {
+    public async Task<IEnumerable<CategoryDto>> CreateBulkCategoriesAsync(IEnumerable<CreateCategoryDto> createCategoryDtos)
+    {
+        await ValidateListAsync(createCategoryDtos);
+
+        var categories = Mapper.Map<IEnumerable<Category>>(createCategoryDtos);
+
+        await Context.Categories.AddRangeAsync(categories);
+
+        await Context.SaveChangesAsync();
+
+        return Mapper.Map<IEnumerable<CategoryDto>>(categories);
+    }
+
     public async Task<CategoryDto> CreateCategoryAsync(CreateCategoryDto createCategoryDto)
     {
         await ValidateAsync(createCategoryDto);
@@ -23,8 +36,9 @@ public class CategoryRepository(IApplicationDbContext context, IMapper mapper, I
     public async Task DeleteCategoryAsync(Guid categoryId)
     {
         var category = await Context.Categories
-            .Where(c => c.Id == categoryId && !c.IsDeleted)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Category), categoryId);
+            .Where(c => !c.IsDeleted)
+            .FirstOrDefaultAsync(c => c.Id == categoryId) 
+            ?? throw new NotFoundException(nameof(Category), categoryId);
 
         Context.Categories.Remove(category);
 
@@ -45,9 +59,10 @@ public class CategoryRepository(IApplicationDbContext context, IMapper mapper, I
     public async Task<CategoryDto> GetCategoryByIdAsync(Guid categoryId)
     {
         var category = await Context.Categories
-            .Where(c => c.Id == categoryId && !c.IsDeleted)
+            .Where(c => !c.IsDeleted)
             .AsNoTracking()
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Category), categoryId);
+            .FirstOrDefaultAsync(c => c.Id == categoryId) 
+            ?? throw new NotFoundException(nameof(Category), categoryId);
 
         return Mapper.Map<CategoryDto>(category);
     }
@@ -57,8 +72,9 @@ public class CategoryRepository(IApplicationDbContext context, IMapper mapper, I
         await ValidateAsync(updateCategoryDto);
 
         var category = await Context.Categories
-            .Where(c => c.Id == categoryId && !c.IsDeleted)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Category), categoryId);
+            .Where(c => !c.IsDeleted)
+            .FirstOrDefaultAsync(c => c.Id == categoryId) 
+            ?? throw new NotFoundException(nameof(Category), categoryId);
 
         Mapper.Map(updateCategoryDto, category);
 

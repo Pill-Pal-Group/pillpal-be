@@ -2,7 +2,7 @@
 
 public record NationQueryParameter
 {
-    /// <example>VN</example>
+    /// <example>VNR</example>
     public string? NationCode { get; init; }
 }
 

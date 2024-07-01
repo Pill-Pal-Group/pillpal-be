@@ -20,11 +20,25 @@ public class BrandRepository(IApplicationDbContext context, IMapper mapper, ISer
         return Mapper.Map<BrandDto>(brand);
     }
 
+    public async Task<IEnumerable<BrandDto>> CreateBulkBrandsAsync(IEnumerable<CreateBrandDto> createBrandDtos)
+    {
+        await ValidateListAsync(createBrandDtos);
+
+        var brands = Mapper.Map<IEnumerable<Brand>>(createBrandDtos);
+
+        await Context.Brands.AddRangeAsync(brands);
+
+        await Context.SaveChangesAsync();
+
+        return Mapper.Map<IEnumerable<BrandDto>>(brands);
+    }
+
     public async Task DeleteBrandAsync(Guid brandId)
     {
         var brand = await Context.Brands
-            .Where(b => b.Id == brandId && !b.IsDeleted)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Brand), brandId);
+            .Where(b => !b.IsDeleted)
+            .FirstOrDefaultAsync(b => b.Id == brandId) 
+            ?? throw new NotFoundException(nameof(Brand), brandId);
 
         Context.Brands.Remove(brand);
 
@@ -34,9 +48,10 @@ public class BrandRepository(IApplicationDbContext context, IMapper mapper, ISer
     public async Task<BrandDto> GetBrandByIdAsync(Guid brandId)
     {
         var brand = await Context.Brands
-            .Where(b => b.Id == brandId && !b.IsDeleted)
+            .Where(b => !b.IsDeleted)
             .AsNoTracking()
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Brand), brandId);
+            .FirstOrDefaultAsync(b => b.Id == brandId) 
+            ?? throw new NotFoundException(nameof(Brand), brandId);
 
         return Mapper.Map<BrandDto>(brand);
     }
@@ -57,8 +72,9 @@ public class BrandRepository(IApplicationDbContext context, IMapper mapper, ISer
         await ValidateAsync(updateBrandDto);
 
         var brand = await Context.Brands
-            .Where(b => b.Id == brandId && !b.IsDeleted)
-            .FirstOrDefaultAsync() ?? throw new NotFoundException(nameof(Brand), brandId);
+            .Where(b => !b.IsDeleted)
+            .FirstOrDefaultAsync(b => b.Id == brandId) 
+            ?? throw new NotFoundException(nameof(Brand), brandId);
 
         Mapper.Map(updateBrandDto, brand);
 

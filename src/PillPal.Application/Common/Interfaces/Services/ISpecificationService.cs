@@ -33,6 +33,16 @@ public interface ISpecificationService
     Task<SpecificationDto> CreateSpecificationAsync(CreateSpecificationDto createSpecificationDto);
 
     /// <summary>
+    /// Creates multiple specifications.
+    /// </summary>
+    /// <param name="createSpecificationDtos">The DTOs containing the creation data for the specifications.</param>
+    /// <returns>
+    /// The task result contains a collection of <see cref="SpecificationDto"/> objects.
+    /// </returns>
+    /// <exception cref="ValidationException">Thrown when validation fails for the creation data.</exception>
+    Task<IEnumerable<SpecificationDto>> CreateBulkSpecificationsAsync(IEnumerable<CreateSpecificationDto> createSpecificationDtos);
+
+    /// <summary>
     /// Updates an existing specification.
     /// </summary>
     /// <param name="specificationId">The unique identifier for the specification to update.</param>

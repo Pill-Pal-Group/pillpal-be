@@ -14,10 +14,10 @@ public record TermsOfServiceDto
     /// <example>Content of the security policy.</example>
     public string? Content { get; init; }
 
-    /// <example>2021-01-01T00:00:00.0000000+00:00</example>
+    /// <example>2024-01-01T00:00:00.0000000+00:00</example>
     public DateTimeOffset? CreatedAt { get; init; }
 
-    /// <example>2021-01-01T00:00:00.0000000+00:00</example>
+    /// <example>2024-01-01T00:00:00.0000000+00:00</example>
     public DateTimeOffset? UpdatedAt { get; init; }
 
     /// <example>Id of account execute create</example>
