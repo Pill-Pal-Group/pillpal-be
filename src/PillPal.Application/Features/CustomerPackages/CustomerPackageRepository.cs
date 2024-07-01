@@ -7,6 +7,20 @@ namespace PillPal.Application.Features.CustomerPackages;
 public class CustomerPackageRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider, IUser user)
     : BaseRepository(context, mapper, serviceProvider), ICustomerPackageService
 {
+    public async Task CheckForExpiredPackagesAsync()
+    {
+        var expiredPackages = await Context.CustomerPackages
+            .Where(c => c.EndDate < DateTimeOffset.UtcNow)
+            .ToListAsync();
+
+        foreach (var expiredPackage in expiredPackages)
+        {
+            expiredPackage.IsExpired = true;
+        }
+
+        await Context.SaveChangesAsync();
+    }
+
     public async Task<CustomerPackageDto> CreateCustomerPackageAsync(CreateCustomerPackageDto createCustomerPackageDto)
     {
         await ValidateAsync(createCustomerPackageDto);

@@ -1,5 +1,9 @@
-﻿using PillPal.Application.Common.Interfaces.Auth;
+﻿using Hangfire;
+using HangfireBasicAuthenticationFilter;
+using Microsoft.AspNetCore.Builder;
+using PillPal.Application.Common.Interfaces.Auth;
 using PillPal.Application.Common.Interfaces.Data;
+using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Infrastructure.Auth;
 using PillPal.Infrastructure.Identity;
 using PillPal.Infrastructure.Persistence;
@@ -58,6 +62,40 @@ public static class DependencyInjection
 
         services.AddSingleton<IFirebaseService, FirebaseService>();
 
+        services.AddHangfire(config =>
+        {
+            config.UseSqlServerStorage(configuration.GetConnectionString("HANGFIRE_DB"));
+        });
+
+        services.AddHangfireServer();
+
         return services;
+    }
+
+    public static void UseInfrastructureServices(this IApplicationBuilder app, IConfiguration configuration)
+    {
+        app.UseHangfireDashboard("/hangfire", new DashboardOptions
+        {
+            DarkModeEnabled = false,
+            DashboardTitle = "PillPal Hangfire Dashboard",
+            Authorization = new[]
+            {
+                new HangfireCustomBasicAuthenticationFilter
+                {
+                    User = configuration["Hangfire:User"],
+                    Pass = configuration["Hangfire:Pass"]
+                }
+            }
+        });
+
+        RecurringJob.AddOrUpdate<ICustomerPackageService>(
+            "CheckForExpiredPackages",
+            service => service.CheckForExpiredPackagesAsync(),
+            Cron.Daily,
+            new RecurringJobOptions
+            {
+                TimeZone = TimeZoneInfo.Local
+            }
+        );
     }
 }
