@@ -39,4 +39,11 @@ public interface ICustomerPackageService
     /// <exception cref="NotFoundException">Thrown if the package or payment is not found.</exception>
     /// <exception cref="ValidationException">Thrown if the creation data is invalid.</exception>
     Task<CustomerPackageDto> CreateCustomerPackageAsync(CreateCustomerPackageDto createCustomerPackageDto);
+
+    /// <summary>
+    /// Checks for expired packages and updates their status.
+    /// This method should be called periodically by a background service.
+    /// </summary>
+    /// <returns>The task result.</returns>
+    Task CheckForExpiredPackagesAsync();
 }
