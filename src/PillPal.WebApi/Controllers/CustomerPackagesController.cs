@@ -27,7 +27,7 @@ public class CustomerPackagesController(ICustomerPackageService customerPackageS
     /// <summary>
     /// Get customer package by id
     /// </summary>
-    /// <param name="packageId"></param>
+    /// <param name="packageId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <remarks>Requires administrative policy (e.g. admin, manager)</remarks>
     /// <response code="200">Returns a customer package</response>
     /// <response code="404">If the customer package is not found</response>
