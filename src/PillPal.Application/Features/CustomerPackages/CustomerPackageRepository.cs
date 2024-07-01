@@ -11,10 +11,21 @@ public class CustomerPackageRepository(IApplicationDbContext context, IMapper ma
     {
         await ValidateAsync(createCustomerPackageDto);
 
+        var customerId = await Context.Customers
+            .AsNoTracking()
+            .Where(c => c.IdentityUserId == Guid.Parse(user.Id!))
+            .Select(c => c.Id)
+            .FirstOrDefaultAsync();
+
         var existingCustomerPackage = await Context.CustomerPackages
             .AsNoTracking()
-            .FirstOrDefaultAsync(c => !c.IsExpired)
-            ?? throw new BadRequestException("Customer already has an active package.");
+            .Where(c => c.CustomerId == customerId)
+            .FirstOrDefaultAsync(c => !c.IsExpired);
+        
+        if (existingCustomerPackage != null)
+        {
+            throw new BadRequestException("Customer already has an active package.");
+        }
 
         //todo: need improvement
         var package = await Context.PackageCategories
@@ -26,12 +37,6 @@ public class CustomerPackageRepository(IApplicationDbContext context, IMapper ma
             .AsNoTracking()
             .FirstOrDefaultAsync(p => p.Id == createCustomerPackageDto.PaymentId)
             ?? throw new NotFoundException(nameof(Payment), createCustomerPackageDto.PaymentId);
-
-        var customerId = await Context.Customers
-            .AsNoTracking()
-            .Where(c => c.IdentityUserId == Guid.Parse(user.Id!))
-            .Select(c => c.Id)
-            .FirstOrDefaultAsync();
 
         var customerPackage = Mapper.Map<CustomerPackage>(createCustomerPackageDto);
 
