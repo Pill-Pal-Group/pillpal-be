@@ -1,4 +1,5 @@
-﻿using PillPal.Application.Features.Customers;
+﻿using PillPal.Application.Features.CustomerPackages;
+using PillPal.Application.Features.Customers;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -6,7 +7,7 @@ namespace PillPal.WebApi.Controllers;
 [Route("api/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
-public class CustomersController(ICustomerService customerService)
+public class CustomersController(ICustomerService customerService, ICustomerPackageService customerPackageService)
     : ControllerBase
 {
     /// <summary>
@@ -22,6 +23,39 @@ public class CustomersController(ICustomerService customerService)
         var customerInfo = await customerService.GetCustomerInfoAsync();
 
         return Ok(customerInfo);
+    }
+
+    /// <summary>
+    /// Get customer packages
+    /// </summary>
+    /// <remarks>Requires customer policy</remarks>
+    /// <response code="200">Returns a list of customer packages</response>
+    [Authorize(Policy.Customer)]
+    [HttpGet("packages", Name = "GetOwnCustomerPackages")]
+    [ProducesResponseType(typeof(IEnumerable<CustomerPackageDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetCustomerPackagesAsync()
+    {
+        var customerPackages = await customerPackageService.GetCustomerPackagesAsync(isCustomer: true);
+
+        return Ok(customerPackages);
+    }
+
+    /// <summary>
+    /// Get customer package by id
+    /// </summary>
+    /// <param name="packageId" example="00000000-0000-0000-0000-000000000000"></param>
+    /// <remarks>Requires customer policy</remarks>
+    /// <response code="200">Returns a customer package</response>
+    /// <response code="404">If the customer package is not found</response>
+    [Authorize(Policy.Customer)]
+    [HttpGet("packages/{packageId}", Name = "GetOwnCustomerPackage")]
+    [ProducesResponseType(typeof(CustomerPackageDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCustomerPackageAsync(Guid packageId)
+    {
+        var customerPackage = await customerPackageService.GetCustomerPackageAsync(packageId, isCustomer: true);
+
+        return Ok(customerPackage);
     }
 
     /// <summary>
