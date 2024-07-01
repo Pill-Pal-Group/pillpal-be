@@ -44,8 +44,8 @@ public class CustomerPackageRepository(IApplicationDbContext context, IMapper ma
         //todo: need improvement
         var package = await Context.PackageCategories
             .AsNoTracking()
-            .FirstOrDefaultAsync(p => p.Id == createCustomerPackageDto.PackageId)
-            ?? throw new NotFoundException(nameof(PackageCategories), createCustomerPackageDto.PackageId);
+            .FirstOrDefaultAsync(p => p.Id == createCustomerPackageDto.PackageCategoryId)
+            ?? throw new NotFoundException(nameof(PackageCategories), createCustomerPackageDto.PackageCategoryId);
 
         var payment = await Context.Payments
             .AsNoTracking()
@@ -59,7 +59,7 @@ public class CustomerPackageRepository(IApplicationDbContext context, IMapper ma
         customerPackage.EndDate = DateTimeOffset.UtcNow.AddDays(package.PackageDuration);
         customerPackage.Price = package.Price;
         customerPackage.CustomerId = customerId;
-        customerPackage.PackageId = package.Id;
+        customerPackage.PackageCategoryId = package.Id;
         customerPackage.PaymentId = payment.Id;
 
         await Context.CustomerPackages.AddAsync(customerPackage);

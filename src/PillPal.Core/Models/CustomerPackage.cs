@@ -11,7 +11,7 @@ public class CustomerPackage : BaseEntity
     public Guid CustomerId { get; set; }
     public virtual Customer? Customer { get; set; }
 
-    public Guid PackageId { get; set; }
+    public Guid PackageCategoryId { get; set; }
     public virtual PackageCategory? PackageCategory { get; set; }
 
     public Guid PaymentId { get; set; }
