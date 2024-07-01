@@ -12,6 +12,7 @@ using PillPal.Application.Features.MedicationTakes;
 using PillPal.Application.Features.Medicines;
 using PillPal.Application.Features.Nations;
 using PillPal.Application.Features.PackageCategories;
+using PillPal.Application.Features.Payments;
 using PillPal.Application.Features.PharmaceuticalCompanies;
 using PillPal.Application.Features.PharmacyStores;
 using PillPal.Application.Features.Prescripts;
@@ -37,7 +38,7 @@ public static class DependencyInjection
         services.AddScoped<IMedicineService, MedicineRepository>();
         services.AddScoped<INationService, NationRepository>();
         services.AddScoped<IPackageCategoryService, PackageCategoryRepository>();
-        //services.AddScoped<IPaymentService, >();
+        services.AddScoped<IPaymentService, PaymentRepository>();
         services.AddScoped<IPharmaceuticalCompanyService, PharmaceuticalCompanyRepository>();
         services.AddScoped<IPharmacyStoreService, PharmacyStoreRepository>();
         services.AddScoped<IPrescriptService, PrescriptRepository>();
