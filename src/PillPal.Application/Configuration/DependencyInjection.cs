@@ -5,6 +5,7 @@ using PillPal.Application.Features.ActiveIngredients;
 using PillPal.Application.Features.Auths;
 using PillPal.Application.Features.Brands;
 using PillPal.Application.Features.Categories;
+using PillPal.Application.Features.CustomerPackages;
 using PillPal.Application.Features.Customers;
 using PillPal.Application.Features.DosageForms;
 using PillPal.Application.Features.MedicationTakes;
@@ -30,7 +31,7 @@ public static class DependencyInjection
         services.AddScoped<IBrandService, BrandRepository>();
         services.AddScoped<ICategoryService, CategoryRepository>();
         services.AddScoped<ICustomerService, CustomerRepository>();
-        //services.AddScoped<ICustomerPackageService, >();
+        services.AddScoped<ICustomerPackageService, CustomerPackageRepository>();
         services.AddScoped<IDosageFormService, DosageFormRepository>();
         services.AddScoped<IMedicationTakeService, MedicationTakeRepository>();
         services.AddScoped<IMedicineService, MedicineRepository>();
