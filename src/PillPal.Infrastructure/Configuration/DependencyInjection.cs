@@ -78,6 +78,7 @@ public static class DependencyInjection
         {
             DarkModeEnabled = false,
             DashboardTitle = "PillPal Hangfire Dashboard",
+            DisplayStorageConnectionString = false,
             Authorization = new[]
             {
                 new HangfireCustomBasicAuthenticationFilter
