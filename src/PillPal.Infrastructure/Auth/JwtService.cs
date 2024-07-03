@@ -65,7 +65,7 @@ public class JwtService : IJwtService
         {
             ValidateIssuer = true,
             ValidateAudience = true,
-            ValidateLifetime = true,
+            ValidateLifetime = false,
             ValidateIssuerSigningKey = true,
             ValidIssuer = _settings.Issuer,
             ValidAudience = _settings.Audience,
