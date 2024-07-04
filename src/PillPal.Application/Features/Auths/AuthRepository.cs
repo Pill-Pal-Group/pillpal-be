@@ -51,11 +51,11 @@ public class AuthRepository(
     {
         await ValidateAsync(refreshToken);
 
-        var isTokenValid = jwtService.ValidateRefreshToken(refreshToken.ExpiredToken!, refreshToken.RefreshToken!);
+        var tokenValidate = jwtService.ValidateRefreshToken(refreshToken.ExpiredToken!, refreshToken.RefreshToken!);
 
-        if (!isTokenValid)
+        if (!tokenValidate.isValid)
         {
-            throw new UnauthorizedAccessException("Invalid token");
+            throw new UnauthorizedAccessException(tokenValidate.message);
         }
 
         var claimsPrincipal = jwtService.GetPrincipalFromExpiredToken(refreshToken.ExpiredToken!);
