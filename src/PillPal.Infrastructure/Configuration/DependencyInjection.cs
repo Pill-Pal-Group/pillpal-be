@@ -3,8 +3,10 @@ using HangfireBasicAuthenticationFilter;
 using Microsoft.AspNetCore.Builder;
 using PillPal.Application.Common.Interfaces.Auth;
 using PillPal.Application.Common.Interfaces.Data;
+using PillPal.Application.Common.Interfaces.File;
 using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Infrastructure.Auth;
+using PillPal.Infrastructure.File;
 using PillPal.Infrastructure.Identity;
 using PillPal.Infrastructure.Persistence;
 using PillPal.Infrastructure.Persistence.Interceptors;
@@ -58,6 +60,8 @@ public static class DependencyInjection
         });
 
         services.AddHangfireServer();
+
+        services.AddScoped<IFileReader, FileReader>();
 
         return services;
     }

@@ -83,4 +83,15 @@ public interface IMedicineService
     /// <param name="brandId">The unique identifier for the brand.</param>
     /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task DeleteMedicineInBrandAsync(Guid medicineId, Guid brandId);
+
+    /// <summary>
+    /// Imports medicines from excel file.
+    /// </summary>
+    /// <param name="file">The excel file to import.</param>
+    /// <returns>
+    /// The task result contains the number of imported medicines.
+    /// </returns>
+    /// <exception cref="ValidationException">Thrown when validation fails for the import data.</exception>
+    /// <exception cref="Exception">Thrown when an error occurs during the import process.</exception>
+    Task<int> ImportMedicinesAsync(Stream file);
 }

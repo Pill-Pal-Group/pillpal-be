@@ -236,4 +236,23 @@ public class MedicinesController(IMedicineService medicineService)
 
         return NoContent();
     }
+
+    // [Authorize(Policy.Administrative)]
+    [HttpPost("import", Name = "ImportMedicines")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> ImportMedicinesAsync(IFormFile file)
+    {
+        // validate valid excel file
+        if (file is null || file.Length <= 0)
+        {
+            return BadRequest("Invalid file");
+        }
+
+        await using var stream = file.OpenReadStream();
+
+        var importedCount = await medicineService.ImportMedicinesAsync(stream);
+
+        return Ok(importedCount);
+    }
 }

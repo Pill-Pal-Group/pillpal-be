@@ -1,12 +1,14 @@
 ﻿using PillPal.Application.Common.Interfaces.Data;
+using PillPal.Application.Common.Interfaces.File;
 using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Application.Common.Repositories;
 using PillPal.Application.Features.MedicineInBrands;
 using PillPal.Application.Features.Medicines;
+using System.Data;
 
 namespace PillPal.Application.Features.Medicines;
 
-public class MedicineRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
+public class MedicineRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider, IFileReader fileReader)
     : BaseRepository(context, mapper, serviceProvider), IMedicineService
 {
     public async Task<MedicineDto> CreateMedicineAsync(CreateMedicineDto createMedicineDto)
@@ -157,5 +159,105 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         Context.MedicineInBrands.Remove(medicineInBrand);
 
         await Context.SaveChangesAsync();
+    }
+
+    public async Task<int> ImportMedicinesAsync(Stream file)
+    {
+        var dataTable = fileReader.ReadFile(file);
+
+        // data in excel file include
+        // link
+        // brand
+        // product name
+        // price
+        // image
+        // ingredient
+        // manufacturer
+        // manufacturering country
+        // dosage forms
+        // specifications
+        //category
+
+        //extract these data above from excel file and check if they are already in the database
+        // if not, add them to the database
+        // these data name are the first row of the excel file
+        HashSet<string> brands = new HashSet<string>();
+        HashSet<string> productNames = new HashSet<string>();
+        HashSet<string> prices = new HashSet<string>();
+        HashSet<string> images = new HashSet<string>();
+        HashSet<string> ingredients = new HashSet<string>();
+        HashSet<string> manufacturers = new HashSet<string>();
+        HashSet<string> manufacturingCountries = new HashSet<string>();
+        HashSet<string> dosageForms = new HashSet<string>();
+        HashSet<string> specifications = new HashSet<string>();
+        HashSet<string> categories = new HashSet<string>();
+        HashSet<string> links = new HashSet<string>();
+
+        // Extract brand data from each row and add it to the list
+        foreach (DataRow row in dataTable.Rows)
+        {
+            var brand = row["Brand"].ToString();
+            var productName = row["Product Name"].ToString();
+            var price = row["Price"].ToString();
+            var image = row["Image"].ToString();
+            var ingredient = row["Ingredient"].ToString();
+            var manufacturer = row["Manufacturer"].ToString();
+            var manufacturingCountry = row["Manufacturing country"].ToString();
+            var dosageForm = row["Dosage forms"].ToString();
+            var specification = row["Specifications"].ToString();
+            var category = row["Category"].ToString();
+            var link = row["Link"].ToString();
+            brands.Add(brand);
+            productNames.Add(productName);
+            prices.Add(price);
+            images.Add(image);
+            ingredients.Add(ingredient);
+            manufacturers.Add(manufacturer);
+            manufacturingCountries.Add(manufacturingCountry);
+            dosageForms.Add(dosageForm);
+            specifications.Add(specification);
+            categories.Add(category);
+            links.Add(link);
+
+        }
+
+        // Print each brand name from the list
+        foreach (var brand in brands)
+        {
+            System.Console.WriteLine(brand);
+        }
+
+        System.Console.WriteLine("Total brands: " + brands.Count);
+
+        foreach (var productName in productNames)
+        {
+            System.Console.WriteLine(productName);
+        }
+
+        System.Console.WriteLine("Total product names: " + productNames.Count);
+
+        foreach (var price in prices)
+        {
+            System.Console.WriteLine(price);
+        }
+
+        System.Console.WriteLine("Total prices: " + prices.Count);
+
+        foreach (var image in images)
+        {
+            System.Console.WriteLine(image);
+        }
+
+        System.Console.WriteLine("Total images: " + images.Count);
+
+        foreach (var dosageForm in dosageForms)
+        {
+            System.Console.WriteLine(dosageForm);
+        }
+        
+
+
+        return 0;
+        
     }
 }
