@@ -16,6 +16,13 @@ public partial class MapperConfigure : Profile
             .ForMember(dest => dest.DosageForms, opt => opt.Ignore())
             .ForMember(dest => dest.ActiveIngredients, opt => opt.Ignore());
 
+        CreateMap<Medicine, CreateMedicineFromExcelDto>()
+            .ReverseMap()
+            .ForMember(dest => dest.Categories, opt => opt.Ignore())
+            .ForMember(dest => dest.PharmaceuticalCompanies, opt => opt.Ignore())
+            .ForMember(dest => dest.DosageForms, opt => opt.Ignore())
+            .ForMember(dest => dest.ActiveIngredients, opt => opt.Ignore());
+
         CreateMap<Medicine, UpdateMedicineDto>()
             .ReverseMap()
             .ForMember(dest => dest.Categories, opt => opt.Ignore())

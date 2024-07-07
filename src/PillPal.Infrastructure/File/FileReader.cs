@@ -6,13 +6,13 @@ namespace PillPal.Infrastructure.File;
 
 public class FileReader : IFileReader
 {
-    public DataTable ReadFile(Stream stream)
+    public DataTable ReadExcelFile(Stream stream, bool useHeaderRow)
     {
         var configuration = new ExcelDataSetConfiguration
         {
             ConfigureDataTable = _ => new ExcelDataTableConfiguration
             {
-                UseHeaderRow = true
+                UseHeaderRow = useHeaderRow
             }
         };
 

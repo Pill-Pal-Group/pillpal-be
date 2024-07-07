@@ -6,8 +6,8 @@ public record MedicineInBrandsDto
 {
     public BrandDto? Brand { get; init; }
 
-    /// <example>100.000</example>
-    public decimal Price { get; init; }
+    /// <example>8.000₫/viên</example>
+    public string? Price { get; init; }
 
     /// <example>https://monke.com/paracetamol</example>
     public string? MedicineUrl { get; init; }

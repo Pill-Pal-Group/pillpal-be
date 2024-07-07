@@ -1,4 +1,5 @@
-﻿using PillPal.Application.Features.MedicineInBrands;
+﻿using PillPal.Application.Common.Interfaces.File;
+using PillPal.Application.Features.MedicineInBrands;
 using PillPal.Application.Features.Medicines;
 
 namespace PillPal.Application.Common.Interfaces.Services;
@@ -35,6 +36,16 @@ public interface IMedicineService
     /// </returns>
     /// <exception cref="ValidationException">Thrown when validation fails for the creation data.</exception>
     Task<MedicineDto> CreateMedicineAsync(CreateMedicineDto createMedicineDto);
+
+    /// <summary>
+    /// Creates batch of medicines from excel file import.
+    /// Other entities related to the medicine will be created if not exist.
+    /// </summary>
+    /// <param name="createMedicineFromExcelDtos">The DTOs containing the creation data for the medicines.</param>
+    /// <returns>
+    /// The task result contains the number of rows affected.
+    /// </returns>
+    Task<int> CreateMedicinesFromExcelBatchAsync(List<CreateMedicineFromExcelDto> createMedicineFromExcelDtos);
 
     /// <summary>
     /// Adds brand to medicine with price.
@@ -89,9 +100,7 @@ public interface IMedicineService
     /// </summary>
     /// <param name="file">The excel file to import.</param>
     /// <returns>
-    /// The task result contains the number of imported medicines.
+    /// The task result contains the <see cref="FileExecutionResult"/> representing the import result.
     /// </returns>
-    /// <exception cref="ValidationException">Thrown when validation fails for the import data.</exception>
-    /// <exception cref="Exception">Thrown when an error occurs during the import process.</exception>
-    Task<int> ImportMedicinesAsync(Stream file);
+    Task<FileExecutionResult> ImportMedicinesAsync(Stream file);
 }
