@@ -10,7 +10,7 @@ public class PrescriptsController(IPrescriptService prescriptService)
     : ControllerBase
 {
     /// <summary>
-    /// Retrieves all prescripts.
+    /// Retrieves all prescripts
     /// </summary>
     /// <param name="queryParameter"></param>
     /// <param name="includeParameter"></param>
@@ -27,7 +27,7 @@ public class PrescriptsController(IPrescriptService prescriptService)
     }
 
     /// <summary>
-    /// Retrieves a prescript by its unique identifier.
+    /// Retrieves a prescript by its unique identifier
     /// </summary>
     /// <param name="prescriptId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <response code="200">Returns a prescript</response>
@@ -43,7 +43,7 @@ public class PrescriptsController(IPrescriptService prescriptService)
     }
 
     /// <summary>
-    /// Creates a new prescript.
+    /// Creates a new prescript
     /// </summary>
     /// <param name="createPrescriptDto"></param>
     /// <remarks>
@@ -87,7 +87,7 @@ public class PrescriptsController(IPrescriptService prescriptService)
     }
 
     /// <summary>
-    /// Deletes a prescript by its unique identifier. Soft delete.
+    /// Deletes a prescript by its unique identifier (soft delete)
     /// </summary>
     /// <remarks>Requires customer policy</remarks>
     /// <param name="prescriptId" example="00000000-0000-0000-0000-000000000000"></param>
