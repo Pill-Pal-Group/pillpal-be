@@ -1,5 +1,7 @@
-﻿using PillPal.Application.Features.MedicineInBrands;
+﻿using PillPal.Application.Common.Interfaces.File;
+using PillPal.Application.Features.MedicineInBrands;
 using PillPal.Application.Features.Medicines;
+using System.ComponentModel.DataAnnotations;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -99,7 +101,7 @@ public class MedicinesController(IMedicineService medicineService)
     ///     POST /api/medicines/{medicineId}/brands
     ///     {
     ///         "brandId": "6b4aadb0-8189-467a-8aba-6572d3d4b972",
-    ///         "price": 100.000,
+    ///         "price": 8.000₫/viên,
     ///         "medicineUrl": "https://monke.com/paracetamol"
     ///     }
     ///
@@ -179,7 +181,7 @@ public class MedicinesController(IMedicineService medicineService)
     ///     PUT /api/medicines/{medicineId}/brands
     ///     {
     ///         "brandId": "6b4aadb0-8189-467a-8aba-6572d3d4b972",
-    ///         "price": 100.000,
+    ///         "price": 8.000₫/viên,
     ///         "medicineUrl": "https://monke.com/paracetamol"
     ///     }
     ///
@@ -235,5 +237,33 @@ public class MedicinesController(IMedicineService medicineService)
         await medicineService.DeleteMedicineInBrandAsync(medicineId, brandId);
 
         return NoContent();
+    }
+
+    /// <summary>
+    /// Import medicines from excel file
+    /// </summary>
+    /// <remarks>Requires administrative policy (e.g. Admin, Manager)</remarks>
+    /// <param name="file">The excel file to import</param>
+    /// <response code="200">Returns the file execution result</response>
+    /// <response code="400">If the file format is invalid</response>
+    [Authorize(Policy.Administrative)]
+    [Consumes("multipart/form-data")]
+    [HttpPost("import", Name = "ImportMedicines")]
+    [ProducesResponseType(typeof(FileExecutionResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> ImportMedicinesAsync([Required] IFormFile file)
+    {
+        var extension = Path.GetExtension(file.FileName);
+
+        if (extension != ".xlsx")
+        {
+            return BadRequest("Invalid file format");
+        }
+
+        await using var stream = file.OpenReadStream();
+
+        var importedCount = await medicineService.ImportMedicinesAsync(stream);
+
+        return Ok(importedCount);
     }
 }

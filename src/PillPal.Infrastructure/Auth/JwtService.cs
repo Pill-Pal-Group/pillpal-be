@@ -47,16 +47,36 @@ public class JwtService : IJwtService
 
     public string GenerateRefreshToken(string token)
     {
-        var hash = SHA256.HashData(Encoding.ASCII.GetBytes(token));
+        var refreshExpires = DateTimeOffset.UtcNow.AddMinutes(_settings.RefreshExpires)
+            .ToUnixTimeSeconds().ToString();
 
-        return Convert.ToBase64String(hash);
+        var hash = SHA256.HashData(Encoding.ASCII.GetBytes(token + refreshExpires));
+
+        var tokenPart = Convert.ToBase64String(hash);
+
+        return $"{tokenPart}.{refreshExpires}";
     }
 
-    public bool ValidateRefreshToken(string token, string refreshToken)
+    public (bool, string) ValidateRefreshToken(string token, string refreshToken)
     {
-        var hash = SHA256.HashData(Encoding.ASCII.GetBytes(token));
+        var parts = refreshToken.Split('.');
 
-        return refreshToken == Convert.ToBase64String(hash);
+        if (parts.Length != 2)
+        {
+            return (false, "Invalid refresh token, refresh token must contain two parts");
+        }
+
+        if (long.TryParse(parts[1], out long expires) &&
+            DateTimeOffset.FromUnixTimeSeconds(expires) < DateTimeOffset.UtcNow)
+        {
+            return (false, "Invalid refresh token, refresh token has expired");
+        }
+
+        var hash = SHA256.HashData(Encoding.ASCII.GetBytes(token + parts[1]));
+
+        var tokenPart = Convert.ToBase64String(hash);
+
+        return (tokenPart == parts[0], "Invalid refresh token, tokens does not match");
     }
 
     public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
@@ -65,7 +85,7 @@ public class JwtService : IJwtService
         {
             ValidateIssuer = true,
             ValidateAudience = true,
-            ValidateLifetime = true,
+            ValidateLifetime = false,
             ValidateIssuerSigningKey = true,
             ValidIssuer = _settings.Issuer,
             ValidAudience = _settings.Audience,

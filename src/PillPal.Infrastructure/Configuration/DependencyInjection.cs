@@ -1,6 +1,12 @@
-﻿using PillPal.Application.Common.Interfaces.Auth;
+﻿using Hangfire;
+using HangfireBasicAuthenticationFilter;
+using Microsoft.AspNetCore.Builder;
+using PillPal.Application.Common.Interfaces.Auth;
 using PillPal.Application.Common.Interfaces.Data;
+using PillPal.Application.Common.Interfaces.File;
+using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Infrastructure.Auth;
+using PillPal.Infrastructure.File;
 using PillPal.Infrastructure.Identity;
 using PillPal.Infrastructure.Persistence;
 using PillPal.Infrastructure.Persistence.Interceptors;
@@ -23,41 +29,68 @@ public static class DependencyInjection
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>()!);
 
-        services.AddIdentityCore<ApplicationUser>(op =>
+        services.AddIdentityCore<ApplicationUser>(options =>
         {
-            op.Password.RequireDigit = true;
-            op.Password.RequireLowercase = true;
-            op.Password.RequireNonAlphanumeric = true;
-            op.Password.RequireUppercase = true;
-            op.Password.RequiredLength = 6;
+            options.Password.RequireDigit = true;
+            options.Password.RequireLowercase = true;
+            options.Password.RequireNonAlphanumeric = true;
+            options.Password.RequireUppercase = true;
+            options.Password.RequiredLength = 6;
 
-            op.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
-            op.Lockout.MaxFailedAccessAttempts = 5;
-            op.Lockout.AllowedForNewUsers = true;
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+            options.Lockout.MaxFailedAccessAttempts = 5;
+            options.Lockout.AllowedForNewUsers = true;
         })
         .AddRoles<IdentityRole<Guid>>()
         .AddEntityFrameworkStores<ApplicationDbContext>();
 
         services.AddTransient<IIdentityService, IdentityService>();
 
-        services.Configure<JwtSettings>(options =>
-        {
-            options.SecretKey = configuration["Jwt:SecretKey"];
-            options.Issuer = configuration["Jwt:Issuer"];
-            options.Audience = configuration["Jwt:Audience"];
-            options.Expires = double.Parse(configuration["Jwt:Expires"]!);
-        });
+        services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
 
         services.AddTransient<IJwtService, JwtService>();
 
-        services.Configure<FirebaseSettings>(options =>
-        {
-            options.ProjectId = configuration["Firebase:ProjectId"];
-            options.ServiceKey = configuration["Firebase:ServiceKey"];
-        });
+        services.Configure<FirebaseSettings>(configuration.GetSection("FirebaseSettings"));
 
         services.AddSingleton<IFirebaseService, FirebaseService>();
 
+        services.AddHangfire(config =>
+        {
+            config.UseSqlServerStorage(configuration.GetConnectionString("HANGFIRE_DB"));
+        });
+
+        services.AddHangfireServer();
+
+        services.AddScoped<IFileReader, FileReader>();
+
         return services;
+    }
+
+    public static void UseInfrastructureServices(this IApplicationBuilder app, IConfiguration configuration)
+    {
+        app.UseHangfireDashboard("/hangfire", new DashboardOptions
+        {
+            DarkModeEnabled = false,
+            DashboardTitle = "PillPal Hangfire Dashboard",
+            DisplayStorageConnectionString = false,
+            Authorization = new[]
+            {
+                new HangfireCustomBasicAuthenticationFilter
+                {
+                    User = configuration["Hangfire:User"],
+                    Pass = configuration["Hangfire:Pass"]
+                }
+            }
+        });
+
+        RecurringJob.AddOrUpdate<ICustomerPackageService>(
+            "CheckForExpiredPackages",
+            service => service.CheckForExpiredPackagesAsync(),
+            Cron.Daily,
+            new RecurringJobOptions
+            {
+                TimeZone = TimeZoneInfo.Local
+            }
+        );
     }
 }

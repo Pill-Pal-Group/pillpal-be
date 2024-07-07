@@ -9,6 +9,7 @@ public class JwtSettings
     public string? Issuer { get; set; }
     public string? Audience { get; set; }
     public double Expires { get; set; }
+    public double RefreshExpires { get; set; }
 }
 
 public interface IJwtService
@@ -37,7 +38,12 @@ public interface IJwtService
     /// </summary>
     /// <param name="token">The token to validate</param>
     /// <param name="refreshToken">The refresh token to validate</param>
-    public bool ValidateRefreshToken(string token, string refreshToken);
+    /// <returns>
+    /// A tuple containing:
+    /// <para>Item1 (bool): Whether the token is valid</para>
+    /// <para>Item2 (string): The message if the token is invalid</para>
+    /// </returns>
+    public (bool isValid, string message) ValidateRefreshToken(string token, string refreshToken);
 
     /// <summary>
     /// Get the principal from the expired token

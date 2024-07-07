@@ -58,6 +58,6 @@ public class CustomerPackagesController(ICustomerPackageService customerPackageS
     {
         var customerPackage = await customerPackageService.CreateCustomerPackageAsync(createCustomerPackageDto);
 
-        return CreatedAtRoute("GetCustomerPackage", new { packageId = customerPackage.PackageId }, customerPackage);
+        return CreatedAtRoute("GetCustomerPackage", new { packageId = customerPackage.PackageCategoryId }, customerPackage);
     }
 }

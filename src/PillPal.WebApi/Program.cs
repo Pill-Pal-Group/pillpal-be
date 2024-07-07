@@ -28,6 +28,8 @@ public class Program
             app.UseSwaggerUI();
         }
 
+        app.UseInfrastructureServices(builder.Configuration);
+
         app.UseCors();
 
         app.UseHttpsRedirection();

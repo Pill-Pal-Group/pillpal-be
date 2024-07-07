@@ -3,7 +3,7 @@
 public record CreateCustomerPackageDto
 {
     /// <example>00000000-0000-0000-0000-000000000000</example>
-    public Guid PackageId { get; init; }
+    public Guid PackageCategoryId { get; init; }
 
     /// <example>00000000-0000-0000-0000-000000000000</example>
     public Guid PaymentId { get; init; }
@@ -13,7 +13,7 @@ public class CreateCustomerPackageValidator : AbstractValidator<CreateCustomerPa
 {
     public CreateCustomerPackageValidator()
     {
-        RuleFor(v => v.PackageId)
+        RuleFor(v => v.PackageCategoryId)
             .NotEmpty().WithMessage("PackageId is required.");
         
         RuleFor(v => v.PaymentId)

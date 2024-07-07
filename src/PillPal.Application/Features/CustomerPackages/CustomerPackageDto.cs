@@ -14,11 +14,14 @@ public record CustomerPackageDto
     /// <example>100000</example>
     public decimal Price { get; init; }
 
+    /// <example>false</example>
+    public bool IsExpired { get; init; }
+
     /// <example>00000000-0000-0000-0000-000000000000</example>
     public Guid CustomerId { get; init; }
 
     /// <example>00000000-0000-0000-0000-000000000000</example>
-    public Guid PackageId { get; init; }
+    public Guid PackageCategoryId { get; init; }
 
     /// <example>00000000-0000-0000-0000-000000000000</example>
     public Guid PaymentId { get; init; }

@@ -8,7 +8,7 @@ public class MedicineInBrand : ISoftDelete
     public Guid MedicineId { get; set; }
     public virtual Medicine? Medicine { get; set; }
 
-    public decimal Price { get; set; }
+    public string? Price { get; set; }
     public string? MedicineUrl { get; set; }
 
     public bool IsDeleted { get; set; }
