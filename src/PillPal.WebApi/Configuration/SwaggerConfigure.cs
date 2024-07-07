@@ -14,8 +14,6 @@ public static class SwaggerConfigure
 
         services.AddSwaggerGen(config =>
         {
-            config.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
-
             config.SwaggerDoc("v1", new OpenApiInfo
             {
                 Title = "PillPal.WebApi",
@@ -65,6 +63,8 @@ public static class SwaggerConfigure
                     Array.Empty<string>()
                 }
             });
+            
+            config.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
 
             if (environment == "Development")
             {
