@@ -284,19 +284,27 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
 
         foreach (DataRow row in dataTable.Rows)
         {
+            // Skip if any cell in the row is empty or null
+            if (row.ItemArray.Any(cell => cell == null 
+                || string.IsNullOrWhiteSpace(cell.ToString())))
+            {
+                continue; 
+            }
+
             var medicine = new CreateMedicineFromExcelDto
             {
-                MedicineUrl = row["Link"].ToString(),
-                Brand = row["Brand"].ToString(),
                 MedicineName = row["Product Name"].ToString(),
-                Price = row["Price"].ToString(),
+                RequirePrescript = row["Medication requires prescription"].ToString()!.Equals("Có"),
                 Image = row["Image"].ToString(),
+                Specifications = row["Specifications"].ToString(),
+                Categories = row["Category"].ToString(),
+                DosageForms = row["Dosage forms"].ToString(),
                 ActiveIngredients = row["Ingredient"].ToString(),
                 PharmaceuticalCompanies = row["Manufacturer"].ToString(),
+                Brand = row["Brand"].ToString(),
+                Price = row["Price"].ToString(),
+                MedicineUrl = row["Link"].ToString(),
                 Nation = row["Manufacturing country"].ToString(),
-                DosageForms = row["Dosage forms"].ToString(),
-                Specifications = row["Specifications"].ToString(),
-                Categories = row["Category"].ToString()
             };
 
             medicineInsert.Add(medicine);
