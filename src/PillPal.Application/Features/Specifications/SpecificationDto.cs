@@ -7,7 +7,4 @@ public record SpecificationDto
 
     /// <example>Box</example>
     public string? TypeName { get; init; }
-
-    /// <example>2 per tablet</example>
-    public string? Detail { get; init; }
 }

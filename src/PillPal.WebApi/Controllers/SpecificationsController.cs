@@ -49,8 +49,7 @@ public class SpecificationsController(ISpecificationService specificationService
     /// 
     ///     POST /api/specifications
     ///     {
-    ///         "typeName": "Specification Type",
-    ///         "detail": "Specification Detail"
+    ///         "typeName": "Specification Type"
     ///     }
     ///     
     /// </remarks>
@@ -79,12 +78,10 @@ public class SpecificationsController(ISpecificationService specificationService
     ///     POST /api/specifications/bulk
     ///     [
     ///         {
-    ///             "typeName": "Specification Type 1",
-    ///             "detail": "Specification Detail 1"
+    ///             "typeName": "Specification Type 1"
     ///         },
     ///         {
-    ///             "typeName": "Specification Type 2",
-    ///             "detail": "Specification Detail 2"
+    ///             "typeName": "Specification Type 2"
     ///         }
     ///     ]
     ///     
@@ -114,8 +111,7 @@ public class SpecificationsController(ISpecificationService specificationService
     /// 
     ///     PUT /api/specifications/{specificationId}
     ///     {
-    ///         "typeName": "Specification Type",
-    ///         "detail": "Specification Detail"
+    ///         "typeName": "Specification Type"
     ///     }
     ///     
     /// </remarks>

@@ -12,13 +12,12 @@ public class NationsController(INationService nationService)
     /// <summary>
     /// Get all nations
     /// </summary>
-    /// <param name="queryParameter"></param>
     /// <response code="200">Returns a list of nations</response>
     [HttpGet(Name = "GetNations")]
     [ProducesResponseType(typeof(IEnumerable<NationDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetNationsAsync([FromQuery] NationQueryParameter queryParameter)
+    public async Task<IActionResult> GetNationsAsync()
     {
-        var nations = await nationService.GetNationsAsync(queryParameter);
+        var nations = await nationService.GetNationsAsync();
 
         return Ok(nations);
     }
@@ -50,7 +49,6 @@ public class NationsController(INationService nationService)
     /// 
     ///     POST /api/nations
     ///     {
-    ///         "nationCode": "Nation Code",
     ///         "nationName": "Nation Name"
     ///     }
     ///     
@@ -80,11 +78,9 @@ public class NationsController(INationService nationService)
     ///     POST /api/nations/bulk
     ///     [
     ///         {
-    ///             "nationCode": "Nation Code 1",
     ///             "nationName": "Nation Name 1"
     ///         },
     ///         {
-    ///             "nationCode": "Nation Code 2",
     ///             "nationName": "Nation Name 2"
     ///         }
     ///     ]
@@ -115,7 +111,6 @@ public class NationsController(INationService nationService)
     ///     
     ///     PUT /api/nations/{nationId}
     ///     {
-    ///         "nationCode": "Nation Code",
     ///         "nationName": "Nation Name"
     ///      }
     ///      
