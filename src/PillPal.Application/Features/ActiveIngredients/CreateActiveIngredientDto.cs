@@ -4,9 +4,6 @@ public record CreateActiveIngredientDto
 {
     /// <example>Paracetamol</example>
     public string? IngredientName { get; init; }
-
-    /// <example>Paracetamol is a paracetamol-based analgesic</example>
-    public string? IngredientInformation { get; init; }
 }
 
 public class CreateActiveIngredientValidator : AbstractValidator<CreateActiveIngredientDto>
@@ -16,8 +13,5 @@ public class CreateActiveIngredientValidator : AbstractValidator<CreateActiveIng
         RuleFor(x => x.IngredientName)
             .NotEmpty()
             .MaximumLength(50);
-
-        RuleFor(x => x.IngredientInformation)
-            .MaximumLength(2048);
     }
 }

@@ -50,8 +50,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// 
     ///     POST /api/active-ingredients
     ///     {
-    ///         "ingredientName": "Ingredient Name",
-    ///         "ingredientInformation": "Ingredient Information"
+    ///         "ingredientName": "Ingredient Name"
     ///     }
     ///     
     /// </remarks>
@@ -79,12 +78,10 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     ///     POST /api/active-ingredients/bulk
     ///     [
     ///         {
-    ///             "ingredientName": "Ingredient Name 1",
-    ///             "ingredientInformation": "Ingredient Information 1"
+    ///             "ingredientName": "Ingredient Name 1"
     ///         },
     ///         {
-    ///             "ingredientName": "Ingredient Name 2",
-    ///             "ingredientInformation": "Ingredient Information 2"
+    ///             "ingredientName": "Ingredient Name 2"
     ///         }
     ///     ]
     ///     
@@ -114,8 +111,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     ///     
     ///     PUT /api/active-ingredients/{activeIngredientId}
     ///     {
-    ///         "ingredientName": "Ingredient Name",
-    ///         "ingredientInformation": "Ingredient Information"
+    ///         "ingredientName": "Ingredient Name"
     ///     }
     ///     
     /// </remarks>
