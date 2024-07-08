@@ -78,7 +78,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
                 ?? newPharmaceuticalCompanies!.GetOrAdd(dto.PharmaceuticalCompanies, new PharmaceuticalCompany { Id = Guid.NewGuid(), CompanyName = dto.PharmaceuticalCompanies, Nation = nation });
 
             var brand = existingBrands.FirstOrDefault(b => b.BrandName == dto.Brand)
-                ?? newBrands!.GetOrAdd(dto.Brand, new Brand { Id = Guid.NewGuid(), BrandName = dto.Brand });
+                ?? newBrands!.GetOrAdd(dto.Brand, new Brand { Id = Guid.NewGuid(), BrandName = dto.Brand, BrandLogo = dto.BrandLogo, BrandUrl = dto.BrandUrl });
 
             var dosageForm = existingDosageForms.FirstOrDefault(df => df.FormName == dto.DosageForms)
                 ?? newDosageForms!.GetOrAdd(dto.DosageForms, new DosageForm { Id = Guid.NewGuid(), FormName = dto.DosageForms });
@@ -302,6 +302,8 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
                 ActiveIngredients = row["Ingredient"].ToString(),
                 PharmaceuticalCompanies = row["Manufacturer"].ToString(),
                 Brand = row["Brand"].ToString(),
+                BrandLogo = row["Brand Logo"].ToString(),
+                BrandUrl = row["Brand Url"].ToString(),
                 Price = row["Price"].ToString(),
                 MedicineUrl = row["Link"].ToString(),
                 Nation = row["Manufacturing country"].ToString(),

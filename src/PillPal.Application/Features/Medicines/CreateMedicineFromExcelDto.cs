@@ -17,4 +17,6 @@ public record CreateMedicineFromExcelDto
     public string? Price { get; set; }
     public string? MedicineUrl { get; set; }
     public string? Nation { get; set; }
+    public string? BrandUrl { get; set; }
+    public string? BrandLogo { get; set; }
 }
