@@ -76,7 +76,7 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
                     {
                         DateTake = dateTake,
                         TimeTake = timeTake.ToShortTimeString(),
-                        Dose = dose.Value.ToString(),
+                        Dose = dose.Value,
                         PrescriptDetailId = prescriptDetail.Id
                     };
 
@@ -141,5 +141,33 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
         Context.MedicationTakes.Remove(medicationTake);
 
         await Context.SaveChangesAsync();
+    }
+
+    public async Task<MedicationTakesDto> CreateMedicationTakeAsync(CreateMedicationTakesDto createMedicationTakesDto)
+    {
+        await ValidateAsync(createMedicationTakesDto);
+
+        var prescriptDetail = await Context.PrescriptDetails
+            .AsNoTracking()
+            .FirstOrDefaultAsync(pd => pd.Id == createMedicationTakesDto.PrescriptDetailId)
+            ?? throw new NotFoundException(nameof(PrescriptDetail), createMedicationTakesDto.PrescriptDetailId);
+
+        var medicationTake = Mapper.Map<MedicationTake>(createMedicationTakesDto);
+
+        await Context.MedicationTakes.AddAsync(medicationTake);
+
+        await Context.SaveChangesAsync();
+
+        return Mapper.Map<MedicationTakesDto>(medicationTake);
+    }
+
+    public async Task<MedicationTakesDto> GetIndividualMedicationTakesAsync(Guid medicationTakeId)
+    {
+        var medicationTake = await Context.MedicationTakes
+            .AsNoTracking()
+            .FirstOrDefaultAsync(mt => mt.Id == medicationTakeId)
+            ?? throw new NotFoundException(nameof(MedicationTake), medicationTakeId);
+
+        return Mapper.Map<MedicationTakesDto>(medicationTake);
     }
 }
