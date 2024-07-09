@@ -60,6 +60,7 @@ public class PrescriptsController(IPrescriptService prescriptService)
     ///         "prescriptDetails": [
     ///             {
     ///                 "medicineName": "Paracetamol",
+    ///                 "medicineImage": "https://monke.com/med-image.jpg",
     ///                 "dateStart": "2024-06-19",
     ///                 "dateEnd": "2024-06-29",
     ///                 "totalDose": 80,

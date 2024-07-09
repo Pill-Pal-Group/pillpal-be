@@ -7,6 +7,9 @@ public record CreatePrescriptDetailDto
     /// <example>Paracetamol</example>
     public string? MedicineName { get; init; }
 
+    /// <example>https://monke.com/med-image.jpg</example>
+    public string? MedicineImage { get; init; }
+
     /// <example>2024-06-19</example>
     public DateTimeOffset DateStart { get; init; }
 
@@ -40,6 +43,9 @@ public class CreatePrescriptDetailValidator : AbstractValidator<CreatePrescriptD
             .NotEmpty().WithMessage("{PropertyName} is required.")
             .MaximumLength(100).WithMessage("{PropertyName} must not exceed 100 characters.");
 
+        RuleFor(p => p.MedicineImage)
+            .MaximumLength(500).WithMessage("{PropertyName} must not exceed 500 characters.");
+        
         RuleFor(p => p.DateStart)
             .NotEmpty().WithMessage("{PropertyName} is required.")
             .LessThan(p => p.DateEnd).WithMessage("{PropertyName} must be before {ComparisonValue}.");

@@ -3,6 +3,7 @@
 public class PrescriptDetail : BaseEntity, ISoftDelete
 {
     public string? MedicineName { get; set; }
+    public string? MedicineImage { get; set; }
     public DateTimeOffset DateStart { get; set; }
     public DateTimeOffset DateEnd { get; set; }
     public int TotalDose { get; set; }
