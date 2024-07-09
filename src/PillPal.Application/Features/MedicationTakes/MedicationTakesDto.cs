@@ -12,7 +12,7 @@ public record MedicationTakesDto
     public string? TimeTake { get; init; }
 
     /// <example>2</example>
-    public string? Dose { get; init; }
+    public double Dose { get; init; }
 }
 
 public record MedicationTakesListDto

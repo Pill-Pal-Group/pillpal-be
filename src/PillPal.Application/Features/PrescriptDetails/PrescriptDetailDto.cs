@@ -5,6 +5,9 @@ public record PrescriptDetailDto
     /// <example>Paracetamol</example>
     public string? MedicineName { get; init; }
 
+    /// <example>https://monke.com/med-image.jpg</example>
+    public string? MedicineImage { get; init; }
+
     /// <example>2024-06-19</example>
     public DateTimeOffset DateStart { get; init; }
 

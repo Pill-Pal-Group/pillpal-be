@@ -16,6 +16,27 @@ public interface IMedicationTakeService
     Task<IEnumerable<MedicationTakesDto>> CreateMedicationTakeAsync(Guid prescriptId);
 
     /// <summary>
+    /// Get an individual Medication Take.
+    /// </summary>
+    /// <param name="medicationTakeId"></param>
+    /// <returns>
+    /// The task result contains a <see cref="MedicationTakesDto"/> object.
+    /// </returns>
+    /// <exception cref="NotFoundException">Thrown when the Medication Take is not found.</exception>
+    Task<MedicationTakesDto> GetIndividualMedicationTakesAsync(Guid medicationTakeId);
+
+    /// <summary>
+    /// Manually create a Medication Take.
+    /// </summary>
+    /// <param name="createMedicationTakesDto">The Medication Take to create.</param>
+    /// <returns>
+    /// The task result contains a <see cref="MedicationTakesDto"/> object.
+    /// </returns>
+    /// <exception cref="NotFoundException">Thrown when the prescript detail is not found.</exception>
+    /// <exception cref="ValidationException">Thrown when the Medication Take is invalid.</exception>
+    Task<MedicationTakesDto> CreateMedicationTakeAsync(CreateMedicationTakesDto createMedicationTakesDto);
+
+    /// <summary>
     /// Get Medication Takes from given Prescript
     /// </summary>
     /// <param name="prescriptId"></param>
