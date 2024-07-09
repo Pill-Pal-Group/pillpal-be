@@ -10,7 +10,7 @@ public class MedicationIntakesController(IMedicationTakeService medicationTakeSe
     : ControllerBase
 {
     /// <summary>
-    /// Get a list of Medication Takes from a given Prescript.
+    /// Get a list of Medication Takes from a given Prescript
     /// </summary>
     /// <param name="prescriptId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <param name="dateTake" example="2024-06-19"></param>
@@ -31,7 +31,7 @@ public class MedicationIntakesController(IMedicationTakeService medicationTakeSe
     }
 
     /// <summary>
-    /// Get an individual Medication Take.
+    /// Get an individual Medication Take
     /// </summary>
     /// <param name="medicationTakeId" example="00000000-0000-0000-0000-000000000000"></param>
     /// <remarks>Requires customer policy</remarks>
@@ -68,22 +68,23 @@ public class MedicationIntakesController(IMedicationTakeService medicationTakeSe
     }
 
     /// <summary>
-    /// Manually create a Medication Take.
+    /// Manually create a Medication Take
     /// </summary>
-    /// <remarks>Requires customer policy</remarks>
-    /// <param name="createMedicationTakesDto">The Medication Take to create.</param>
+    /// <param name="createMedicationTakesDto">
+    /// The Medication Take, note that this only create an individual med take
+    /// </param>
     /// <remarks>
     /// Requires customer policy
     /// 
     /// Sample request:
     /// 
-    ///    POST /api/medication-intakes
-    ///    {
+    ///     POST /api/medication-intakes
+    ///     {
     ///         "dateTake": "2024-06-19",
     ///         "timeTake": "08:00",
     ///         "dose": 2,
     ///         "prescriptDetailId": "00000000-0000-0000-0000-000000000000"
-    ///    }
+    ///     }
     ///    
     /// </remarks>
     /// <response code="201">Returns the created Medication Take</response>
@@ -94,8 +95,7 @@ public class MedicationIntakesController(IMedicationTakeService medicationTakeSe
     [ProducesResponseType(typeof(MedicationTakesDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
-    public async Task<IActionResult> CreateMedicationTakeAsync(
-        [FromBody] CreateMedicationTakesDto createMedicationTakesDto)
+    public async Task<IActionResult> CreateMedicationTakeAsync(CreateMedicationTakesDto createMedicationTakesDto)
     {
         var medicationTake = await medicationTakeService.CreateMedicationTakeAsync(createMedicationTakesDto);
 
@@ -103,7 +103,7 @@ public class MedicationIntakesController(IMedicationTakeService medicationTakeSe
     }
 
     /// <summary>
-    /// Removes a Medication Take by performing a soft delete.
+    /// Removes a Medication Take by performing a soft delete
     /// </summary>
     /// <remarks>Requires customer policy</remarks>
     /// <param name="medicationTakeId" example="00000000-0000-0000-0000-000000000000"></param>
