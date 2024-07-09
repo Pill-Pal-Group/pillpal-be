@@ -1,4 +1,5 @@
-﻿using PillPal.Application.Features.Prescripts;
+﻿using PillPal.Application.Features.PrescriptDetails;
+using PillPal.Application.Features.Prescripts;
 
 namespace PillPal.Application.Common.Interfaces.Services;
 
@@ -35,6 +36,16 @@ public interface IPrescriptService
     /// <exception cref="ValidationException">Thrown when validation fails for the creation data.</exception>
     /// <exception cref="NotFoundException">Thrown if the customer (owner of the prescript) is not found.</exception>
     Task<PrescriptDto> CreatePrescriptAsync(CreatePrescriptDto createPrescriptDto);
+
+    /// <summary>
+    /// Updates medicine image of a prescript detail.
+    /// </summary>
+    /// <param name="prescriptDetailId">The unique identifier for the prescript detail.</param>
+    /// <param name="updatePrescriptDetailImageDto">The DTO containing the update data for the prescript detail image.</param>
+    /// <returns>The task result.</returns>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="ValidationException">Thrown when validation fails for the update data.</exception>
+    Task UpdatePrescriptDetailImageAsync(Guid prescriptDetailId, UpdatePrescriptDetailImageDto updatePrescriptDetailImageDto);
 
     /// <summary>
     /// Deletes a prescript by its unique identifier. Soft delete.

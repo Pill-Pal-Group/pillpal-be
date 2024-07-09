@@ -1,6 +1,7 @@
 ﻿using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Application.Common.Repositories;
+using PillPal.Application.Features.PrescriptDetails;
 
 namespace PillPal.Application.Features.Prescripts;
 
@@ -61,5 +62,18 @@ public class PrescriptRepository(IApplicationDbContext context, IMapper mapper, 
             .ToListAsync();
 
         return Mapper.Map<IEnumerable<PrescriptDto>>(prescipts);
+    }
+
+    public async Task UpdatePrescriptDetailImageAsync(Guid prescriptDetailId, UpdatePrescriptDetailImageDto updatePrescriptDetailImageDto)
+    {
+        await ValidateAsync(updatePrescriptDetailImageDto);
+
+        var prescriptDetail = await Context.PrescriptDetails
+            .FirstOrDefaultAsync(pd => pd.Id == prescriptDetailId)
+            ?? throw new NotFoundException(nameof(PrescriptDetail), prescriptDetailId);
+
+        prescriptDetail.MedicineImage = updatePrescriptDetailImageDto.MedicineImage;
+
+        await Context.SaveChangesAsync();
     }
 }
