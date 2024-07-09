@@ -1,4 +1,5 @@
-﻿using PillPal.Application.Features.Prescripts;
+﻿using PillPal.Application.Features.PrescriptDetails;
+using PillPal.Application.Features.Prescripts;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -14,7 +15,9 @@ public class PrescriptsController(IPrescriptService prescriptService)
     /// </summary>
     /// <param name="queryParameter"></param>
     /// <param name="includeParameter"></param>
+    /// <remarks>Requires authentication</remarks>
     /// <response code="200">Returns a list of prescripts</response>
+    [Authorize]
     [HttpGet(Name = "GetPrescripts")]
     [ProducesResponseType(typeof(IEnumerable<PrescriptDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPrescriptsAsync(
@@ -30,8 +33,10 @@ public class PrescriptsController(IPrescriptService prescriptService)
     /// Retrieves a prescript by its unique identifier
     /// </summary>
     /// <param name="prescriptId" example="00000000-0000-0000-0000-000000000000"></param>
+    /// <remarks>Requires authentication</remarks>
     /// <response code="200">Returns a prescript</response>
     /// <response code="404">If the prescript is not found</response>
+    [Authorize]
     [HttpGet("{prescriptId:guid}", Name = "GetPrescriptById")]
     [ProducesResponseType(typeof(PrescriptDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
@@ -80,11 +85,42 @@ public class PrescriptsController(IPrescriptService prescriptService)
     [HttpPost(Name = "CreatePrescript")]
     [ProducesResponseType(typeof(PrescriptDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
-    public async Task<IActionResult> CreatePrescriptAsync([FromBody] CreatePrescriptDto createPrescriptDto)
+    public async Task<IActionResult> CreatePrescriptAsync(CreatePrescriptDto createPrescriptDto)
     {
         var prescript = await prescriptService.CreatePrescriptAsync(createPrescriptDto);
 
         return CreatedAtRoute("GetPrescriptById", new { prescriptId = prescript.Id }, prescript);
+    }
+
+    /// <summary>
+    /// Updates medicine image of a prescript detail
+    /// </summary>
+    /// <param name="prescriptDetailId" example="00000000-0000-0000-0000-000000000000"></param>
+    /// <param name="updatePrescriptDetailImageDto"></param>
+    /// <remarks>
+    /// Requires customer policy
+    ///
+    /// Sample request:
+    /// 
+    ///     PUT /api/prescripts/prescript-details/00000000-0000-0000-0000-000000000000/image
+    ///     {
+    ///         "medicineImage": "https://monke.com/med-image.jpg"
+    ///     }
+    ///     
+    /// </remarks>
+    /// <response code="204">If the prescript detail image is updated successfully</response>
+    /// <response code="404">If the prescript detail is not found</response>
+    /// <response code="422">If the input data is invalid</response>
+    [Authorize(Policy.Customer)]
+    [HttpPut("prescript-details/{prescriptDetailId:guid}/image", Name = "UpdatePrescriptDetailImage")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+    public async Task<IActionResult> UpdatePrescriptDetailImageAsync(Guid prescriptDetailId, UpdatePrescriptDetailImageDto updatePrescriptDetailImageDto)
+    {
+        await prescriptService.UpdatePrescriptDetailImageAsync(prescriptDetailId, updatePrescriptDetailImageDto);
+
+        return NoContent();
     }
 
     /// <summary>
