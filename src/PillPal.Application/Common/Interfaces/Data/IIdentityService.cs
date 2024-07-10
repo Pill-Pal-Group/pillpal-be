@@ -1,4 +1,5 @@
-﻿using PillPal.Core.Identity;
+﻿using PillPal.Application.Features.Accounts;
+using PillPal.Core.Identity;
 
 namespace PillPal.Application.Common.Interfaces.Data;
 
@@ -117,4 +118,23 @@ public interface IIdentityService
     /// <param name="userId">The ID of the user</param>
     /// <exception cref="BadRequestException">Thrown if the account is already unlocked or not locked</exception>
     Task UnlockAccountAsync(Guid userId);
+
+    /// <summary>
+    /// Assign a manager to the customer with email and password
+    /// </summary>
+    /// <param name="request">The request object containing the email and password of the manager</param>
+    /// <exception cref="ConflictException">Thrown if the email is already exists</exception>
+    Task AssignManagerAsync(AssignManagerRequest request);
+
+    /// <summary>
+    /// Update the information of the manager
+    /// </summary>
+    /// <remarks>
+    /// This will not check for user id existence,
+    /// as given that the user is needed to be logged in to update the information.
+    /// Therefore, the user ID is always valid
+    /// </remarks>
+    /// <param name="userId">The ID of the manager</param>
+    /// <param name="request">The request object containing the information of the manager</param>
+    Task UpdateManagerInformationAsync(string userId, UpdateManagerInformationDto request);
 }

@@ -18,14 +18,14 @@ public class AuthRepository(
     {
         await ValidateAsync(request);
 
-        await identityService.ChangePasswordAsync(user.Id!.ToString(), request.CurrentPassword!, request.NewPassword!);
+        await identityService.ChangePasswordAsync(user.Id!, request.CurrentPassword!, request.NewPassword!);
     }
 
     public async Task CreatePasswordAsync(CreatePasswordRequest request)
     {
         await ValidateAsync(request);
 
-        await identityService.CreatePasswordAsync(user.Id!.ToString(), request.Password!);
+        await identityService.CreatePasswordAsync(user.Id!, request.Password!);
     }
 
     public async Task<AccessTokenResponse> LoginAsync(LoginRequest request)

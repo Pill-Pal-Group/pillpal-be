@@ -8,9 +8,17 @@ public class AccountRepository(
     IApplicationDbContext context,
     IServiceProvider serviceProvider,
     IIdentityService identityService,
-    IMapper mapper)
+    IMapper mapper,
+    IUser user)
     : BaseRepository(context, mapper, serviceProvider), IAccountService
 {
+    public async Task AssignManagerAsync(AssignManagerRequest request)
+    {
+        await ValidateAsync(request);
+
+        await identityService.AssignManagerAsync(request);
+    }
+
     public async Task<AccountDto> GetAccountAsync(Guid id)
     {
         var account = await identityService.GetAccountAsync(id);
@@ -60,5 +68,12 @@ public class AccountRepository(
         customerAccount.LockoutCount = 0;
 
         await Context.SaveChangesAsync();
+    }
+
+    public async Task UpdateManagerInformationAsync(UpdateManagerInformationDto request)
+    {
+        await ValidateAsync(request);
+
+        await identityService.UpdateManagerInformationAsync(user.Id!, request);
     }
 }

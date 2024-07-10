@@ -1,5 +1,6 @@
 ﻿using PillPal.Application.Common.Exceptions;
 using PillPal.Application.Common.Interfaces.Data;
+using PillPal.Application.Features.Accounts;
 
 namespace PillPal.Infrastructure.Identity;
 
@@ -13,6 +14,25 @@ public class IdentityService : IIdentityService
     {
         _userManager = userManager;
         _roleManager = roleManager;
+    }
+
+    public async Task AssignManagerAsync(AssignManagerRequest request)
+    {
+        var user = new ApplicationUser
+        {
+            UserName = request.Email,
+            Email = request.Email,
+            PhoneNumber = request.PhoneNumber
+        };
+
+        var result = await _userManager.CreateAsync(user, request.Password!);
+
+        if (!result.Succeeded)
+        {
+            throw new ConflictException(result.Errors);
+        }
+
+        await _userManager.AddToRoleAsync(user, Role.Manager);
     }
 
     public async Task ChangePasswordAsync(string userId, string currentPassword, string newPassword)
@@ -68,16 +88,14 @@ public class IdentityService : IIdentityService
             Email = userName
         };
 
-        await _userManager.AddPasswordAsync(user, password);
-
-        await _userManager.AddToRoleAsync(user, Role.Customer);
-
         var result = await _userManager.CreateAsync(user, password);
 
         if (!result.Succeeded)
         {
             throw new ConflictException(result.Errors);
         }
+
+        await _userManager.AddToRoleAsync(user, Role.Customer);
 
         return user.Id.ToString();
     }
@@ -195,5 +213,14 @@ public class IdentityService : IIdentityService
         }
 
         await _userManager.SetLockoutEndDateAsync(user!, null);
+    }
+
+    public async Task UpdateManagerInformationAsync(string userId, UpdateManagerInformationDto request)
+    {
+        var user = await _userManager.FindByIdAsync(userId);
+        
+        user!.PhoneNumber = request.PhoneNumber;
+
+        await _userManager.UpdateAsync(user);
     }
 }

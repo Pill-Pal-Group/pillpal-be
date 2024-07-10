@@ -40,4 +40,19 @@ public interface IAccountService
     /// <exception cref="BadRequestException">Thrown when the account is already unlocked or not locked</exception>
     /// <exception cref="NotFoundException">Thrown when the customer with the given ID is not found</exception>
     Task UnlockAccountAsync(Guid customerId);
+
+    /// <summary>
+    /// Assign a manager to the customer with email and password
+    /// </summary>
+    /// <param name="request">The request object containing the email and password of the manager</param>
+    /// <exception cref="ConflictException">Thrown if the email is already exists</exception>
+    /// <exception cref="ValidationException">Thrown when the request is invalid</exception>
+    Task AssignManagerAsync(AssignManagerRequest request);
+
+    /// <summary>
+    /// Update the information of the manager
+    /// </summary>
+    /// <param name="request">The request object containing the information of the manager</param>
+    /// <exception cref="ValidationException">Thrown when the request is invalid</exception>
+    Task UpdateManagerInformationAsync(UpdateManagerInformationDto request);
 }
