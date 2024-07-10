@@ -1,4 +1,5 @@
-﻿using PillPal.Application.Features.Categories;
+﻿using PillPal.Application.Common.Paginations;
+using PillPal.Application.Features.Categories;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -15,7 +16,7 @@ public class CategoriesController(ICategoryService categoryService)
     /// <param name="queryParameter"></param>
     /// <response code="200">Returns a list of categories</response>
     [HttpGet(Name = "GetCategories")]
-    [ProducesResponseType(typeof(IEnumerable<CategoryDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PaginationResponse<CategoryDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCategoriesAsync([FromQuery] CategoryQueryParameter queryParameter)
     {
         var categories = await categoryService.GetCategoriesAsync(queryParameter);

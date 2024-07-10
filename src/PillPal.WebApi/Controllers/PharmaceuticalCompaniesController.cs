@@ -1,4 +1,5 @@
-﻿using PillPal.Application.Features.PharmaceuticalCompanies;
+﻿using PillPal.Application.Common.Paginations;
+using PillPal.Application.Features.PharmaceuticalCompanies;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -9,16 +10,15 @@ namespace PillPal.WebApi.Controllers;
 public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pharmaceuticalCompanyService)
     : ControllerBase
 {
-
     /// <summary>
     /// Get all pharmaceutical companies
     /// </summary>
     /// <response code="200">Returns a list of pharmaceutical companies</response>
     [HttpGet(Name = "GetPharmaceuticalCompanies")]
-    [ProducesResponseType(typeof(IEnumerable<PharmaceuticalCompanyDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetPharmaceuticalCompaniesAsync()
+    [ProducesResponseType(typeof(PaginationResponse<PharmaceuticalCompanyDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetPharmaceuticalCompaniesAsync([FromQuery] PharmaceuticalCompanyQueryParameter queryParameter)
     {
-        var pharmaceuticalCompanies = await pharmaceuticalCompanyService.GetPharmaceuticalCompaniesAsync();
+        var pharmaceuticalCompanies = await pharmaceuticalCompanyService.GetPharmaceuticalCompaniesAsync(queryParameter);
 
         return Ok(pharmaceuticalCompanies);
     }

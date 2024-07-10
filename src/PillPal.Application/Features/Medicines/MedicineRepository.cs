@@ -2,6 +2,7 @@
 using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Common.Interfaces.File;
 using PillPal.Application.Common.Interfaces.Services;
+using PillPal.Application.Common.Paginations;
 using PillPal.Application.Common.Repositories;
 using PillPal.Application.Features.MedicineInBrands;
 using PillPal.Application.Features.Medicines;
@@ -211,17 +212,17 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         return Mapper.Map<MedicineDto>(medicine);
     }
 
-    public async Task<IEnumerable<MedicineDto>> GetMedicinesAsync(
+    public async Task<PaginationResponse<MedicineDto>> GetMedicinesAsync(
         MedicineQueryParameter queryParameter, MedicineIncludeParameter includeParameter)
     {
         var medicines = await Context.Medicines
+            .AsNoTracking()
             .Where(m => !m.IsDeleted)
             .Filter(queryParameter)
             .Include(includeParameter)
-            .AsNoTracking()
-            .ToListAsync();
+            .ToPaginationResponseAsync<Medicine, MedicineDto>(queryParameter, Mapper);
 
-        return Mapper.Map<IEnumerable<MedicineDto>>(medicines);
+        return medicines;
     }
 
     public async Task<MedicineDto> UpdateMedicineAsync(Guid medicineId, UpdateMedicineDto updateMedicineDto)

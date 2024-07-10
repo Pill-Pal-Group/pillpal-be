@@ -1,4 +1,5 @@
-﻿using PillPal.Application.Features.DosageForms;
+﻿using PillPal.Application.Common.Paginations;
+using PillPal.Application.Features.DosageForms;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -13,12 +14,13 @@ public class DosageFormsController(IDosageFormService dosageFormService)
     /// <summary>
     /// Get all dosage forms
     /// </summary>
+    /// <param name="queryParameter"></param>
     /// <response code="200">Returns a list of dosage forms</response>
     [HttpGet(Name = "GetDosageForms")]
-    [ProducesResponseType(typeof(IEnumerable<DosageFormDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetDosageFormsAsync()
+    [ProducesResponseType(typeof(PaginationResponse<DosageFormDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetDosageFormsAsync([FromQuery] DosageFormQueryParameter queryParameter)
     {
-        var dosageForms = await dosageFormService.GetDosageFormsAsync();
+        var dosageForms = await dosageFormService.GetDosageFormsAsync(queryParameter);
 
         return Ok(dosageForms);
     }
@@ -132,7 +134,7 @@ public class DosageFormsController(IDosageFormService dosageFormService)
     }
 
     /// <summary>
-    /// Delete a dosage form
+    /// Delete a dosage form (soft delete)
     /// </summary>
     /// <remarks>Requires administrative policy (e.g. Admin, Manager)</remarks>
     /// <param name="dosageFormId" example="00000000-0000-0000-0000-000000000000"></param>

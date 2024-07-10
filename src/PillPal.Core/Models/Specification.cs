@@ -1,6 +1,6 @@
 ﻿namespace PillPal.Core.Models;
 
-public class Specification : BaseEntity
+public class Specification : BaseAuditableEntity
 {
     public string? TypeName { get; set; }
 

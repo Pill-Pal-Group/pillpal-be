@@ -1,4 +1,5 @@
-﻿using PillPal.Application.Features.Specifications;
+﻿using PillPal.Application.Common.Paginations;
+using PillPal.Application.Features.Specifications;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -12,12 +13,13 @@ public class SpecificationsController(ISpecificationService specificationService
     /// <summary>
     /// Get all specifications
     /// </summary>
+    /// <param name="queryParameter"></param>
     /// <response code="200">Returns a list of specifications</response>
     [HttpGet(Name = "GetSpecifications")]
-    [ProducesResponseType(typeof(IEnumerable<SpecificationDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetSpecificationsAsync()
+    [ProducesResponseType(typeof(PaginationResponse<SpecificationDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetSpecificationsAsync([FromQuery] SpecificationQueryParameter queryParameter)
     {
-        var specifications = await specificationService.GetSpecificationsAsync();
+        var specifications = await specificationService.GetSpecificationsAsync(queryParameter);
 
         return Ok(specifications);
     }
@@ -131,7 +133,7 @@ public class SpecificationsController(ISpecificationService specificationService
     }
 
     /// <summary>
-    /// Delete a specification
+    /// Delete a specification (soft delete)
     /// </summary>
     /// <remarks>Requires administrative policy (e.g. Admin, Manager)</remarks>
     /// <param name="specificationId" example="00000000-0000-0000-0000-000000000000"></param>

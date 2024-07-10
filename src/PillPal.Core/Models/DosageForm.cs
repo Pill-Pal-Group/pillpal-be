@@ -1,6 +1,6 @@
 ﻿namespace PillPal.Core.Models;
 
-public class DosageForm : BaseEntity
+public class DosageForm : BaseAuditableEntity
 {
     public string? FormName { get; set; }
 

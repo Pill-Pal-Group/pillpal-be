@@ -1,4 +1,5 @@
 ﻿using PillPal.Application.Common.Interfaces.File;
+using PillPal.Application.Common.Paginations;
 using PillPal.Application.Features.MedicineInBrands;
 using PillPal.Application.Features.Medicines;
 
@@ -12,9 +13,9 @@ public interface IMedicineService
     /// <param name="queryParameter">The query parameters for filtering.</param>
     /// <param name="includeParameter">The include parameters for related entities.</param>
     /// <returns>
-    /// The task result contains a collection of <see cref="MedicineDto"/> objects.
+    /// The task result contains a pagination collection of <see cref="MedicineDto"/> objects.
     /// </returns>
-    Task<IEnumerable<MedicineDto>> GetMedicinesAsync(
+    Task<PaginationResponse<MedicineDto>> GetMedicinesAsync(
         MedicineQueryParameter queryParameter, MedicineIncludeParameter includeParameter);
 
     /// <summary>
