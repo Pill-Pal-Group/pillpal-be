@@ -1,5 +1,6 @@
 ﻿using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Common.Interfaces.Services;
+using PillPal.Application.Common.Paginations;
 using PillPal.Application.Common.Repositories;
 
 namespace PillPal.Application.Features.Specifications;
@@ -22,7 +23,9 @@ public class SpecificationRepository(IApplicationDbContext context, IMapper mapp
 
     public async Task DeleteSpecificationAsync(Guid specificationId)
     {
-        var specification = await Context.Specifications.FindAsync(specificationId)
+        var specification = await Context.Specifications
+            .Where(s => !s.IsDeleted)
+            .FirstOrDefaultAsync(s => s.Id == specificationId)
             ?? throw new NotFoundException(nameof(Specification), specificationId);
 
         Context.Specifications.Remove(specification);
@@ -30,18 +33,23 @@ public class SpecificationRepository(IApplicationDbContext context, IMapper mapp
         await Context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<SpecificationDto>> GetSpecificationsAsync()
+    public async Task<PaginationResponse<SpecificationDto>> GetSpecificationsAsync(SpecificationQueryParameter queryParameter)
     {
         var specifications = await Context.Specifications
             .AsNoTracking()
-            .ToListAsync();
+            .Where(s => !s.IsDeleted)
+            .Filter(queryParameter)
+            .ToPaginationResponseAsync<Specification, SpecificationDto>(queryParameter, Mapper);
 
-        return Mapper.Map<IEnumerable<SpecificationDto>>(specifications);
+        return specifications;
     }
 
     public async Task<SpecificationDto> GetSpecificationByIdAsync(Guid specificationId)
     {
-        var specification = await Context.Specifications.FindAsync(specificationId)
+        var specification = await Context.Specifications
+            .AsNoTracking()
+            .Where(s => !s.IsDeleted)
+            .FirstOrDefaultAsync(s => s.Id == specificationId)
             ?? throw new NotFoundException(nameof(Specification), specificationId);
 
         return Mapper.Map<SpecificationDto>(specification);
@@ -51,7 +59,9 @@ public class SpecificationRepository(IApplicationDbContext context, IMapper mapp
     {
         await ValidateAsync(updateSpecificationDto);
 
-        var specification = await Context.Specifications.FindAsync(specificationId)
+        var specification = await Context.Specifications
+            .Where(s => !s.IsDeleted)
+            .FirstOrDefaultAsync(s => s.Id == specificationId)
             ?? throw new NotFoundException(nameof(Specification), specificationId);
 
         Mapper.Map(updateSpecificationDto, specification);
