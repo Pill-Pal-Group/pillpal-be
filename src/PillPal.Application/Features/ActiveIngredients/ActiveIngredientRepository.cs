@@ -1,5 +1,6 @@
 ﻿using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Common.Interfaces.Services;
+using PillPal.Application.Common.Paginations;
 using PillPal.Application.Common.Repositories;
 
 namespace PillPal.Application.Features.ActiveIngredients;
@@ -56,15 +57,15 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
         return Mapper.Map<ActiveIngredientDto>(activeIngredient);
     }
 
-    public async Task<IEnumerable<ActiveIngredientDto>> GetActiveIngredientsAsync(ActiveIngredientQueryParameter queryParameter)
+    public async Task<PaginationResponse<ActiveIngredientDto>> GetActiveIngredientsAsync(ActiveIngredientQueryParameter queryParameter)
     {
         var activeIngredients = await Context.ActiveIngredients
+            .AsNoTracking()
             .Where(ai => !ai.IsDeleted)
             .Filter(queryParameter)
-            .AsNoTracking()
-            .ToListAsync();
+            .ToPaginationResponseAsync<ActiveIngredient, ActiveIngredientDto>(queryParameter, Mapper);
 
-        return Mapper.Map<IEnumerable<ActiveIngredientDto>>(activeIngredients);
+        return activeIngredients;
     }
 
     public async Task<ActiveIngredientDto> UpdateActiveIngredientAsync(Guid ingredientId, UpdateActiveIngredientDto updateActiveIngredientDto)

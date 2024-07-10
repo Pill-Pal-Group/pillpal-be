@@ -1,5 +1,6 @@
 ﻿using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Common.Interfaces.Services;
+using PillPal.Application.Common.Paginations;
 using PillPal.Application.Common.Repositories;
 
 namespace PillPal.Application.Features.Categories;
@@ -45,15 +46,15 @@ public class CategoryRepository(IApplicationDbContext context, IMapper mapper, I
         await Context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<CategoryDto>> GetCategoriesAsync(CategoryQueryParameter queryParameter)
+    public async Task<PaginationResponse<CategoryDto>> GetCategoriesAsync(CategoryQueryParameter queryParameter)
     {
         var categories = await Context.Categories
+            .AsNoTracking()
             .Where(c => !c.IsDeleted)
             .Filter(queryParameter)
-            .AsNoTracking()
-            .ToListAsync();
+            .ToPaginationResponseAsync<Category, CategoryDto>(queryParameter, Mapper);
 
-        return Mapper.Map<IEnumerable<CategoryDto>>(categories);
+        return categories;
     }
 
     public async Task<CategoryDto> GetCategoryByIdAsync(Guid categoryId)

@@ -1,5 +1,6 @@
 ﻿using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Common.Interfaces.Services;
+using PillPal.Application.Common.Paginations;
 using PillPal.Application.Common.Repositories;
 
 namespace PillPal.Application.Features.PharmaceuticalCompanies;
@@ -32,15 +33,17 @@ public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMap
         await Context.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<PharmaceuticalCompanyDto>> GetPharmaceuticalCompaniesAsync()
+    public async Task<PaginationResponse<PharmaceuticalCompanyDto>> 
+        GetPharmaceuticalCompaniesAsync(PharmaceuticalCompanyQueryParameter queryParameter)
     {
         var pharmaceuticalCompanies = await Context.PharmaceuticalCompanies
-            .Include(b => b.Nation)
-            .Where(b => !b.IsDeleted)
             .AsNoTracking()
-            .ToListAsync();
+            .Where(b => !b.IsDeleted)
+            .Include(b => b.Nation)
+            .Filter(queryParameter)
+            .ToPaginationResponseAsync<PharmaceuticalCompany, PharmaceuticalCompanyDto>(queryParameter, Mapper);
 
-        return Mapper.Map<IEnumerable<PharmaceuticalCompanyDto>>(pharmaceuticalCompanies);
+        return pharmaceuticalCompanies;
     }
 
     public async Task<PharmaceuticalCompanyDto> GetPharmaceuticalCompanyByIdAsync(Guid companyId)

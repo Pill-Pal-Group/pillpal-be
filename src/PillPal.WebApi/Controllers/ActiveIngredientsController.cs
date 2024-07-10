@@ -1,4 +1,5 @@
 ﻿using PillPal.Application.Features.ActiveIngredients;
+using PillPal.Application.Common.Paginations;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -15,7 +16,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// <param name="queryParameter"></param>
     /// <response code="200">Returns a list of active ingredients</response>
     [HttpGet(Name = "GetActiveIngredients")]
-    [ProducesResponseType(typeof(IEnumerable<ActiveIngredientDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PaginationResponse<ActiveIngredientDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetActiveIngredientsAsync([FromQuery] ActiveIngredientQueryParameter queryParameter)
     {
         var activeIngredients = await activeIngredientService.GetActiveIngredientsAsync(queryParameter);

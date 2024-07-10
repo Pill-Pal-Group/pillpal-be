@@ -1,4 +1,5 @@
 ﻿using PillPal.Application.Common.Interfaces.File;
+using PillPal.Application.Common.Paginations;
 using PillPal.Application.Features.MedicineInBrands;
 using PillPal.Application.Features.Medicines;
 using System.ComponentModel.DataAnnotations;
@@ -19,7 +20,7 @@ public class MedicinesController(IMedicineService medicineService)
     /// <param name="includeParameter"></param>
     /// <response code="200">Returns a list of medicines</response>
     [HttpGet(Name = "GetMedicines")]
-    [ProducesResponseType(typeof(IEnumerable<MedicineDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PaginationResponse<MedicineDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetMedicinesAsync(
         [FromQuery] MedicineQueryParameter queryParameter,
         [FromQuery] MedicineIncludeParameter includeParameter)
