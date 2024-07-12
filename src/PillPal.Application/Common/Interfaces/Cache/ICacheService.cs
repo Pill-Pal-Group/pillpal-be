@@ -1,4 +1,4 @@
-namespace PillPal.Application.Common.Interfaces.Caches;
+namespace PillPal.Application.Common.Interfaces.Cache;
 
 public class CacheSettings
 {

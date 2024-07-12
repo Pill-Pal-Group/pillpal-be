@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc.Filters;
-using PillPal.Application.Common.Interfaces.Caches;
+using PillPal.Application.Common.Interfaces.Cache;
 
 namespace PillPal.WebApi.Common;
 

@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Options;
-using PillPal.Application.Common.Interfaces.Caches;
+using PillPal.Application.Common.Interfaces.Cache;
 using System.Text.Json;
 
 namespace PillPal.Infrastructure.Cache;
