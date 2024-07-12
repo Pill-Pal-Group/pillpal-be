@@ -2,10 +2,12 @@
 using HangfireBasicAuthenticationFilter;
 using Microsoft.AspNetCore.Builder;
 using PillPal.Application.Common.Interfaces.Auth;
+using PillPal.Application.Common.Interfaces.Caches;
 using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Common.Interfaces.File;
 using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Infrastructure.Auth;
+using PillPal.Infrastructure.Cache;
 using PillPal.Infrastructure.File;
 using PillPal.Infrastructure.Identity;
 using PillPal.Infrastructure.Persistence;
@@ -62,6 +64,15 @@ public static class DependencyInjection
         services.AddHangfireServer();
 
         services.AddScoped<IFileReader, FileReader>();
+
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.Configuration = configuration.GetConnectionString("REDIS");
+        });
+
+        services.Configure<CacheSettings>(configuration.GetSection("CacheSettings"));
+
+        services.AddScoped<ICacheService, CacheService>();
 
         return services;
     }

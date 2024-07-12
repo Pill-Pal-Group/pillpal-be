@@ -30,6 +30,7 @@ public class BrandsController(IBrandService brandService)
     /// <response code="200">Returns a brand</response>
     /// <response code="404">If the brand is not found</response>
     [HttpGet("{brandId:guid}", Name = "GetBrandById")]
+    [Cache(Key = nameof(Brand), IdParameterName = "brandId")]
     [ProducesResponseType(typeof(BrandDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBrandByIdAsync(Guid brandId)
@@ -60,13 +61,14 @@ public class BrandsController(IBrandService brandService)
     /// <response code="422">If the input data is invalid</response>
     [Authorize(Policy.Administrative)]
     [HttpPost(Name = "CreateBrand")]
+    [Cache(Key = nameof(Brand), IdParameterName = "brandId")]
     [ProducesResponseType(typeof(BrandDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> CreateBrandAsync(CreateBrandDto createBrandDto)
     {
         var brand = await brandService.CreateBrandAsync(createBrandDto);
 
-        return CreatedAtAction("GetBrandById", new { brandId = brand.Id }, brand);
+        return CreatedAtRoute("GetBrandById", new { brandId = brand.Id }, brand);
     }
 
     /// <summary>
@@ -129,6 +131,7 @@ public class BrandsController(IBrandService brandService)
     /// <response code="422">If the input data is invalid</response>
     [Authorize(Policy.Administrative)]
     [HttpPut("{brandId:guid}", Name = "UpdateBrand")]
+    [Cache(Key = nameof(Brand), IdParameterName = "brandId")]
     [ProducesResponseType(typeof(BrandDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -148,6 +151,7 @@ public class BrandsController(IBrandService brandService)
     /// <response code="404">If the brand is not found</response>
     [Authorize(Policy.Administrative)]
     [HttpDelete("{brandId:guid}", Name = "DeleteBrand")]
+    [Cache(Key = nameof(Brand), IdParameterName = "brandId")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteBrandAsync(Guid brandId)
