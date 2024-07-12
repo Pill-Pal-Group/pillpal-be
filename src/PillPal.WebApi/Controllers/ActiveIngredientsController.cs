@@ -31,6 +31,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// <response code="200">Returns an active ingredient</response>
     /// <response code="404">If the active ingredient is not found</response>
     [HttpGet("{activeIngredientId:guid}", Name = "GetActiveIngredientById")]
+    [Cache(Key = nameof(ActiveIngredient), IdParameterName = "activeIngredientId")]
     [ProducesResponseType(typeof(ActiveIngredientDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetActiveIngredientByIdAsync(Guid activeIngredientId)
@@ -59,6 +60,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// <response code="422">If the input data is invalid</response>
     [Authorize(Policy.Administrative)]
     [HttpPost(Name = "CreateActiveIngredient")]
+    [Cache(Key = nameof(ActiveIngredient), IdParameterName = "activeIngredientId")]
     [ProducesResponseType(typeof(ActiveIngredientDto), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateActiveIngredientAsync(CreateActiveIngredientDto createActiveIngredientDto)
     {
@@ -121,6 +123,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// <response code="422">If the input data is invalid</response>
     [Authorize(Policy.Administrative)]
     [HttpPut("{activeIngredientId:guid}", Name = "UpdateActiveIngredient")]
+    [Cache(Key = nameof(ActiveIngredient), IdParameterName = "activeIngredientId")]
     [ProducesResponseType(typeof(ActiveIngredientDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -140,6 +143,7 @@ public class ActiveIngredientsController(IActiveIngredientService activeIngredie
     /// <response code="404">If the active ingredient is not found</response>
     [Authorize(Policy.Administrative)]
     [HttpDelete("{activeIngredientId:guid}", Name = "DeleteActiveIngredient")]
+    [Cache(Key = nameof(ActiveIngredient), IdParameterName = "activeIngredientId")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteActiveIngredientAsync(Guid activeIngredientId)

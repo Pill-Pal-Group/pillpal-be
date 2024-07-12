@@ -31,6 +31,7 @@ public class SpecificationsController(ISpecificationService specificationService
     /// <response code="200">Returns a specification</response>
     /// <response code="404">If the specification is not found</response>
     [HttpGet("{specificationId:guid}", Name = "GetSpecificationById")]
+    [Cache(Key = nameof(Specification), IdParameterName = "specificationId")]
     [ProducesResponseType(typeof(SpecificationDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetSpecificationByIdAsync(Guid specificationId)
@@ -59,6 +60,7 @@ public class SpecificationsController(ISpecificationService specificationService
     /// <response code="422">If the input data is invalid</response>
     [Authorize(Policy.Administrative)]
     [HttpPost(Name = "CreateSpecification")]
+    [Cache(Key = nameof(Specification), IdParameterName = "specificationId")]
     [ProducesResponseType(typeof(SpecificationDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> CreateSpecificationAsync(CreateSpecificationDto createSpecificationDto)
@@ -122,6 +124,7 @@ public class SpecificationsController(ISpecificationService specificationService
     /// <response code="422">If the input data is invalid</response>
     [Authorize(Policy.Administrative)]
     [HttpPut("{specificationId:guid}", Name = "UpdateSpecification")]
+    [Cache(Key = nameof(Specification), IdParameterName = "specificationId")]
     [ProducesResponseType(typeof(SpecificationDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -141,6 +144,7 @@ public class SpecificationsController(ISpecificationService specificationService
     /// <response code="404">If the specification is not found</response>
     [Authorize(Policy.Administrative)]
     [HttpDelete("{specificationId:guid}", Name = "DeleteSpecification")]
+    [Cache(Key = nameof(Specification), IdParameterName = "specificationId")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteSpecificationAsync(Guid specificationId)

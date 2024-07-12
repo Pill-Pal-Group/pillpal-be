@@ -10,7 +10,6 @@ namespace PillPal.WebApi.Controllers;
 public class DosageFormsController(IDosageFormService dosageFormService)
     : ControllerBase
 {
-
     /// <summary>
     /// Get all dosage forms
     /// </summary>
@@ -32,6 +31,7 @@ public class DosageFormsController(IDosageFormService dosageFormService)
     /// <response code="200">Returns a dosage form</response>
     /// <response code="404">If the dosage form is not found</response>
     [HttpGet("{dosageFormId:guid}", Name = "GetDosageFormById")]
+    [Cache(Key = nameof(DosageForm), IdParameterName = "dosageFormId")]
     [ProducesResponseType(typeof(DosageFormDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetDosageFormByIdAsync(Guid dosageFormId)
@@ -60,6 +60,7 @@ public class DosageFormsController(IDosageFormService dosageFormService)
     /// <response code="422">If the input data is invalid</response>
     [Authorize(Policy.Administrative)]
     [HttpPost(Name = "CreateDosageForm")]
+    [Cache(Key = nameof(DosageForm), IdParameterName = "dosageFormId")]
     [ProducesResponseType(typeof(DosageFormDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> CreateDosageFormAsync(CreateDosageFormDto createDosageFormDto)
@@ -123,6 +124,7 @@ public class DosageFormsController(IDosageFormService dosageFormService)
     /// <response code="422">If the input data is invalid</response>
     [Authorize(Policy.Administrative)]
     [HttpPut("{dosageFormId:guid}", Name = "UpdateDosageForm")]
+    [Cache(Key = nameof(DosageForm), IdParameterName = "dosageFormId")]
     [ProducesResponseType(typeof(DosageFormDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -142,6 +144,7 @@ public class DosageFormsController(IDosageFormService dosageFormService)
     /// <response code="404">If the dosage form is not found</response>
     [Authorize(Policy.Administrative)]
     [HttpDelete("{dosageFormId:guid}", Name = "DeleteDosageForm")]
+    [Cache(Key = nameof(DosageForm), IdParameterName = "dosageFormId")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteDosageFormAsync(Guid dosageFormId)
