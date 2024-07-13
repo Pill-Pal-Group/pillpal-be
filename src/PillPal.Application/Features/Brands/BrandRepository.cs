@@ -1,8 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces.Data;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Common.Repositories;
-
-namespace PillPal.Application.Features.Brands;
+﻿namespace PillPal.Application.Features.Brands;
 
 public class BrandRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
     : BaseRepository(context, mapper, serviceProvider), IBrandService
@@ -37,7 +33,7 @@ public class BrandRepository(IApplicationDbContext context, IMapper mapper, ISer
     {
         var brand = await Context.Brands
             .Where(b => !b.IsDeleted)
-            .FirstOrDefaultAsync(b => b.Id == brandId) 
+            .FirstOrDefaultAsync(b => b.Id == brandId)
             ?? throw new NotFoundException(nameof(Brand), brandId);
 
         Context.Brands.Remove(brand);
@@ -50,7 +46,7 @@ public class BrandRepository(IApplicationDbContext context, IMapper mapper, ISer
         var brand = await Context.Brands
             .Where(b => !b.IsDeleted)
             .AsNoTracking()
-            .FirstOrDefaultAsync(b => b.Id == brandId) 
+            .FirstOrDefaultAsync(b => b.Id == brandId)
             ?? throw new NotFoundException(nameof(Brand), brandId);
 
         return Mapper.Map<BrandDto>(brand);
@@ -73,7 +69,7 @@ public class BrandRepository(IApplicationDbContext context, IMapper mapper, ISer
 
         var brand = await Context.Brands
             .Where(b => !b.IsDeleted)
-            .FirstOrDefaultAsync(b => b.Id == brandId) 
+            .FirstOrDefaultAsync(b => b.Id == brandId)
             ?? throw new NotFoundException(nameof(Brand), brandId);
 
         Mapper.Map(updateBrandDto, brand);

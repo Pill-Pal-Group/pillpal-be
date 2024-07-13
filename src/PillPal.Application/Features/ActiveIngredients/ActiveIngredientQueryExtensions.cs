@@ -1,6 +1,4 @@
-﻿using PillPal.Application.Common.Paginations;
-
-namespace PillPal.Application.Features.ActiveIngredients;
+﻿namespace PillPal.Application.Features.ActiveIngredients;
 
 public record ActiveIngredientQueryParameter : PaginationQueryParameter
 {

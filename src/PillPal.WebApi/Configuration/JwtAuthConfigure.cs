@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using PillPal.Application.Common.Interfaces.Auth;
-using System.Text;
 
 namespace PillPal.WebApi.Configuration;
 

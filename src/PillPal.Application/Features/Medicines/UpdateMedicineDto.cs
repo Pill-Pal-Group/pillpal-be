@@ -1,6 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces.Data;
-
-namespace PillPal.Application.Features.Medicines;
+﻿namespace PillPal.Application.Features.Medicines;
 
 public record UpdateMedicineDto : MedicineRelationDto
 {

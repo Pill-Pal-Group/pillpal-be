@@ -1,7 +1,4 @@
-﻿using PillPal.Core.Identity;
-using System.Security.Claims;
-
-namespace PillPal.Application.Common.Interfaces.Auth;
+﻿namespace PillPal.Application.Common.Interfaces.Auth;
 
 public class JwtSettings
 {

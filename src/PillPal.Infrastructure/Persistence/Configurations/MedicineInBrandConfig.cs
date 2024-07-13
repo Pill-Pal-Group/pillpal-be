@@ -1,5 +1,4 @@
-﻿
-namespace PillPal.Infrastructure.Persistence.Configurations;
+﻿namespace PillPal.Infrastructure.Persistence.Configurations;
 
 public class MedicineInBrandConfig : IEntityTypeConfiguration<MedicineInBrand>
 {

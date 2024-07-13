@@ -1,9 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces.Auth;
-using PillPal.Application.Common.Interfaces.Data;
-using PillPal.Application.Common.Repositories;
-using System.Security.Claims;
-
-namespace PillPal.Application.Features.Auths;
+﻿namespace PillPal.Application.Features.Auths;
 
 public class AuthRepository(
     IApplicationDbContext context,

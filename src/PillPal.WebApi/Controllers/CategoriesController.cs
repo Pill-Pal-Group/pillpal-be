@@ -1,5 +1,4 @@
-﻿using PillPal.Application.Common.Paginations;
-using PillPal.Application.Features.Categories;
+﻿using PillPal.Application.Features.Categories;
 
 namespace PillPal.WebApi.Controllers;
 

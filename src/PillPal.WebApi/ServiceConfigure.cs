@@ -1,5 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces.Data;
-using PillPal.WebApi.Service;
+﻿using PillPal.WebApi.Service;
 
 namespace PillPal.WebApi;
 

@@ -1,8 +1,6 @@
 ﻿using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
-using PillPal.Application.Features.Auths;
 using Swashbuckle.AspNetCore.Filters;
-using System.Reflection;
 
 namespace PillPal.WebApi.Configuration;
 
@@ -36,7 +34,7 @@ public static class SwaggerConfigure
 
             config.IncludeXmlComments(controllerXmlPath);
 
-            var dtoXmlFile = Assembly.GetAssembly(typeof(AuthRepository))!.GetName().Name + ".xml";
+            var dtoXmlFile = Assembly.GetAssembly(typeof(BaseRepository))!.GetName().Name + ".xml";
             var dtoXmlPath = Path.Combine(AppContext.BaseDirectory, dtoXmlFile);
 
             config.IncludeXmlComments(dtoXmlPath);
@@ -63,7 +61,7 @@ public static class SwaggerConfigure
                     Array.Empty<string>()
                 }
             });
-            
+
             config.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
 
             if (environment == "Development")

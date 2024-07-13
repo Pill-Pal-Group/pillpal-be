@@ -1,9 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces.Data;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Common.Paginations;
-using PillPal.Application.Common.Repositories;
-
-namespace PillPal.Application.Features.Categories;
+﻿namespace PillPal.Application.Features.Categories;
 
 public class CategoryRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
     : BaseRepository(context, mapper, serviceProvider), ICategoryService
@@ -38,7 +33,7 @@ public class CategoryRepository(IApplicationDbContext context, IMapper mapper, I
     {
         var category = await Context.Categories
             .Where(c => !c.IsDeleted)
-            .FirstOrDefaultAsync(c => c.Id == categoryId) 
+            .FirstOrDefaultAsync(c => c.Id == categoryId)
             ?? throw new NotFoundException(nameof(Category), categoryId);
 
         Context.Categories.Remove(category);
@@ -62,7 +57,7 @@ public class CategoryRepository(IApplicationDbContext context, IMapper mapper, I
         var category = await Context.Categories
             .Where(c => !c.IsDeleted)
             .AsNoTracking()
-            .FirstOrDefaultAsync(c => c.Id == categoryId) 
+            .FirstOrDefaultAsync(c => c.Id == categoryId)
             ?? throw new NotFoundException(nameof(Category), categoryId);
 
         return Mapper.Map<CategoryDto>(category);
@@ -74,7 +69,7 @@ public class CategoryRepository(IApplicationDbContext context, IMapper mapper, I
 
         var category = await Context.Categories
             .Where(c => !c.IsDeleted)
-            .FirstOrDefaultAsync(c => c.Id == categoryId) 
+            .FirstOrDefaultAsync(c => c.Id == categoryId)
             ?? throw new NotFoundException(nameof(Category), categoryId);
 
         Mapper.Map(updateCategoryDto, category);

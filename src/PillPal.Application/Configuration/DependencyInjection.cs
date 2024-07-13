@@ -1,6 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces.Auth;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Features.Accounts;
+﻿using PillPal.Application.Features.Accounts;
 using PillPal.Application.Features.ActiveIngredients;
 using PillPal.Application.Features.Auths;
 using PillPal.Application.Features.Brands;

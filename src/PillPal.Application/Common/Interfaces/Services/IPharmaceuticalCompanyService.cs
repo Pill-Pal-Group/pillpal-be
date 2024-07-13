@@ -1,5 +1,4 @@
-﻿using PillPal.Application.Common.Paginations;
-using PillPal.Application.Features.PharmaceuticalCompanies;
+﻿using PillPal.Application.Features.PharmaceuticalCompanies;
 
 namespace PillPal.Application.Common.Interfaces.Services;
 

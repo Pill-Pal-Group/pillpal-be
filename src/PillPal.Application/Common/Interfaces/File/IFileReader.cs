@@ -1,5 +1,3 @@
-using System.Data;
-
 namespace PillPal.Application.Common.Interfaces.File;
 
 public class FileExecutionResult

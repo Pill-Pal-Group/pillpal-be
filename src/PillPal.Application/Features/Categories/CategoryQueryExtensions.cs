@@ -1,6 +1,4 @@
-﻿using PillPal.Application.Common.Paginations;
-
-namespace PillPal.Application.Features.Categories;
+﻿namespace PillPal.Application.Features.Categories;
 
 public record CategoryQueryParameter : PaginationQueryParameter
 {

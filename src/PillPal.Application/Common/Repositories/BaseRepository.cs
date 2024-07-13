@@ -1,7 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces.Data;
-using PillPal.Core.Common;
-
-namespace PillPal.Application.Common.Repositories;
+﻿namespace PillPal.Application.Common.Repositories;
 
 public class BaseRepository
 {

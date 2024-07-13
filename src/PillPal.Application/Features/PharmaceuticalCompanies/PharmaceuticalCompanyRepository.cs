@@ -1,9 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces.Data;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Common.Paginations;
-using PillPal.Application.Common.Repositories;
-
-namespace PillPal.Application.Features.PharmaceuticalCompanies;
+﻿namespace PillPal.Application.Features.PharmaceuticalCompanies;
 
 public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
     : BaseRepository(context, mapper, serviceProvider), IPharmaceuticalCompanyService
@@ -25,7 +20,7 @@ public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMap
     {
         var pharmaceuticalCompany = await Context.PharmaceuticalCompanies
             .Where(b => !b.IsDeleted)
-            .FirstOrDefaultAsync(b => b.Id == companyId) 
+            .FirstOrDefaultAsync(b => b.Id == companyId)
             ?? throw new NotFoundException(nameof(PharmaceuticalCompany), companyId);
 
         Context.PharmaceuticalCompanies.Remove(pharmaceuticalCompany);
@@ -33,7 +28,7 @@ public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMap
         await Context.SaveChangesAsync();
     }
 
-    public async Task<PaginationResponse<PharmaceuticalCompanyDto>> 
+    public async Task<PaginationResponse<PharmaceuticalCompanyDto>>
         GetPharmaceuticalCompaniesAsync(PharmaceuticalCompanyQueryParameter queryParameter)
     {
         var pharmaceuticalCompanies = await Context.PharmaceuticalCompanies
@@ -52,7 +47,7 @@ public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMap
             .Include(b => b.Nation)
             .Where(b => !b.IsDeleted)
             .AsNoTracking()
-            .FirstOrDefaultAsync(b => b.Id == companyId) 
+            .FirstOrDefaultAsync(b => b.Id == companyId)
             ?? throw new NotFoundException(nameof(PharmaceuticalCompany), companyId);
 
         return Mapper.Map<PharmaceuticalCompanyDto>(pharmaceuticalCompany);
@@ -64,7 +59,7 @@ public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMap
 
         var pharmaceuticalCompany = await Context.PharmaceuticalCompanies
             .Where(b => !b.IsDeleted)
-            .FirstOrDefaultAsync(b => b.Id == companyId) 
+            .FirstOrDefaultAsync(b => b.Id == companyId)
             ?? throw new NotFoundException(nameof(PharmaceuticalCompany), companyId);
 
         Mapper.Map(updatePharmaceuticalCompanyDto, pharmaceuticalCompany);

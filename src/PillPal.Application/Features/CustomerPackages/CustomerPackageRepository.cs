@@ -1,8 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces.Data;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Common.Repositories;
-
-namespace PillPal.Application.Features.CustomerPackages;
+﻿namespace PillPal.Application.Features.CustomerPackages;
 
 public class CustomerPackageRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider, IUser user)
     : BaseRepository(context, mapper, serviceProvider), ICustomerPackageService
@@ -35,7 +31,7 @@ public class CustomerPackageRepository(IApplicationDbContext context, IMapper ma
             .AsNoTracking()
             .Where(c => c.CustomerId == customerId)
             .FirstOrDefaultAsync(c => !c.IsExpired);
-        
+
         if (existingCustomerPackage != null)
         {
             throw new BadRequestException("Customer already has an active package.");
@@ -84,7 +80,7 @@ public class CustomerPackageRepository(IApplicationDbContext context, IMapper ma
         var customerPackage = await customerPackageQueryable
             .FirstOrDefaultAsync(c => c.Id == id)
             ?? throw new NotFoundException(nameof(CustomerPackage), id);
-        
+
         return Mapper.Map<CustomerPackageDto>(customerPackage);
     }
 
