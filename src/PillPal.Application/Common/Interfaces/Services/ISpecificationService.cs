@@ -1,5 +1,4 @@
-﻿using PillPal.Application.Common.Paginations;
-using PillPal.Application.Features.Specifications;
+﻿using PillPal.Application.Features.Specifications;
 
 namespace PillPal.Application.Common.Interfaces.Services;
 

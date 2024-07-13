@@ -13,7 +13,7 @@ public static class PackageCategoryQueryExtensions
         bool isDeleted = queryParameter.IsDeleted ?? false;
 
         query = query.Where(p => p.IsDeleted == isDeleted);
-        
+
         return query;
     }
 }

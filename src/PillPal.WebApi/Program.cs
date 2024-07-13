@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Mvc.ApplicationModels;
-
 namespace PillPal.WebApi;
 
 public class Program

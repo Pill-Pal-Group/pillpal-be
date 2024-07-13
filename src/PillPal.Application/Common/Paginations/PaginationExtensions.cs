@@ -1,5 +1,3 @@
-using PillPal.Core.Common;
-
 namespace PillPal.Application.Common.Paginations;
 
 public static class PaginationExtensions

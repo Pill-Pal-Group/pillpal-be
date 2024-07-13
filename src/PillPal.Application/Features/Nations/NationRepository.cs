@@ -1,8 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces.Data;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Common.Repositories;
-
-namespace PillPal.Application.Features.Nations;
+﻿namespace PillPal.Application.Features.Nations;
 
 public class NationRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
     : BaseRepository(context, mapper, serviceProvider), INationService
@@ -37,7 +33,7 @@ public class NationRepository(IApplicationDbContext context, IMapper mapper, ISe
     {
         var nation = await Context.Nations
             .Where(n => !n.IsDeleted)
-            .FirstOrDefaultAsync(n => n.Id == nationId) 
+            .FirstOrDefaultAsync(n => n.Id == nationId)
             ?? throw new NotFoundException(nameof(Nation), nationId);
 
         Context.Nations.Remove(nation);
@@ -50,7 +46,7 @@ public class NationRepository(IApplicationDbContext context, IMapper mapper, ISe
         var nation = await Context.Nations
             .Where(n => !n.IsDeleted)
             .AsNoTracking()
-            .FirstOrDefaultAsync(n => n.Id == nationId) 
+            .FirstOrDefaultAsync(n => n.Id == nationId)
             ?? throw new NotFoundException(nameof(Nation), nationId);
 
         return Mapper.Map<NationDto>(nation);
@@ -72,7 +68,7 @@ public class NationRepository(IApplicationDbContext context, IMapper mapper, ISe
 
         var nation = await Context.Nations
             .Where(n => !n.IsDeleted)
-            .FirstOrDefaultAsync(n => n.Id == nationId) 
+            .FirstOrDefaultAsync(n => n.Id == nationId)
             ?? throw new NotFoundException(nameof(Nation), nationId);
 
         Mapper.Map(updateNationDto, nation);

@@ -1,12 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using PillPal.Application.Common.Interfaces.Auth;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-
-namespace PillPal.Infrastructure.Auth;
+﻿namespace PillPal.Infrastructure.Auth;
 
 public class JwtService : IJwtService
 {

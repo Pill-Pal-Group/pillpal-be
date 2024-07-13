@@ -1,8 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces.Data;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Common.Repositories;
-
-namespace PillPal.Application.Features.Accounts;
+﻿namespace PillPal.Application.Features.Accounts;
 
 public class AccountRepository(
     IApplicationDbContext context,

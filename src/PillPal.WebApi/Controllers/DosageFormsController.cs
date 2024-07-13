@@ -1,5 +1,4 @@
-﻿using PillPal.Application.Common.Paginations;
-using PillPal.Application.Features.DosageForms;
+﻿using PillPal.Application.Features.DosageForms;
 
 namespace PillPal.WebApi.Controllers;
 

@@ -3,7 +3,7 @@
 namespace PillPal.Application.Common.Interfaces.Services;
 
 public interface IPackageCategoryService
-{   
+{
     /// <summary>
     /// Get all packages
     /// </summary>

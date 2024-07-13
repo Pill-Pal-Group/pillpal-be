@@ -1,5 +1,4 @@
-﻿using PillPal.Application.Common.Paginations;
-using PillPal.Application.Features.Medicines;
+﻿using PillPal.Application.Features.Medicines;
 
 namespace PillPal.Application.Features.Medicines;
 

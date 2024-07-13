@@ -1,7 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces.Data;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Common.Repositories;
-using PillPal.Application.Features.PrescriptDetails;
+﻿using PillPal.Application.Features.PrescriptDetails;
 
 namespace PillPal.Application.Features.Prescripts;
 
@@ -31,7 +28,7 @@ public class PrescriptRepository(IApplicationDbContext context, IMapper mapper, 
     {
         var prescript = await Context.Prescripts
             .Where(p => !p.IsDeleted)
-            .FirstOrDefaultAsync(p => p.Id == prescriptId) 
+            .FirstOrDefaultAsync(p => p.Id == prescriptId)
             ?? throw new NotFoundException(nameof(Prescript), prescriptId);
 
         Context.Prescripts.Remove(prescript);
@@ -45,7 +42,7 @@ public class PrescriptRepository(IApplicationDbContext context, IMapper mapper, 
             .Where(p => !p.IsDeleted)
             .Include(p => p.PrescriptDetails)
             .AsNoTracking()
-            .FirstOrDefaultAsync(p => p.Id == prescriptId) 
+            .FirstOrDefaultAsync(p => p.Id == prescriptId)
             ?? throw new NotFoundException(nameof(Prescript), prescriptId);
 
         return Mapper.Map<PrescriptDto>(prescript);

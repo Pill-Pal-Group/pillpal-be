@@ -1,6 +1,4 @@
 using ExcelDataReader;
-using PillPal.Application.Common.Interfaces.File;
-using System.Data;
 
 namespace PillPal.Infrastructure.File;
 

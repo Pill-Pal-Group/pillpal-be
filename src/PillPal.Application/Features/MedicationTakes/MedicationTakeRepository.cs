@@ -1,9 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces.Data;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Common.Repositories;
-using PillPal.Core.Enums;
-
-namespace PillPal.Application.Features.MedicationTakes;
+﻿namespace PillPal.Application.Features.MedicationTakes;
 
 public class MedicationTakeRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
     : BaseRepository(context, mapper, serviceProvider), IMedicationTakeService

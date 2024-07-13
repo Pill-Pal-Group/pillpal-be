@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace PillPal.WebApi.Common;
+﻿namespace PillPal.WebApi.Common;
 
 public class KebabCaseParameterTransformer : IOutboundParameterTransformer
 {

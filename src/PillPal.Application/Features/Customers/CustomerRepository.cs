@@ -1,9 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces.Data;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Common.Repositories;
-using PillPal.Core.Identity;
-
-namespace PillPal.Application.Features.Customers;
+﻿namespace PillPal.Application.Features.Customers;
 
 public class CustomerRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider, IUser user)
     : BaseRepository(context, mapper, serviceProvider), ICustomerService

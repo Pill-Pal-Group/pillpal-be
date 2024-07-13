@@ -1,9 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces.Data;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Common.Paginations;
-using PillPal.Application.Common.Repositories;
-
-namespace PillPal.Application.Features.DosageForms;
+﻿namespace PillPal.Application.Features.DosageForms;
 
 public class DosageFormRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
     : BaseRepository(context, mapper, serviceProvider), IDosageFormService

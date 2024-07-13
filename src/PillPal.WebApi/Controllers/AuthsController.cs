@@ -1,5 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces.Auth;
-using PillPal.Application.Features.Auths;
+﻿using PillPal.Application.Features.Auths;
 using LoginRequest = PillPal.Application.Features.Auths.LoginRequest;
 using RegisterRequest = PillPal.Application.Features.Auths.RegisterRequest;
 

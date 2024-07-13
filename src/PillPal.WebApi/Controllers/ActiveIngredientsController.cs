@@ -1,5 +1,4 @@
 ﻿using PillPal.Application.Features.ActiveIngredients;
-using PillPal.Application.Common.Paginations;
 
 namespace PillPal.WebApi.Controllers;
 

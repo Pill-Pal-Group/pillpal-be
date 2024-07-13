@@ -1,9 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces.Data;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Common.Paginations;
-using PillPal.Application.Common.Repositories;
-
-namespace PillPal.Application.Features.ActiveIngredients;
+﻿namespace PillPal.Application.Features.ActiveIngredients;
 
 public class ActiveIngredientRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
     : BaseRepository(context, mapper, serviceProvider), IActiveIngredientService
@@ -38,7 +33,7 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
     {
         var activeIngredient = await Context.ActiveIngredients
             .Where(ai => !ai.IsDeleted)
-            .FirstOrDefaultAsync(ai => ai.Id == ingredientId) 
+            .FirstOrDefaultAsync(ai => ai.Id == ingredientId)
             ?? throw new NotFoundException(nameof(ActiveIngredient), ingredientId);
 
         Context.ActiveIngredients.Remove(activeIngredient);
@@ -51,7 +46,7 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
         var activeIngredient = await Context.ActiveIngredients
             .Where(ai => !ai.IsDeleted)
             .AsNoTracking()
-            .FirstOrDefaultAsync(ai => ai.Id == ingredientId) 
+            .FirstOrDefaultAsync(ai => ai.Id == ingredientId)
             ?? throw new NotFoundException(nameof(ActiveIngredient), ingredientId);
 
         return Mapper.Map<ActiveIngredientDto>(activeIngredient);
@@ -74,7 +69,7 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
 
         var activeIngredient = await Context.ActiveIngredients
             .Where(ai => !ai.IsDeleted)
-            .FirstOrDefaultAsync(ai => ai.Id == ingredientId) 
+            .FirstOrDefaultAsync(ai => ai.Id == ingredientId)
             ?? throw new NotFoundException(nameof(ActiveIngredient), ingredientId);
 
         activeIngredient = Mapper.Map(updateActiveIngredientDto, activeIngredient);

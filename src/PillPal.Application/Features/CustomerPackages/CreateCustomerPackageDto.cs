@@ -15,7 +15,7 @@ public class CreateCustomerPackageValidator : AbstractValidator<CreateCustomerPa
     {
         RuleFor(v => v.PackageCategoryId)
             .NotEmpty().WithMessage("PackageId is required.");
-        
+
         RuleFor(v => v.PaymentId)
             .NotEmpty().WithMessage("PaymentId is required.");
     }

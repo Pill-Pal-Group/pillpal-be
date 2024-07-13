@@ -1,5 +1,3 @@
-using PillPal.Application.Common.Paginations;
-
 namespace PillPal.Application.Features.PharmaceuticalCompanies;
 
 public record PharmaceuticalCompanyQueryParameter : PaginationQueryParameter

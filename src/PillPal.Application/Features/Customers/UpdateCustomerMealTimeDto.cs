@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace PillPal.Application.Features.Customers;
+﻿namespace PillPal.Application.Features.Customers;
 
 public record UpdateCustomerMealTimeDto
 {

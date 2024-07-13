@@ -1,0 +1,33 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "FirebaseSettings": {
+    "ProjectId": "ProjectId",
+    "ServiceKey": "ServiceKey"
+  },
+  "JwtSettings": {
+    "SecretKey": "SecretKey",
+    "Issuer": "Issuer",
+    "Audience": "Audience",
+    "Expires": 60,
+    "RefreshExpires": 43200
+  },
+  "CacheSettings": {
+    "SlidingExpiration": 5,
+    "AbsoluteExpiration": 60
+  },
+  "ConnectionStrings": {
+    "REDIS": "REDIS_CONNECTION_STRING",
+    "PILLPAL_DB": "PILLPAL_DB_CONNECTION_STRING",
+    "HANGFIRE_DB": "HANGFIRE_DB_CONNECTION_STRING"
+  },
+  "Hangfire": {
+    "User": "User",
+    "Pass": "Pass"
+  }
+}
