@@ -1,6 +1,4 @@
-﻿using PillPal.Core.Enums;
-
-namespace PillPal.Application.Features.PrescriptDetails;
+﻿namespace PillPal.Application.Features.PrescriptDetails;
 
 public record CreatePrescriptDetailDto
 {
@@ -45,7 +43,7 @@ public class CreatePrescriptDetailValidator : AbstractValidator<CreatePrescriptD
 
         RuleFor(p => p.MedicineImage)
             .MaximumLength(500).WithMessage("{PropertyName} must not exceed 500 characters.");
-        
+
         RuleFor(p => p.DateStart)
             .NotEmpty().WithMessage("{PropertyName} is required.")
             .LessThan(p => p.DateEnd).WithMessage("{PropertyName} must be before {ComparisonValue}.");

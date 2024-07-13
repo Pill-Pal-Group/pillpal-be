@@ -1,8 +1,6 @@
 ﻿using FirebaseAdmin;
 using FirebaseAdmin.Auth;
 using Google.Apis.Auth.OAuth2;
-using Microsoft.Extensions.Options;
-using PillPal.Application.Common.Interfaces.Auth;
 
 namespace PillPal.Infrastructure.Auth;
 

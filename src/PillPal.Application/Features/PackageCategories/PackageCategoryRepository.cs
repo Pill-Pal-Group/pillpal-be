@@ -1,8 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces.Data;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Common.Repositories;
-
-namespace PillPal.Application.Features.PackageCategories;
+﻿namespace PillPal.Application.Features.PackageCategories;
 
 public class PackageCategoryRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
     : BaseRepository(context, mapper, serviceProvider), IPackageCategoryService
@@ -38,7 +34,7 @@ public class PackageCategoryRepository(IApplicationDbContext context, IMapper ma
     {
         var packageCategory = await Context.PackageCategories
             .Where(p => !p.IsDeleted)
-            .FirstOrDefaultAsync(p => p.Id == id) 
+            .FirstOrDefaultAsync(p => p.Id == id)
             ?? throw new NotFoundException(nameof(PackageCategory), id);
 
         Context.PackageCategories.Remove(packageCategory);
@@ -47,13 +43,13 @@ public class PackageCategoryRepository(IApplicationDbContext context, IMapper ma
     }
 
     public async Task<PackageCategoryDto> GetPackageByIdAsync(
-        Guid id, 
+        Guid id,
         PackageCategoryQueryParameter queryParameter)
     {
         var packageCategory = await Context.PackageCategories
             .Filter(queryParameter)
             .AsNoTracking()
-            .FirstOrDefaultAsync(p => p.Id == id) 
+            .FirstOrDefaultAsync(p => p.Id == id)
             ?? throw new NotFoundException(nameof(PackageCategory), id);
 
         return Mapper.Map<PackageCategoryDto>(packageCategory);
@@ -70,14 +66,14 @@ public class PackageCategoryRepository(IApplicationDbContext context, IMapper ma
     }
 
     public async Task<PackageCategoryDto> UpdatePackageAsync(
-        Guid id, 
+        Guid id,
         UpdatePackageCategoryDto updatePackageCategoryDto)
     {
         await ValidateAsync(updatePackageCategoryDto);
 
         var packageCategory = await Context.PackageCategories
             .Where(p => !p.IsDeleted)
-            .FirstOrDefaultAsync(p => p.Id == id) 
+            .FirstOrDefaultAsync(p => p.Id == id)
             ?? throw new NotFoundException(nameof(PackageCategory), id);
 
         Mapper.Map(updatePackageCategoryDto, packageCategory);

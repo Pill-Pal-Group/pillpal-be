@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Mvc.Filters;
-using PillPal.Application.Common.Interfaces.Cache;
-
 namespace PillPal.WebApi.Common;
 
 [AttributeUsage(AttributeTargets.Method)]
@@ -42,10 +39,10 @@ public class CacheAttribute : Attribute, IAsyncActionFilter
             var cacheKey = $"{Key}:{id}";
             await cache.SetAsync(cacheKey, createdResult.Value);
         }
-        else 
+        else
         {
             var cacheKey = $"{Key}:{context.ActionArguments[IdParameterName]}";
-            
+
             if (executedContext.Result is OkObjectResult okObjectResult)
             {
                 await cache.SetAsync(cacheKey, okObjectResult.Value);

@@ -1,7 +1,7 @@
 namespace PillPal.Application.Common.Extensions;
 
 public static class DictionaryExtensions
-{   
+{
     /// <summary>
     /// Gets the value associated with the specified key or adds a new value if the key does not exist.
     /// </summary>

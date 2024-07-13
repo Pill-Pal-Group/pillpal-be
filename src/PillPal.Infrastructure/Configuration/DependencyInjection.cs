@@ -1,11 +1,5 @@
 ﻿using Hangfire;
 using HangfireBasicAuthenticationFilter;
-using Microsoft.AspNetCore.Builder;
-using PillPal.Application.Common.Interfaces.Auth;
-using PillPal.Application.Common.Interfaces.Cache;
-using PillPal.Application.Common.Interfaces.Data;
-using PillPal.Application.Common.Interfaces.File;
-using PillPal.Application.Common.Interfaces.Services;
 using PillPal.Infrastructure.Auth;
 using PillPal.Infrastructure.Cache;
 using PillPal.Infrastructure.File;

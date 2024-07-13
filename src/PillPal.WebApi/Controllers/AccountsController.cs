@@ -104,7 +104,7 @@ public class AccountsController(
 
         return NoContent();
     }
-    
+
     /// <summary>
     /// Get all customers
     /// </summary>

@@ -1,6 +1,4 @@
-﻿using PillPal.Application.Common.Exceptions;
-using PillPal.Application.Common.Interfaces.Data;
-using PillPal.Application.Features.Accounts;
+﻿using PillPal.Application.Features.Accounts;
 
 namespace PillPal.Infrastructure.Identity;
 
@@ -218,7 +216,7 @@ public class IdentityService : IIdentityService
     public async Task UpdateManagerInformationAsync(string userId, UpdateManagerInformationDto request)
     {
         var user = await _userManager.FindByIdAsync(userId);
-        
+
         user!.PhoneNumber = request.PhoneNumber;
 
         await _userManager.UpdateAsync(user);

@@ -1,5 +1,4 @@
 ﻿using PillPal.Application.Features.Nations;
-using System.Text.Json.Serialization;
 
 namespace PillPal.Application.Features.PharmaceuticalCompanies;
 

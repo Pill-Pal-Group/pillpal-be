@@ -1,6 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces.Data;
-
-namespace PillPal.Application.Features.MedicineInBrands;
+﻿namespace PillPal.Application.Features.MedicineInBrands;
 
 public record CreateMedicineInBrandsDto
 {

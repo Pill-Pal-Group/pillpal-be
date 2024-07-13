@@ -1,8 +1,4 @@
-﻿using PillPal.Application.Common.Interfaces.Data;
-using PillPal.Application.Common.Interfaces.Services;
-using PillPal.Application.Common.Repositories;
-
-namespace PillPal.Application.Features.PharmacyStores;
+﻿namespace PillPal.Application.Features.PharmacyStores;
 
 public class PharmacyStoreRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
     : BaseRepository(context, mapper, serviceProvider), IPharmacyStoreService
@@ -24,7 +20,7 @@ public class PharmacyStoreRepository(IApplicationDbContext context, IMapper mapp
     {
         var pharmacyStore = await Context.PharmacyStores
             .Where(c => !c.IsDeleted)
-            .FirstOrDefaultAsync(c => c.Id == pharmacyStoreId) 
+            .FirstOrDefaultAsync(c => c.Id == pharmacyStoreId)
             ?? throw new NotFoundException(nameof(PharmacyStore), pharmacyStoreId);
 
         Context.PharmacyStores.Remove(pharmacyStore);
@@ -38,7 +34,7 @@ public class PharmacyStoreRepository(IApplicationDbContext context, IMapper mapp
             .Include(c => c.Brand)
             .Where(c => !c.IsDeleted)
             .AsNoTracking()
-            .FirstOrDefaultAsync(c => c.Id == pharmacyStoreId) 
+            .FirstOrDefaultAsync(c => c.Id == pharmacyStoreId)
             ?? throw new NotFoundException(nameof(PharmacyStore), pharmacyStoreId);
 
         return Mapper.Map<PharmacyStoreDto>(pharmacyStore);
@@ -61,7 +57,7 @@ public class PharmacyStoreRepository(IApplicationDbContext context, IMapper mapp
 
         var pharmacyStore = await Context.PharmacyStores
             .Where(c => !c.IsDeleted)
-            .FirstOrDefaultAsync(c => c.Id == pharmacyStoreId) 
+            .FirstOrDefaultAsync(c => c.Id == pharmacyStoreId)
             ?? throw new NotFoundException(nameof(PharmacyStore), pharmacyStoreId);
 
         pharmacyStore = Mapper.Map(updatePharmacyStoreDto, pharmacyStore);
