@@ -44,6 +44,66 @@ public class AccountsController(
 
         return Ok(managers);
     }
+
+    /// <summary>
+    /// Assign a manager
+    /// </summary>
+    /// <param name="request"></param>
+    /// <remarks>
+    /// Requires admin policy
+    /// 
+    /// Sample request:
+    /// 
+    ///     POST /api/accounts/manager
+    ///     {
+    ///         "email": "manager@pillpal",
+    ///         "password": "password",
+    ///         "phoneNumber": "0234567899"
+    ///     }
+    ///     
+    /// </remarks>
+    /// <response code="204">Assign the manager successfully</response>
+    /// <response code="409">If the email is already exists</response>
+    /// <response code="422">If the request is invalid</response>
+    [Authorize(Policy.Admin)]
+    [HttpPost("manager", Name = "AssignManager")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+    public async Task<IActionResult> AssignManagerAsync(AssignManagerRequest request)
+    {
+        await accountService.AssignManagerAsync(request);
+
+        return NoContent();
+    }
+
+    /// <summary>
+    /// Update manager information
+    /// </summary>
+    /// <param name="request"></param>
+    /// <remarks>
+    /// Requires manager policy
+    /// 
+    /// Sample request:
+    /// 
+    ///     PUT /api/accounts/manager
+    ///     {
+    ///         "phoneNumber": "0234567896"
+    ///     }
+    ///     
+    /// </remarks>
+    /// <response code="204">Update the manager information successfully</response>
+    /// <response code="422">If the request is invalid</response>
+    [Authorize(Policy.Manager)]
+    [HttpPut("manager", Name = "UpdateManagerInformation")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+    public async Task<IActionResult> UpdateManagerInformationAsync(UpdateManagerInformationDto request)
+    {
+        await accountService.UpdateManagerInformationAsync(request);
+
+        return NoContent();
+    }
     
     /// <summary>
     /// Get all customers

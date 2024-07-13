@@ -1,8 +1,9 @@
-﻿using PillPal.Application.Features.Medicines;
+﻿using PillPal.Application.Common.Paginations;
+using PillPal.Application.Features.Medicines;
 
 namespace PillPal.Application.Features.Medicines;
 
-public record MedicineQueryParameter
+public record MedicineQueryParameter : PaginationQueryParameter
 {
     /// <example>MED6060-555555</example>
     public string? MedicineCode { get; init; }

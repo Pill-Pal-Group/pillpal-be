@@ -2,6 +2,7 @@
 using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Common.Interfaces.File;
 using PillPal.Application.Common.Interfaces.Services;
+using PillPal.Application.Common.Paginations;
 using PillPal.Application.Common.Repositories;
 using PillPal.Application.Features.MedicineInBrands;
 using PillPal.Application.Features.Medicines;
@@ -78,7 +79,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
                 ?? newPharmaceuticalCompanies!.GetOrAdd(dto.PharmaceuticalCompanies, new PharmaceuticalCompany { Id = Guid.NewGuid(), CompanyName = dto.PharmaceuticalCompanies, Nation = nation });
 
             var brand = existingBrands.FirstOrDefault(b => b.BrandName == dto.Brand)
-                ?? newBrands!.GetOrAdd(dto.Brand, new Brand { Id = Guid.NewGuid(), BrandName = dto.Brand });
+                ?? newBrands!.GetOrAdd(dto.Brand, new Brand { Id = Guid.NewGuid(), BrandName = dto.Brand, BrandLogo = dto.BrandLogo, BrandUrl = dto.BrandUrl });
 
             var dosageForm = existingDosageForms.FirstOrDefault(df => df.FormName == dto.DosageForms)
                 ?? newDosageForms!.GetOrAdd(dto.DosageForms, new DosageForm { Id = Guid.NewGuid(), FormName = dto.DosageForms });
@@ -211,17 +212,17 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         return Mapper.Map<MedicineDto>(medicine);
     }
 
-    public async Task<IEnumerable<MedicineDto>> GetMedicinesAsync(
+    public async Task<PaginationResponse<MedicineDto>> GetMedicinesAsync(
         MedicineQueryParameter queryParameter, MedicineIncludeParameter includeParameter)
     {
         var medicines = await Context.Medicines
+            .AsNoTracking()
             .Where(m => !m.IsDeleted)
             .Filter(queryParameter)
             .Include(includeParameter)
-            .AsNoTracking()
-            .ToListAsync();
+            .ToPaginationResponseAsync<Medicine, MedicineDto>(queryParameter, Mapper);
 
-        return Mapper.Map<IEnumerable<MedicineDto>>(medicines);
+        return medicines;
     }
 
     public async Task<MedicineDto> UpdateMedicineAsync(Guid medicineId, UpdateMedicineDto updateMedicineDto)
@@ -302,6 +303,8 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
                 ActiveIngredients = row["Ingredient"].ToString(),
                 PharmaceuticalCompanies = row["Manufacturer"].ToString(),
                 Brand = row["Brand"].ToString(),
+                BrandLogo = row["Brand Logo"].ToString(),
+                BrandUrl = row["Brand Url"].ToString(),
                 Price = row["Price"].ToString(),
                 MedicineUrl = row["Link"].ToString(),
                 Nation = row["Manufacturing country"].ToString(),

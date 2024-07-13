@@ -1,4 +1,5 @@
-﻿using PillPal.Application.Features.Specifications;
+﻿using PillPal.Application.Common.Paginations;
+using PillPal.Application.Features.Specifications;
 
 namespace PillPal.Application.Common.Interfaces.Services;
 
@@ -7,10 +8,11 @@ public interface ISpecificationService
     /// <summary>
     /// Retrieves all specifications.
     /// </summary>
+    /// <param name="queryParameter">The query parameter for filtering.</param>
     /// <returns>
-    /// The task result contains a collection of <see cref="SpecificationDto"/> objects.
+    /// The task result contains a pagination collection of <see cref="SpecificationDto"/> objects.
     /// </returns>
-    Task<IEnumerable<SpecificationDto>> GetSpecificationsAsync();
+    Task<PaginationResponse<SpecificationDto>> GetSpecificationsAsync(SpecificationQueryParameter queryParameter);
 
     /// <summary>
     /// Retrieves a specification by its unique identifier.
@@ -55,7 +57,7 @@ public interface ISpecificationService
     Task<SpecificationDto> UpdateSpecificationAsync(Guid specificationId, UpdateSpecificationDto updateSpecificationDto);
 
     /// <summary>
-    /// Deletes a specification, this deletion is permanent and cannot be undone.
+    /// Deletes a specification by performing a soft delete.
     /// </summary>
     /// <param name="specificationId">The unique identifier for the specification to delete.</param>
     /// <returns>

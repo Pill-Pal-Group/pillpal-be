@@ -14,5 +14,7 @@ public partial class MapperConfigure : Profile
         CreateMap<Prescript, CreatePrescriptDto>().ReverseMap();
 
         CreateMap<PrescriptDetail, CreatePrescriptDetailDto>().ReverseMap();
+
+        CreateMap<PrescriptDetail, UpdatePrescriptDetailImageDto>().ReverseMap();
     }
 }

@@ -1,4 +1,5 @@
-﻿using PillPal.Application.Features.DosageForms;
+﻿using PillPal.Application.Common.Paginations;
+using PillPal.Application.Features.DosageForms;
 
 namespace PillPal.Application.Common.Interfaces.Services;
 
@@ -7,10 +8,11 @@ public interface IDosageFormService
     /// <summary>
     /// Retrieves all dosage forms.
     /// </summary>
+    /// <param name="queryParameter">The query parameter for filtering.</param>
     /// <returns>
-    /// The task result contains a collection of <see cref="DosageFormDto"/> objects.
+    /// The task result contains a pagination collection of <see cref="DosageFormDto"/> objects.
     /// </returns>
-    Task<IEnumerable<DosageFormDto>> GetDosageFormsAsync();
+    Task<PaginationResponse<DosageFormDto>> GetDosageFormsAsync(DosageFormQueryParameter queryParameter);
 
     /// <summary>
     /// Retrieves a dosage form by its unique identifier.
@@ -55,7 +57,7 @@ public interface IDosageFormService
     Task<DosageFormDto> UpdateDosageFormAsync(Guid dosageFormId, UpdateDosageFormDto updateDosageFormDto);
 
     /// <summary>
-    /// Deletes a dosage form, this deletion is permanent and cannot be undone.
+    /// Deletes a dosage form by performing a soft delete.
     /// </summary>
     /// <param name="dosageFormId">The unique identifier for the dosage form to delete.</param>
     /// <returns>

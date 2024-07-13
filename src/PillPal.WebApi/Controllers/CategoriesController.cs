@@ -1,4 +1,5 @@
-﻿using PillPal.Application.Features.Categories;
+﻿using PillPal.Application.Common.Paginations;
+using PillPal.Application.Features.Categories;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -15,7 +16,7 @@ public class CategoriesController(ICategoryService categoryService)
     /// <param name="queryParameter"></param>
     /// <response code="200">Returns a list of categories</response>
     [HttpGet(Name = "GetCategories")]
-    [ProducesResponseType(typeof(IEnumerable<CategoryDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(PaginationResponse<CategoryDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetCategoriesAsync([FromQuery] CategoryQueryParameter queryParameter)
     {
         var categories = await categoryService.GetCategoriesAsync(queryParameter);
@@ -30,6 +31,7 @@ public class CategoriesController(ICategoryService categoryService)
     /// <response code="200">Returns a category</response>
     /// <response code="404">If the category is not found</response>
     [HttpGet("{categoryId:guid}", Name = "GetCategoryById")]
+    [Cache(Key = nameof(Category), IdParameterName = "categoryId")]
     [ProducesResponseType(typeof(CategoryDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCategoryByIdAsync(Guid categoryId)
@@ -58,6 +60,7 @@ public class CategoriesController(ICategoryService categoryService)
     /// <response code="422">If the input data is invalid</response>
     [Authorize(Policy.Administrative)]
     [HttpPost(Name = "CreateCategory")]
+    [Cache(Key = nameof(Category), IdParameterName = "categoryId")]
     [ProducesResponseType(typeof(CategoryDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> CreateCategoryAsync(CreateCategoryDto createCategoryDto)
@@ -121,6 +124,7 @@ public class CategoriesController(ICategoryService categoryService)
     /// <response code="422">If the input data is invalid</response>
     [Authorize(Policy.Administrative)]
     [HttpPut("{categoryId:guid}", Name = "UpdateCategory")]
+    [Cache(Key = nameof(Category), IdParameterName = "categoryId")]
     [ProducesResponseType(typeof(CategoryDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -140,6 +144,7 @@ public class CategoriesController(ICategoryService categoryService)
     /// <response code="404">If the category is not found</response>
     [Authorize(Policy.Administrative)]
     [HttpDelete("{categoryId:guid}", Name = "DeleteCategory")]
+    [Cache(Key = nameof(Category), IdParameterName = "categoryId")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteCategoryAsync(Guid categoryId)

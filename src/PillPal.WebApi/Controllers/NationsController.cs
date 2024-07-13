@@ -12,13 +12,12 @@ public class NationsController(INationService nationService)
     /// <summary>
     /// Get all nations
     /// </summary>
-    /// <param name="queryParameter"></param>
     /// <response code="200">Returns a list of nations</response>
     [HttpGet(Name = "GetNations")]
     [ProducesResponseType(typeof(IEnumerable<NationDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetNationsAsync([FromQuery] NationQueryParameter queryParameter)
+    public async Task<IActionResult> GetNationsAsync()
     {
-        var nations = await nationService.GetNationsAsync(queryParameter);
+        var nations = await nationService.GetNationsAsync();
 
         return Ok(nations);
     }
@@ -30,6 +29,7 @@ public class NationsController(INationService nationService)
     /// <response code="200">Returns a nation</response>
     /// <response code="404">If the nation is not found</response>
     [HttpGet("{nationId:guid}", Name = "GetNationById")]
+    [Cache(Key = nameof(Nation), IdParameterName = "nationId")]
     [ProducesResponseType(typeof(NationDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetNationByIdAsync(Guid nationId)
@@ -50,7 +50,6 @@ public class NationsController(INationService nationService)
     /// 
     ///     POST /api/nations
     ///     {
-    ///         "nationCode": "Nation Code",
     ///         "nationName": "Nation Name"
     ///     }
     ///     
@@ -59,6 +58,7 @@ public class NationsController(INationService nationService)
     /// <response code="422">If the input data is invalid</response>
     [Authorize(Policy.Administrative)]
     [HttpPost(Name = "CreateNation")]
+    [Cache(Key = nameof(Nation), IdParameterName = "nationId")]
     [ProducesResponseType(typeof(NationDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> CreateNationAsync(CreateNationDto createNationDto)
@@ -80,11 +80,9 @@ public class NationsController(INationService nationService)
     ///     POST /api/nations/bulk
     ///     [
     ///         {
-    ///             "nationCode": "Nation Code 1",
     ///             "nationName": "Nation Name 1"
     ///         },
     ///         {
-    ///             "nationCode": "Nation Code 2",
     ///             "nationName": "Nation Name 2"
     ///         }
     ///     ]
@@ -115,7 +113,6 @@ public class NationsController(INationService nationService)
     ///     
     ///     PUT /api/nations/{nationId}
     ///     {
-    ///         "nationCode": "Nation Code",
     ///         "nationName": "Nation Name"
     ///      }
     ///      
@@ -125,6 +122,7 @@ public class NationsController(INationService nationService)
     /// <response code="422">If the input data is invalid</response>
     [Authorize(Policy.Administrative)]
     [HttpPut("{nationId:guid}", Name = "UpdateNation")]
+    [Cache(Key = nameof(Nation), IdParameterName = "nationId")]
     [ProducesResponseType(typeof(NationDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -144,6 +142,7 @@ public class NationsController(INationService nationService)
     /// <response code="404">If the nation is not found</response>
     [Authorize(Policy.Administrative)]
     [HttpDelete("{nationId:guid}", Name = "DeleteNation")]
+    [Cache(Key = nameof(Nation), IdParameterName = "nationId")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteNationAsync(Guid nationId)

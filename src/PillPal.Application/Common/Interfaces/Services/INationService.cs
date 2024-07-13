@@ -7,11 +7,10 @@ public interface INationService
     /// <summary>
     /// Retrieves all nations.
     /// </summary>
-    /// <param name="queryParameter">The query parameters for filtering.</param>
     /// <returns>
     /// The task result contains a collection of <see cref="NationDto"/> objects.
     /// </returns>
-    Task<IEnumerable<NationDto>> GetNationsAsync(NationQueryParameter queryParameter);
+    Task<IEnumerable<NationDto>> GetNationsAsync();
 
     /// <summary>
     /// Retrieves a nation by its unique identifier.

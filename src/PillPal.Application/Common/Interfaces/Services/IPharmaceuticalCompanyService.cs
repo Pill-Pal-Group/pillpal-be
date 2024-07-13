@@ -1,4 +1,5 @@
-﻿using PillPal.Application.Features.PharmaceuticalCompanies;
+﻿using PillPal.Application.Common.Paginations;
+using PillPal.Application.Features.PharmaceuticalCompanies;
 
 namespace PillPal.Application.Common.Interfaces.Services;
 
@@ -7,10 +8,11 @@ public interface IPharmaceuticalCompanyService
     /// <summary>
     /// Retrieves all pharmaceutical companies.
     /// </summary>
+    /// <param name="queryParameter">The query parameters for filtering.</param>
     /// <returns>
-    /// The task result contains a collection of <see cref="PharmaceuticalCompanyDto"/> objects.
+    /// The task result contains a pagination collection of <see cref="PharmaceuticalCompanyDto"/> objects.
     /// </returns>
-    Task<IEnumerable<PharmaceuticalCompanyDto>> GetPharmaceuticalCompaniesAsync();
+    Task<PaginationResponse<PharmaceuticalCompanyDto>> GetPharmaceuticalCompaniesAsync(PharmaceuticalCompanyQueryParameter queryParameter);
 
     /// <summary>
     /// Retrieves a pharmaceutical company by its unique identifier.

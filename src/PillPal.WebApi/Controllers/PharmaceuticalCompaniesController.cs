@@ -1,4 +1,5 @@
-﻿using PillPal.Application.Features.PharmaceuticalCompanies;
+﻿using PillPal.Application.Common.Paginations;
+using PillPal.Application.Features.PharmaceuticalCompanies;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -9,16 +10,15 @@ namespace PillPal.WebApi.Controllers;
 public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pharmaceuticalCompanyService)
     : ControllerBase
 {
-
     /// <summary>
     /// Get all pharmaceutical companies
     /// </summary>
     /// <response code="200">Returns a list of pharmaceutical companies</response>
     [HttpGet(Name = "GetPharmaceuticalCompanies")]
-    [ProducesResponseType(typeof(IEnumerable<PharmaceuticalCompanyDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetPharmaceuticalCompaniesAsync()
+    [ProducesResponseType(typeof(PaginationResponse<PharmaceuticalCompanyDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetPharmaceuticalCompaniesAsync([FromQuery] PharmaceuticalCompanyQueryParameter queryParameter)
     {
-        var pharmaceuticalCompanies = await pharmaceuticalCompanyService.GetPharmaceuticalCompaniesAsync();
+        var pharmaceuticalCompanies = await pharmaceuticalCompanyService.GetPharmaceuticalCompaniesAsync(queryParameter);
 
         return Ok(pharmaceuticalCompanies);
     }
@@ -30,6 +30,7 @@ public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pha
     /// <response code="200">Returns a pharmaceutical company</response>
     /// <response code="404">If the pharmaceutical company is not found</response>
     [HttpGet("{pharmaceuticalCompanyId:guid}", Name = "GetPharmaceuticalCompanyById")]
+    [Cache(Key = nameof(PharmaceuticalCompany), IdParameterName = "pharmaceuticalCompanyId")]
     [ProducesResponseType(typeof(PharmaceuticalCompanyDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetPharmaceuticalCompanyByIdAsync(Guid pharmaceuticalCompanyId)
@@ -59,6 +60,7 @@ public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pha
     /// <response code="422">If the input data is invalid</response>
     [Authorize(Policy.Administrative)]
     [HttpPost(Name = "CreatePharmaceuticalCompany")]
+    [Cache(Key = nameof(PharmaceuticalCompany), IdParameterName = "pharmaceuticalCompanyId")]
     [ProducesResponseType(typeof(PharmaceuticalCompanyDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> CreatePharmaceuticalCompanyAsync(CreatePharmaceuticalCompanyDto createPharmaceuticalCompanyDto)
@@ -90,6 +92,7 @@ public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pha
     /// <response code="422">If the input data is invalid</response>
     [Authorize(Policy.Administrative)]
     [HttpPut("{pharmaceuticalCompanyId:guid}", Name = "UpdatePharmaceuticalCompany")]
+    [Cache(Key = nameof(PharmaceuticalCompany), IdParameterName = "pharmaceuticalCompanyId")]
     [ProducesResponseType(typeof(PharmaceuticalCompanyDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -109,6 +112,7 @@ public class PharmaceuticalCompaniesController(IPharmaceuticalCompanyService pha
     /// <response code="404">If the pharmaceutical company is not found</response>
     [Authorize(Policy.Administrative)]
     [HttpDelete("{pharmaceuticalCompanyId:guid}", Name = "DeletePharmaceuticalCompany")]
+    [Cache(Key = nameof(PharmaceuticalCompany), IdParameterName = "pharmaceuticalCompanyId")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeletePharmaceuticalCompanyAsync(Guid pharmaceuticalCompanyId)

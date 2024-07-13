@@ -1,4 +1,5 @@
-﻿using PillPal.Application.Features.Specifications;
+﻿using PillPal.Application.Common.Paginations;
+using PillPal.Application.Features.Specifications;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -12,12 +13,13 @@ public class SpecificationsController(ISpecificationService specificationService
     /// <summary>
     /// Get all specifications
     /// </summary>
+    /// <param name="queryParameter"></param>
     /// <response code="200">Returns a list of specifications</response>
     [HttpGet(Name = "GetSpecifications")]
-    [ProducesResponseType(typeof(IEnumerable<SpecificationDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetSpecificationsAsync()
+    [ProducesResponseType(typeof(PaginationResponse<SpecificationDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetSpecificationsAsync([FromQuery] SpecificationQueryParameter queryParameter)
     {
-        var specifications = await specificationService.GetSpecificationsAsync();
+        var specifications = await specificationService.GetSpecificationsAsync(queryParameter);
 
         return Ok(specifications);
     }
@@ -29,6 +31,7 @@ public class SpecificationsController(ISpecificationService specificationService
     /// <response code="200">Returns a specification</response>
     /// <response code="404">If the specification is not found</response>
     [HttpGet("{specificationId:guid}", Name = "GetSpecificationById")]
+    [Cache(Key = nameof(Specification), IdParameterName = "specificationId")]
     [ProducesResponseType(typeof(SpecificationDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetSpecificationByIdAsync(Guid specificationId)
@@ -49,8 +52,7 @@ public class SpecificationsController(ISpecificationService specificationService
     /// 
     ///     POST /api/specifications
     ///     {
-    ///         "typeName": "Specification Type",
-    ///         "detail": "Specification Detail"
+    ///         "typeName": "Specification Type"
     ///     }
     ///     
     /// </remarks>
@@ -58,6 +60,7 @@ public class SpecificationsController(ISpecificationService specificationService
     /// <response code="422">If the input data is invalid</response>
     [Authorize(Policy.Administrative)]
     [HttpPost(Name = "CreateSpecification")]
+    [Cache(Key = nameof(Specification), IdParameterName = "specificationId")]
     [ProducesResponseType(typeof(SpecificationDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> CreateSpecificationAsync(CreateSpecificationDto createSpecificationDto)
@@ -79,12 +82,10 @@ public class SpecificationsController(ISpecificationService specificationService
     ///     POST /api/specifications/bulk
     ///     [
     ///         {
-    ///             "typeName": "Specification Type 1",
-    ///             "detail": "Specification Detail 1"
+    ///             "typeName": "Specification Type 1"
     ///         },
     ///         {
-    ///             "typeName": "Specification Type 2",
-    ///             "detail": "Specification Detail 2"
+    ///             "typeName": "Specification Type 2"
     ///         }
     ///     ]
     ///     
@@ -114,8 +115,7 @@ public class SpecificationsController(ISpecificationService specificationService
     /// 
     ///     PUT /api/specifications/{specificationId}
     ///     {
-    ///         "typeName": "Specification Type",
-    ///         "detail": "Specification Detail"
+    ///         "typeName": "Specification Type"
     ///     }
     ///     
     /// </remarks>
@@ -124,6 +124,7 @@ public class SpecificationsController(ISpecificationService specificationService
     /// <response code="422">If the input data is invalid</response>
     [Authorize(Policy.Administrative)]
     [HttpPut("{specificationId:guid}", Name = "UpdateSpecification")]
+    [Cache(Key = nameof(Specification), IdParameterName = "specificationId")]
     [ProducesResponseType(typeof(SpecificationDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -135,7 +136,7 @@ public class SpecificationsController(ISpecificationService specificationService
     }
 
     /// <summary>
-    /// Delete a specification
+    /// Delete a specification (soft delete)
     /// </summary>
     /// <remarks>Requires administrative policy (e.g. Admin, Manager)</remarks>
     /// <param name="specificationId" example="00000000-0000-0000-0000-000000000000"></param>
@@ -143,6 +144,7 @@ public class SpecificationsController(ISpecificationService specificationService
     /// <response code="404">If the specification is not found</response>
     [Authorize(Policy.Administrative)]
     [HttpDelete("{specificationId:guid}", Name = "DeleteSpecification")]
+    [Cache(Key = nameof(Specification), IdParameterName = "specificationId")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteSpecificationAsync(Guid specificationId)

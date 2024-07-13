@@ -29,6 +29,7 @@ public class PharmacyStoresController(IPharmacyStoreService pharmacyStoreService
     /// <response code="200">Returns a pharmacy store</response>
     /// <response code="404">If the pharmacy store is not found</response>
     [HttpGet("{pharmacyStoreId:guid}", Name = "GetPharmacyStoreById")]
+    [Cache(Key = nameof(PharmacyStore), IdParameterName = "pharmacyStoreId")]
     [ProducesResponseType(typeof(PharmacyStoreDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetPharmacyStoreByIdAsync(Guid pharmacyStoreId)
@@ -59,6 +60,7 @@ public class PharmacyStoresController(IPharmacyStoreService pharmacyStoreService
     /// <response code="422">If the input data is invalid</response>
     [Authorize(Policy.Administrative)]
     [HttpPost(Name = "CreatePharmacyStore")]
+    [Cache(Key = nameof(PharmacyStore), IdParameterName = "pharmacyStoreId")]
     [ProducesResponseType(typeof(PharmacyStoreDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
     public async Task<IActionResult> CreatePharmacyStoreAsync(CreatePharmacyStoreDto createPharmacyStoreDto)
@@ -91,6 +93,7 @@ public class PharmacyStoresController(IPharmacyStoreService pharmacyStoreService
     /// <response code="422">If the input data is invalid</response>
     [Authorize(Policy.Administrative)]
     [HttpPut("{pharmacyStoreId:guid}", Name = "UpdatePharmacyStore")]
+    [Cache(Key = nameof(PharmacyStore), IdParameterName = "pharmacyStoreId")]
     [ProducesResponseType(typeof(PharmacyStoreDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
@@ -110,6 +113,7 @@ public class PharmacyStoresController(IPharmacyStoreService pharmacyStoreService
     /// <response code="404">If the pharmacy store is not found</response>
     [Authorize(Policy.Administrative)]
     [HttpDelete("{pharmacyStoreId:guid}", Name = "DeletePharmacyStore")]
+    [Cache(Key = nameof(PharmacyStore), IdParameterName = "pharmacyStoreId")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeletePharmacyStoreAsync(Guid pharmacyStoreId)

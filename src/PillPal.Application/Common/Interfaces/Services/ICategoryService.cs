@@ -1,4 +1,5 @@
-﻿using PillPal.Application.Features.Categories;
+﻿using PillPal.Application.Common.Paginations;
+using PillPal.Application.Features.Categories;
 
 namespace PillPal.Application.Common.Interfaces.Services;
 
@@ -9,9 +10,9 @@ public interface ICategoryService
     /// </summary>
     /// <param name="queryParameter">The query parameters for filtering.</param>
     /// <returns>
-    /// The task result contains a collection of <see cref="CategoryDto"/> objects.
+    /// The task result contains a pagination collection of <see cref="CategoryDto"/> objects.
     /// </returns>
-    Task<IEnumerable<CategoryDto>> GetCategoriesAsync(CategoryQueryParameter queryParameter);
+    Task<PaginationResponse<CategoryDto>> GetCategoriesAsync(CategoryQueryParameter queryParameter);
 
     /// <summary>
     /// Retrieves a category by its unique identifier.

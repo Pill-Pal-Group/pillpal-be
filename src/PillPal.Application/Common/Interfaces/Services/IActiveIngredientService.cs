@@ -1,4 +1,5 @@
-﻿using PillPal.Application.Features.ActiveIngredients;
+﻿using PillPal.Application.Common.Paginations;
+using PillPal.Application.Features.ActiveIngredients;
 
 namespace PillPal.Application.Common.Interfaces.Services;
 
@@ -9,9 +10,9 @@ public interface IActiveIngredientService
     /// </summary>
     /// <param name="queryParameter">The query parameters for filtering.</param>
     /// <returns>
-    /// The task result contains a collection of <see cref="ActiveIngredientDto"/> objects.
+    /// The task result contains a pagination collection of <see cref="ActiveIngredientDto"/> objects.
     /// </returns>
-    Task<IEnumerable<ActiveIngredientDto>> GetActiveIngredientsAsync(ActiveIngredientQueryParameter queryParameter);
+    Task<PaginationResponse<ActiveIngredientDto>> GetActiveIngredientsAsync(ActiveIngredientQueryParameter queryParameter);
 
     /// <summary>
     /// Retrieves an active ingredient by its unique identifier.

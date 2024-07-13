@@ -7,5 +7,6 @@ public partial class MapperConfigure : Profile
     void MedicationTakeProfile()
     {
         CreateMap<MedicationTake, MedicationTakesDto>().ReverseMap();
+        CreateMap<MedicationTake, CreateMedicationTakesDto>().ReverseMap();
     }
 }

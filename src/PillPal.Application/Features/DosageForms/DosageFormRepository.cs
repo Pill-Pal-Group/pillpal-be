@@ -1,5 +1,6 @@
 ﻿using PillPal.Application.Common.Interfaces.Data;
 using PillPal.Application.Common.Interfaces.Services;
+using PillPal.Application.Common.Paginations;
 using PillPal.Application.Common.Repositories;
 
 namespace PillPal.Application.Features.DosageForms;
@@ -36,7 +37,9 @@ public class DosageFormRepository(IApplicationDbContext context, IMapper mapper,
     public async Task DeleteDosageFormAsync(Guid dosageFormId)
     {
         var dosageForm = await Context.DosageForms
-            .FindAsync(dosageFormId) ?? throw new NotFoundException(nameof(DosageForm), dosageFormId);
+            .Where(d => !d.IsDeleted)
+            .FirstOrDefaultAsync(d => d.Id == dosageFormId)
+            ?? throw new NotFoundException(nameof(DosageForm), dosageFormId);
 
         Context.DosageForms.Remove(dosageForm);
 
@@ -46,18 +49,23 @@ public class DosageFormRepository(IApplicationDbContext context, IMapper mapper,
     public async Task<DosageFormDto> GetDosageFormByIdAsync(Guid dosageFormId)
     {
         var dosageForm = await Context.DosageForms
-            .FindAsync(dosageFormId) ?? throw new NotFoundException(nameof(DosageForm), dosageFormId);
+            .AsNoTracking()
+            .Where(d => !d.IsDeleted)
+            .FirstOrDefaultAsync(d => d.Id == dosageFormId)
+            ?? throw new NotFoundException(nameof(DosageForm), dosageFormId);
 
         return Mapper.Map<DosageFormDto>(dosageForm);
     }
 
-    public async Task<IEnumerable<DosageFormDto>> GetDosageFormsAsync()
+    public async Task<PaginationResponse<DosageFormDto>> GetDosageFormsAsync(DosageFormQueryParameter queryParameter)
     {
         var dosageForms = await Context.DosageForms
             .AsNoTracking()
-            .ToListAsync();
+            .Where(d => !d.IsDeleted)
+            .Filter(queryParameter)
+            .ToPaginationResponseAsync<DosageForm, DosageFormDto>(queryParameter, Mapper);
 
-        return Mapper.Map<IEnumerable<DosageFormDto>>(dosageForms);
+        return dosageForms;
     }
 
     public async Task<DosageFormDto> UpdateDosageFormAsync(Guid dosageFormId, UpdateDosageFormDto updateDosageFormDto)
@@ -65,7 +73,9 @@ public class DosageFormRepository(IApplicationDbContext context, IMapper mapper,
         await ValidateAsync(updateDosageFormDto);
 
         var dosageForm = await Context.DosageForms
-            .FindAsync(dosageFormId) ?? throw new NotFoundException(nameof(DosageForm), dosageFormId);
+            .Where(d => !d.IsDeleted)
+            .FirstOrDefaultAsync(d => d.Id == dosageFormId)
+            ?? throw new NotFoundException(nameof(DosageForm), dosageFormId);
 
         Mapper.Map(updateDosageFormDto, dosageForm);
 
