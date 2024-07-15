@@ -2,7 +2,7 @@ namespace PillPal.Application.Features.Accounts;
 
 public record UpdateManagerInformationDto
 {
-    /// <example>094278290</example>
+    /// <example>0942782905</example>
     public string? PhoneNumber { get; set; }
 }
 
