@@ -8,7 +8,7 @@ public record AssignManagerRequest
     /// <example>P@assword7</example>
     public string? Password { get; set; }
 
-    /// <example>094278290</example>
+    /// <example>0942782905</example>
     public string? PhoneNumber { get; set; }
 }
 
