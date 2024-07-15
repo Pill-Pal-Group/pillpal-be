@@ -11,6 +11,7 @@ public class UpdateManagerInformationDtoValidator : AbstractValidator<UpdateMana
     public UpdateManagerInformationDtoValidator()
     {
         RuleFor(x => x.PhoneNumber)
-            .Matches(@"^\d{9}$");
+            .Matches(@"^\d{10}$")
+            .WithMessage("Phone number must be 10 digits.");
     }
 }
