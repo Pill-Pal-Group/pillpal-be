@@ -29,6 +29,7 @@ public class AssignManagerRequestValidator : AbstractValidator<AssignManagerRequ
             .Matches("[^a-zA-Z0-9]").WithMessage("Password must contain at least one non alphanumeric character.");
 
         RuleFor(x => x.PhoneNumber)
-            .Matches(@"^\d{9}$");
+            .Matches(@"^\d{10}$")
+            .WithMessage("Phone number must be 10 digits.");
     }
 }
