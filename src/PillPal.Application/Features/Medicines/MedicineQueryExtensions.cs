@@ -11,7 +11,10 @@ public record MedicineQueryParameter : PaginationQueryParameter
     public Guid? Brand { get; init; }
 
     /// <example>Paracetamol</example>
-    public string? MedicineName { get; set; }
+    public string? MedicineName { get; init; }
+
+    /// <example>Vaccines</example>
+    public string? Category { get; init; }
 
     public bool? RequirePrescript { get; init; }
 }
@@ -59,6 +62,11 @@ public static class MedicineQueryExtensions
         if (queryParameter.RequirePrescript is not null)
         {
             query = query.Where(m => m.RequirePrescript == queryParameter.RequirePrescript);
+        }
+
+        if (queryParameter.Category is not null)
+        {
+            query = query.Where(m => m.Categories.Any(c => c.CategoryName!.Contains(queryParameter.Category)));
         }
 
         return query;
