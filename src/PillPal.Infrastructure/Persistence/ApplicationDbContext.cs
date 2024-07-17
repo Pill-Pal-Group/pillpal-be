@@ -29,8 +29,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<PharmaceuticalCompany> PharmaceuticalCompanies { get; set; }
 
-    public DbSet<PharmacyStore> PharmacyStores { get; set; }
-
     public DbSet<Prescript> Prescripts { get; set; }
 
     public DbSet<PrescriptDetail> PrescriptDetails { get; set; }
