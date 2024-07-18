@@ -1,9 +1,12 @@
 namespace PillPal.Application.Features.Statistics;
 
-public class StatisticRepository(IApplicationDbContext context)
-    : BaseRepository(context), IStatisticService
+public class StatisticRepository(IApplicationDbContext context, IServiceProvider serviceProvider)
+    : BaseRepository(context, serviceProvider), IStatisticService
 {
-    private static ReportTime HandleReportTime(ReportTime reportTime)
+    /// <summary>
+    /// Incase the start date or end date is null, set them to current date
+    /// </summary>
+    private static ReportTimeRequest HandleReportTime(ReportTimeRequest reportTime)
     {
         if (reportTime.StartDate == null || reportTime.EndDate == null)
         {
@@ -14,8 +17,9 @@ public class StatisticRepository(IApplicationDbContext context)
         return reportTime;
     }
 
-    public async Task<IEnumerable<CustomerPackagePercent>> GetCustomerPackagePercentAsync(ReportTime reportTime)
+    public async Task<IEnumerable<CustomerPackagePercentReport>> GetCustomerPackagePercentAsync(ReportTimeRequest reportTime)
     {
+        await ValidateAsync(reportTime);
         HandleReportTime(reportTime);
 
         var customerPackages = await Context.CustomerPackages
@@ -28,17 +32,19 @@ public class StatisticRepository(IApplicationDbContext context)
         //grouping by package category
         var groupByPackageCategory = customerPackages
             .GroupBy(cp => cp.PackageCategoryId)
-            .Select(g => new CustomerPackagePercent
+            .Select(g => new CustomerPackagePercentReport
             {
                 PackageName = g.First().PackageCategory!.PackageName,
-                Percent = (double)g.Count() / customerPackages.Count * 100
+                Percent = (double)g.Count() / customerPackages.Count * 100,
+                TotalRevenue = g.Sum(cp => cp.Price)
             });
 
         return groupByPackageCategory;
     }
 
-    public async Task<CustomerPackageReport> GetCustomerPackageReportAsync(ReportTime reportTime)
+    public async Task<CustomerPackageReport> GetCustomerPackageReportAsync(ReportTimeRequest reportTime)
     {
+        await ValidateAsync(reportTime);
         HandleReportTime(reportTime);
 
         var customerPackages = await Context.CustomerPackages
@@ -57,8 +63,9 @@ public class StatisticRepository(IApplicationDbContext context)
         };
     }
 
-    public async Task<ReportByTime> GetReportsAsync(ReportTime reportTime)
+    public async Task<ReportByTime> GetReportsAsync(ReportTimeRequest reportTime)
     {
+        await ValidateAsync(reportTime);
         HandleReportTime(reportTime);
 
         var customerPackagePercents = await GetCustomerPackagePercentAsync(reportTime);
@@ -77,19 +84,20 @@ public class StatisticRepository(IApplicationDbContext context)
             TotalCustomerPackageSubcription = totalCustomerPackageSubcription,
             TopPackage = topCustomerPackage,
             ReportTime = reportTime,
-            Revenue = revenue
+            TotalRevenue = revenue
         };
     }
 
-    public async Task<TopCustomerPackage?> GetTopCustomerPackageAsync(ReportTime reportTime)
+    public async Task<TopCustomerPackageReport?> GetTopCustomerPackageAsync(ReportTimeRequest reportTime)
     {
+        await ValidateAsync(reportTime);
         HandleReportTime(reportTime);
 
         var topCustomerPackage = await Context.CustomerPackages
             .Where(cp => cp.StartDate >= reportTime.StartDate &&
                         cp.StartDate <= reportTime.EndDate)
             .GroupBy(cp => cp.PackageCategoryId)
-            .Select(g => new TopCustomerPackage
+            .Select(g => new TopCustomerPackageReport
             {
                 PackageName = g.First().PackageCategory!.PackageName,
                 TotalCustomer = g.Count(),
@@ -102,8 +110,9 @@ public class StatisticRepository(IApplicationDbContext context)
         return topCustomerPackage;
     }
 
-    public async Task<CustomerRegistration> GetTotalCustomerRegistrationAsync(ReportTime reportTime)
+    public async Task<CustomerRegistrationReport> GetTotalCustomerRegistrationAsync(ReportTimeRequest reportTime)
     {
+        await ValidateAsync(reportTime);
         HandleReportTime(reportTime);
 
         var totalCustomer = await Context.Customers
@@ -112,7 +121,7 @@ public class StatisticRepository(IApplicationDbContext context)
             .AsNoTracking()
             .CountAsync();
 
-        return new CustomerRegistration
+        return new CustomerRegistrationReport
         {
             TotalCustomer = totalCustomer
         };

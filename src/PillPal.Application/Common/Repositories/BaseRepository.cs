@@ -3,13 +3,8 @@
 public class BaseRepository
 {
     protected readonly IApplicationDbContext Context;
-    protected readonly IServiceProvider ServiceProvider = null!;
+    protected readonly IServiceProvider ServiceProvider;
     protected readonly IMapper Mapper = null!;
-
-    protected BaseRepository(IApplicationDbContext context)
-    {
-        Context = context;
-    }
 
     protected BaseRepository(
         IApplicationDbContext context,
@@ -30,7 +25,7 @@ public class BaseRepository
     }
 
     /// <summary>
-    /// Validate a DTO.
+    /// Validate a DTO using its validator.
     /// </summary>
     /// <typeparam name="T">Type of DTO class, this class must have validator associate with</typeparam>
     /// <param name="dto">DTO object</param>
@@ -50,7 +45,7 @@ public class BaseRepository
     }
 
     /// <summary>
-    /// Validate a list of DTOs.
+    /// Validate a list of DTOs using their validators.
     /// </summary>
     /// <typeparam name="T">Type of DTO class, this class must have validator associate with</typeparam>
     /// <param name="dtos">List of DTOs</param>
