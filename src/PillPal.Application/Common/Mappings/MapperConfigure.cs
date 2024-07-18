@@ -17,7 +17,6 @@ public partial class MapperConfigure : Profile
         PaymentProfile();
         PackageCategoryProfile();
         PharmaceuticalCompanyProfile();
-        PharmacyStoreProfile();
         PrescriptProfile();
         SpecificationProfile();
         TermsOfServiceProfile();

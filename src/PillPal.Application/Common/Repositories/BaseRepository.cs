@@ -3,8 +3,13 @@
 public class BaseRepository
 {
     protected readonly IApplicationDbContext Context;
-    protected readonly IServiceProvider ServiceProvider;
+    protected readonly IServiceProvider ServiceProvider = null!;
     protected readonly IMapper Mapper = null!;
+
+    protected BaseRepository(IApplicationDbContext context)
+    {
+        Context = context;
+    }
 
     protected BaseRepository(
         IApplicationDbContext context,
