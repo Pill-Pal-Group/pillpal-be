@@ -12,9 +12,9 @@ using PillPal.Application.Features.Nations;
 using PillPal.Application.Features.PackageCategories;
 using PillPal.Application.Features.Payments;
 using PillPal.Application.Features.PharmaceuticalCompanies;
-using PillPal.Application.Features.PharmacyStores;
 using PillPal.Application.Features.Prescripts;
 using PillPal.Application.Features.Specifications;
+using PillPal.Application.Features.Statistics;
 using PillPal.Application.Features.TermsOfServices;
 
 namespace PillPal.Application.Configuration;
@@ -38,10 +38,10 @@ public static class DependencyInjection
         services.AddScoped<IPackageCategoryService, PackageCategoryRepository>();
         services.AddScoped<IPaymentService, PaymentRepository>();
         services.AddScoped<IPharmaceuticalCompanyService, PharmaceuticalCompanyRepository>();
-        services.AddScoped<IPharmacyStoreService, PharmacyStoreRepository>();
         services.AddScoped<IPrescriptService, PrescriptRepository>();
         services.AddScoped<ISpecificationService, SpecificationRepository>();
         services.AddScoped<ITermsOfService, TermsOfServiceRepository>();
+        services.AddScoped<IStatisticService, StatisticRepository>();
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

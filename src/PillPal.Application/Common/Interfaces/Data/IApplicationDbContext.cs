@@ -15,7 +15,6 @@ public interface IApplicationDbContext
     DbSet<PackageCategory> PackageCategories { get; }
     DbSet<Payment> Payments { get; }
     DbSet<PharmaceuticalCompany> PharmaceuticalCompanies { get; }
-    DbSet<PharmacyStore> PharmacyStores { get; }
     DbSet<Prescript> Prescripts { get; }
     DbSet<PrescriptDetail> PrescriptDetails { get; }
     DbSet<Specification> Specifications { get; }

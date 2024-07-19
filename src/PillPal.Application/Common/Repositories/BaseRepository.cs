@@ -25,7 +25,7 @@ public class BaseRepository
     }
 
     /// <summary>
-    /// Validate a DTO.
+    /// Validate a DTO using its validator.
     /// </summary>
     /// <typeparam name="T">Type of DTO class, this class must have validator associate with</typeparam>
     /// <param name="dto">DTO object</param>
@@ -45,7 +45,7 @@ public class BaseRepository
     }
 
     /// <summary>
-    /// Validate a list of DTOs.
+    /// Validate a list of DTOs using their validators.
     /// </summary>
     /// <typeparam name="T">Type of DTO class, this class must have validator associate with</typeparam>
     /// <param name="dtos">List of DTOs</param>
