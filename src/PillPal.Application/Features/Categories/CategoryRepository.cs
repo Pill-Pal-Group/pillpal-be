@@ -43,6 +43,8 @@ public class CategoryRepository(IApplicationDbContext context, IMapper mapper, I
 
     public async Task<PaginationResponse<CategoryDto>> GetCategoriesAsync(CategoryQueryParameter queryParameter)
     {
+        await ValidateAsync(queryParameter);
+        
         var categories = await Context.Categories
             .AsNoTracking()
             .Where(c => !c.IsDeleted)

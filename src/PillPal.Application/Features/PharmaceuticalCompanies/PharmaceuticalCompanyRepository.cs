@@ -31,6 +31,8 @@ public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMap
     public async Task<PaginationResponse<PharmaceuticalCompanyDto>>
         GetPharmaceuticalCompaniesAsync(PharmaceuticalCompanyQueryParameter queryParameter)
     {
+        await ValidateAsync(queryParameter);
+
         var pharmaceuticalCompanies = await Context.PharmaceuticalCompanies
             .AsNoTracking()
             .Where(b => !b.IsDeleted)

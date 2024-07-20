@@ -208,6 +208,8 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
     public async Task<PaginationResponse<MedicineDto>> GetMedicinesAsync(
         MedicineQueryParameter queryParameter, MedicineIncludeParameter includeParameter)
     {
+        await ValidateAsync(queryParameter);
+        
         var medicines = await Context.Medicines
             .AsNoTracking()
             .Where(m => !m.IsDeleted)

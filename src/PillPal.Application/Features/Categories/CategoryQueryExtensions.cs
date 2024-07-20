@@ -9,6 +9,14 @@ public record CategoryQueryParameter : PaginationQueryParameter
     public string? CategoryName { get; set; }
 }
 
+public class CategoryQueryParameterValidator : AbstractValidator<CategoryQueryParameter>
+{
+    public CategoryQueryParameterValidator()
+    {
+        Include(new PaginationQueryParameterValidator());
+    }
+}
+
 public static class CategoryQueryExtensions
 {
     public static IQueryable<Category> Filter(this IQueryable<Category> query, CategoryQueryParameter queryParameter)
