@@ -12,6 +12,14 @@ public record PharmaceuticalCompanyQueryParameter : PaginationQueryParameter
     public string? Nation { get; set; }
 }
 
+public class PharmaceuticalCompanyQueryParameterValidator : AbstractValidator<PharmaceuticalCompanyQueryParameter>
+{
+    public PharmaceuticalCompanyQueryParameterValidator()
+    {
+        Include(new PaginationQueryParameterValidator());
+    }
+}
+
 public static class PharmaceuticalCompanyQueryExtensions
 {
     public static IQueryable<PharmaceuticalCompany> Filter(this IQueryable<PharmaceuticalCompany> query, PharmaceuticalCompanyQueryParameter queryParameter)

@@ -9,6 +9,14 @@ public record ActiveIngredientQueryParameter : PaginationQueryParameter
     public string? IngredientName { get; set; }
 }
 
+public class ActiveIngredientQueryParameterValidator : AbstractValidator<ActiveIngredientQueryParameter>
+{
+    public ActiveIngredientQueryParameterValidator()
+    {
+        Include(new PaginationQueryParameterValidator());
+    }
+}
+
 public static class ActiveIngredientQueryExtensions
 {
     public static IQueryable<ActiveIngredient> Filter(this IQueryable<ActiveIngredient> query, ActiveIngredientQueryParameter queryParameter)

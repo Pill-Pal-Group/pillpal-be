@@ -6,6 +6,14 @@ public record DosageFormQueryParameter : PaginationQueryParameter
     public string? FormName { get; init; }
 }
 
+public class DosageFormQueryParameterValidator : AbstractValidator<DosageFormQueryParameter>
+{
+    public DosageFormQueryParameterValidator()
+    {
+        Include(new PaginationQueryParameterValidator());
+    }
+}
+
 public static class DosageFormQueryExtensions
 {
     public static IQueryable<DosageForm> Filter(this IQueryable<DosageForm> query, DosageFormQueryParameter queryParameter)

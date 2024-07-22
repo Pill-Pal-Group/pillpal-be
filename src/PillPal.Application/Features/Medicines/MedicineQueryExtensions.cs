@@ -19,6 +19,14 @@ public record MedicineQueryParameter : PaginationQueryParameter
     public bool? RequirePrescript { get; init; }
 }
 
+public class MedicineQueryParameterValidator : AbstractValidator<MedicineQueryParameter>
+{
+    public MedicineQueryParameterValidator()
+    {
+        Include(new PaginationQueryParameterValidator());
+    }
+}
+
 public record MedicineIncludeParameter
 {
     /// <example>true</example>
