@@ -21,6 +21,8 @@ public static class PaginationExtensions
             .Take(queryParameter.PageSize)
             .ToListAsync();
 
+        var totalCount = await query.CountAsync();
+
         var dtoList = mapper.Map<IEnumerable<TDto>>(data);
 
         return new PaginationResponse<TDto>
@@ -28,6 +30,7 @@ public static class PaginationExtensions
             Page = queryParameter.Page,
             PageSize = queryParameter.PageSize,
             PageCount = dtoList.Count(),
+            TotalCount = totalCount,
             Data = dtoList
         };
     }
