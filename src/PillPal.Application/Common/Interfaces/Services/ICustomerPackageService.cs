@@ -29,18 +29,6 @@ public interface ICustomerPackageService
     Task<CustomerPackageDto> GetCustomerPackageAsync(Guid id, bool isCustomer = false);
 
     /// <summary>
-    /// Creates a new customer package.
-    /// </summary>
-    /// <param name="createCustomerPackageDto">The DTO containing the creation data for the customer package.</param>
-    /// <returns>
-    /// The task result contains the created <see cref="CustomerPackageDto"/>.
-    /// </returns>
-    /// <exception cref="BadRequestException">Thrown if the customer already has an active package.</exception>
-    /// <exception cref="NotFoundException">Thrown if the package or payment is not found.</exception>
-    /// <exception cref="ValidationException">Thrown if the creation data is invalid.</exception>
-    Task<CustomerPackageDto> CreateCustomerPackageAsync(CreateCustomerPackageDto createCustomerPackageDto);
-
-    /// <summary>
     /// Checks for expired packages and updates their status.
     /// This method should be called periodically by a background service.
     /// </summary>

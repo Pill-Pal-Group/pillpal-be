@@ -7,6 +7,5 @@ public partial class MapperConfigure : Profile
     void CustomerPackageProfile()
     {
         CreateMap<CustomerPackage, CustomerPackageDto>().ReverseMap();
-        CreateMap<CustomerPackage, CreateCustomerPackageDto>().ReverseMap();
     }
 }

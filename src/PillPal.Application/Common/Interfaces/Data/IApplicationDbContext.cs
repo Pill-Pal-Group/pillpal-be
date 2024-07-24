@@ -13,7 +13,6 @@ public interface IApplicationDbContext
     DbSet<MedicineInBrand> MedicineInBrands { get; }
     DbSet<Nation> Nations { get; }
     DbSet<PackageCategory> PackageCategories { get; }
-    DbSet<Payment> Payments { get; }
     DbSet<PharmaceuticalCompany> PharmaceuticalCompanies { get; }
     DbSet<Prescript> Prescripts { get; }
     DbSet<PrescriptDetail> PrescriptDetails { get; }
