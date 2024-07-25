@@ -45,11 +45,11 @@ public class VnPayRequest
     private void MakeRequestData()
     {
         requestData.Add("vnp_Command", "pay");
-        requestData.Add("vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss"));
+        requestData.Add("vnp_CreateDate", DateTimeOffset.Now.ToUnixTimeSeconds().ToString("yyyyMMddHHmmss"));
         requestData.Add("vnp_CurrCode", "VND");
         requestData.Add("vnp_Locale", "vn");
         requestData.Add("vnp_OrderType", "billpayment");
-        requestData.Add("vnp_ExpireDate", DateTime.Now.AddMinutes(15).ToString("yyyyMMddHHmmss"));
+        requestData.Add("vnp_ExpireDate", DateTimeOffset.Now.AddMinutes(15).ToUnixTimeSeconds().ToString("yyyyMMddHHmmss"));
 
         if (Vnp_Amount != null)
             requestData.Add("vnp_Amount", Vnp_Amount.ToString() ?? string.Empty);
