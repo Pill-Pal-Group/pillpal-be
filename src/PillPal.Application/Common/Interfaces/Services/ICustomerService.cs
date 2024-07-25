@@ -53,4 +53,14 @@ public interface ICustomerService
     /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     /// <exception cref="ValidationException">Thrown when validation fails for the update information.</exception>
     Task<CustomerMealTimeDto> UpdateCustomerMealTimeAsync(UpdateCustomerMealTimeDto updateCustomerMealTimeDto);
+
+    /// <summary>
+    /// Updates the device token for a customer.
+    /// </summary>
+    /// <param name="customerDeviceTokenDto">The DTO containing the device token information.</param>
+    /// <returns>
+    /// The task result contains the updated <see cref="CustomerDto"/>.
+    /// </returns>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
+    Task UpdateCustomerDeviceTokenAsync(CustomerDeviceTokenDto customerDeviceTokenDto);
 }
