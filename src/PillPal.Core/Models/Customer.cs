@@ -11,6 +11,7 @@ public class Customer : BaseAuditableEntity
     public TimeOnly DinnerTime { get; set; }
     public TimeSpan MealTimeOffset { get; set; }
     public int LockoutCount { get; set; }
+    public string? DeviceToken { get; set; }
 
     public virtual ICollection<Prescript> Prescripts { get; set; } = default!;
 

@@ -56,6 +56,19 @@ public class CustomerRepository(IApplicationDbContext context, IMapper mapper, I
         return Mapper.Map<CustomerDto>(customer);
     }
 
+    public async Task UpdateCustomerDeviceTokenAsync(CustomerDeviceTokenDto customerDeviceTokenDto)
+    {
+        var customer = await Context.Customers
+            .FirstOrDefaultAsync(c => c.IdentityUserId == Guid.Parse(user.Id!))
+            ?? throw new NotFoundException(nameof(ApplicationUser), user.Id!);
+
+        customer.DeviceToken = customerDeviceTokenDto.DeviceToken;
+
+        Context.Customers.Update(customer);
+
+        await Context.SaveChangesAsync();
+    }
+
     public async Task<CustomerMealTimeDto> UpdateCustomerMealTimeAsync(UpdateCustomerMealTimeDto updateCustomerMealTimeDto)
     {
         await ValidateAsync(updateCustomerMealTimeDto);

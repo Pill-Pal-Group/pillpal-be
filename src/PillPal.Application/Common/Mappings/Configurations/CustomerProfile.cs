@@ -31,5 +31,7 @@ public partial class MapperConfigure : Profile
             .ForMember(c => c.LunchTime, dest => dest.MapFrom(src => TimeOnly.Parse(src.LunchTime!)))
             .ForMember(c => c.AfternoonTime, dest => dest.MapFrom(src => TimeOnly.Parse(src.AfternoonTime!)))
             .ForMember(c => c.DinnerTime, dest => dest.MapFrom(src => TimeOnly.Parse(src.DinnerTime!)));
+
+        CreateMap<CustomerDeviceTokenDto, Customer>().ReverseMap();
     }
 }
