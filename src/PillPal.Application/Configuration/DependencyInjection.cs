@@ -36,12 +36,13 @@ public static class DependencyInjection
         services.AddScoped<IMedicineService, MedicineRepository>();
         services.AddScoped<INationService, NationRepository>();
         services.AddScoped<IPackageCategoryService, PackageCategoryRepository>();
-        services.AddScoped<IPaymentService, PaymentRepository>();
         services.AddScoped<IPharmaceuticalCompanyService, PharmaceuticalCompanyRepository>();
         services.AddScoped<IPrescriptService, PrescriptRepository>();
         services.AddScoped<ISpecificationService, SpecificationRepository>();
         services.AddScoped<ITermsOfService, TermsOfServiceRepository>();
         services.AddScoped<IStatisticService, StatisticRepository>();
+        
+        services.AddScoped<IPaymentService, PaymentRepository>();
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
 

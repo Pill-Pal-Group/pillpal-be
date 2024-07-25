@@ -25,8 +25,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 
     public DbSet<PackageCategory> PackageCategories { get; set; }
 
-    public DbSet<Payment> Payments { get; set; }
-
     public DbSet<PharmaceuticalCompany> PharmaceuticalCompanies { get; set; }
 
     public DbSet<Prescript> Prescripts { get; set; }

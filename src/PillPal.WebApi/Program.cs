@@ -1,3 +1,6 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 namespace PillPal.WebApi;
 
 public class Program
@@ -10,6 +13,10 @@ public class Program
         {
             options.Conventions.Add(new RouteTokenTransformerConvention(
                 new KebabCaseParameterTransformer()));
+        })
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
 
         builder.Services.AddInfrastructureServices(builder.Configuration);
