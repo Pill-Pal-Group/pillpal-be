@@ -19,24 +19,27 @@ public class PaymentRepository(IApplicationDbContext context, IServiceProvider s
         };
 
         string paymentRef;
+        Guid id;
 
         switch (packagePaymentInfo.PaymentType)
         {
             case PaymentEnums.ZALOPAY:
                 paymentRef = DateTime.Now.ToString("yymmdd") + "_" + Guid.NewGuid().ToString();
                 paymentRequest.PaymentReference = paymentRef;
-                await CreatePendingCustomerPackageAsync(packageInformation, paymentRef);
+                id = await CreatePendingCustomerPackageAsync(packageInformation, paymentRef);
                 return new PaymentResponse
                 {
-                    PaymentUrl = zaloPayService.GetPaymentUrl(paymentRequest)
+                    PaymentUrl = zaloPayService.GetPaymentUrl(paymentRequest),
+                    CustomerPackageId = id
                 };
             case PaymentEnums.VNPAY:
                 paymentRef = Guid.NewGuid().ToString();
                 paymentRequest.PaymentReference = paymentRef;
-                await CreatePendingCustomerPackageAsync(packageInformation, paymentRef);
+                id = await CreatePendingCustomerPackageAsync(packageInformation, paymentRef);
                 return new PaymentResponse
                 {
-                    PaymentUrl = vnPayService.GetPaymentUrl(paymentRequest)
+                    PaymentUrl = vnPayService.GetPaymentUrl(paymentRequest),
+                    CustomerPackageId = id
                 };
             default:
                 throw new BadRequestException("Invalid payment method.");
@@ -53,7 +56,7 @@ public class PaymentRepository(IApplicationDbContext context, IServiceProvider s
         return package;
     }
 
-    private async Task CreatePendingCustomerPackageAsync(PackageCategory packageCategory, string paymentRef)
+    private async Task<Guid> CreatePendingCustomerPackageAsync(PackageCategory packageCategory, string paymentRef)
     {
         var customerId = await Context.Customers
             .AsNoTracking()
@@ -87,6 +90,8 @@ public class PaymentRepository(IApplicationDbContext context, IServiceProvider s
         await Context.CustomerPackages.AddAsync(customerPackage);
 
         await Context.SaveChangesAsync();
+
+        return customerPackage.Id;
     }
 
     public async Task UpdatePaymentStatusAsync(string paymentRef, PaymentStatusEnums paymentStatus)

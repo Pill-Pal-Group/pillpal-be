@@ -56,4 +56,17 @@ public class CustomerPackageRepository(IApplicationDbContext context, IMapper ma
 
         return Mapper.Map<IEnumerable<CustomerPackageDto>>(customerPackages);
     }
+
+    public async Task UpdateConfirmPackagePayment(Guid customerPackageId)
+    {
+        var customerPackage = await Context.CustomerPackages
+            .FirstOrDefaultAsync(c => c.Id == customerPackageId)
+            ?? throw new NotFoundException(nameof(CustomerPackage), customerPackageId);
+
+        customerPackage.PaymentStatus = (int)PaymentStatusEnums.PAID;
+
+        Context.CustomerPackages.Update(customerPackage);
+
+        await Context.SaveChangesAsync();
+    }
 }

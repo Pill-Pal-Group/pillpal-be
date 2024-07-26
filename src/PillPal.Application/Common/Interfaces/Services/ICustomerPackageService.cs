@@ -34,4 +34,11 @@ public interface ICustomerPackageService
     /// </summary>
     /// <returns>The task result.</returns>
     Task CheckForExpiredPackagesAsync();
+
+    /// <summary>
+    /// To update payment to paid (for demonstration and testing purpose)
+    /// </summary>
+    /// <param name="customerPackageId"></param>
+    /// <returns></returns>
+    Task UpdateConfirmPackagePayment(Guid customerPackageId);
 }
