@@ -1,6 +1,6 @@
 ﻿namespace PillPal.Application.Features.CustomerPackages;
 
-public class CustomerPackageRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider, IUser user)
+public class CustomerPackageRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider, IUser user, IFirebaseService firebaseService)
     : BaseRepository(context, mapper, serviceProvider), ICustomerPackageService
 {
     public async Task CheckForExpiredPackagesAsync()
@@ -16,6 +16,33 @@ public class CustomerPackageRepository(IApplicationDbContext context, IMapper ma
         }
 
         await Context.SaveChangesAsync();
+    }
+
+    public async Task CheckForRenewPackage()
+    {
+        var renewPackage = await Context.CustomerPackages
+            .Where(c => c.EndDate.Date == DateTimeOffset.UtcNow.Date)
+            .Where(c => c.PaymentStatus == (int)PaymentStatusEnums.PAID)
+            .Where(c => c.Customer!.DeviceToken != null)
+            .Select(c => new
+            {
+                c.PackageCategoryId,
+                c.Customer!.DeviceToken
+            })
+            .ToListAsync();
+
+        string title = "Gói đăng ký đã hết hạn";
+        string body = "Gói đăng ký của bạn đã hết hạn, vui lòng gia hạn để tiếp tục sử dụng dịch vụ";
+
+        foreach (var item in renewPackage)
+        {
+            Dictionary<string, string> data = new()
+            {
+                { "PackageCategoryId", item.PackageCategoryId.ToString() }
+            };
+
+            await firebaseService.SendCloudMessaging(title, body, item.DeviceToken!, data);
+        }
     }
 
     public async Task<CustomerPackageDto> GetCustomerPackageAsync(Guid id, bool isCustomer)

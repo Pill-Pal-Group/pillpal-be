@@ -14,4 +14,6 @@ public interface IFirebaseService
     /// <param name="token">The token to get the email from</param>
     /// <returns>The email from the token</returns>
     Task<string> GetEmailFromTokenAsync(string token);
+
+    Task SendCloudMessaging(string title, string body, string deviceToken, Dictionary<string, string> data);
 }

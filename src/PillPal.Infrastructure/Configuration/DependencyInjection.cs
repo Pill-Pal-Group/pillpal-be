@@ -107,5 +107,15 @@ public static class DependencyInjection
                 TimeZone = TimeZoneInfo.Local
             }
         );
+
+        RecurringJob.AddOrUpdate<ICustomerPackageService>(
+            "MessageToRenewPackage",
+            service => service.CheckForRenewPackage(),
+            Cron.Daily,
+            new RecurringJobOptions
+            {
+                TimeZone = TimeZoneInfo.Local
+            }
+        );
     }
 }
