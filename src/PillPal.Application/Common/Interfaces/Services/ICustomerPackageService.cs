@@ -41,4 +41,6 @@ public interface ICustomerPackageService
     /// <param name="customerPackageId"></param>
     /// <returns></returns>
     Task UpdateConfirmPackagePayment(Guid customerPackageId);
+
+    Task CheckForRenewPackage();
 }
