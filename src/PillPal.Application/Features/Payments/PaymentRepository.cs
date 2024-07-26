@@ -27,10 +27,12 @@ public class PaymentRepository(IApplicationDbContext context, IServiceProvider s
                 paymentRef = DateTime.Now.ToString("yymmdd") + "_" + Guid.NewGuid().ToString();
                 paymentRequest.PaymentReference = paymentRef;
                 id = await CreatePendingCustomerPackageAsync(packageInformation, paymentRef);
+                var zp = zaloPayService.GetPaymentUrl(paymentRequest);
                 return new PaymentResponse
                 {
-                    PaymentUrl = zaloPayService.GetPaymentUrl(paymentRequest),
-                    CustomerPackageId = id
+                    PaymentUrl = zp.zpMsg,
+                    CustomerPackageId = id,
+                    zp_trans_token = zp.zpTransToken
                 };
             case PaymentEnums.VNPAY:
                 paymentRef = Guid.NewGuid().ToString();
