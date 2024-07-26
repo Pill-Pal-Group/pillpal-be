@@ -4,5 +4,5 @@ namespace PillPal.Application.Common.Interfaces.Payment;
 
 public interface IZaloPayService
 {
-    string GetPaymentUrl(PaymentRequest request);
+    (string zpMsg, string zpTransToken) GetPaymentUrl(PaymentRequest request);
 }

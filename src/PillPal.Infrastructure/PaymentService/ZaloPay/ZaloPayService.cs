@@ -30,7 +30,7 @@ public class ZaloPayService : IZaloPayService
         Configuration = configuration.Value;
     }
 
-    public string GetPaymentUrl(PaymentRequest request)
+    public (string zpMsg, string zpTransToken) GetPaymentUrl(PaymentRequest request)
     {
         var zaloPayRequest = new ZaloPayRequest(
             appId: Configuration.AppId,
@@ -39,17 +39,17 @@ public class ZaloPayService : IZaloPayService
             appTransId: DateTime.Now.ToString("yymmdd") + "_" + Guid.NewGuid().ToString(),
             bankCode: "zalopayapp",
 
-            amount: (long)request.Amount,
+            amount: 1000,
             description: request.Description
         );
 
         zaloPayRequest.MakeSignature(Configuration.Key1);
 
-        (bool createZaloPayLinkResult, string? createZaloPayMessage) = zaloPayRequest.GetLink(Configuration.PaymentUrl);
+        (bool createZaloPayLinkResult, string? createZaloPayMessage, string? zpTransToken) = zaloPayRequest.GetLink(Configuration.PaymentUrl);
 
         if (createZaloPayLinkResult)
         {
-            return createZaloPayMessage;
+            return (createZaloPayMessage, zpTransToken);
         }
         else
         {

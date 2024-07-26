@@ -50,7 +50,7 @@ public class ZaloPayRequest
         return keyValuePairs;
     }
 
-    public (bool, string) GetLink(string paymentUrl)
+    public (bool, string, string) GetLink(string paymentUrl)
     {
         using var client = new HttpClient();
         var content = new FormUrlEncodedContent(GetContent());
@@ -70,17 +70,17 @@ public class ZaloPayRequest
 
             if (responseData.returnCode == 1)
             {
-                return (true, responseData.orderUrl);
+                return (true, responseData.orderUrl, responseData.zpTransToken);
             }
             else
             {
-                return (false, responseData.returnMessage);
+                return (false, responseData.returnMessage, "");
             }
 
         }
         else
         {
-            return (false, response.ReasonPhrase ?? string.Empty);
+            return (false, response.ReasonPhrase ?? string.Empty, "");
         }
     }
 }
