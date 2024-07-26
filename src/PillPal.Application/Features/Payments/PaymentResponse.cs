@@ -1,6 +1,7 @@
 namespace PillPal.Application.Features.Payments;
 
-public class PaymentResponse
+public record PaymentResponse
 {
     public string? PaymentUrl { get; set; }
+    public Guid CustomerPackageId { get; init; }
 }

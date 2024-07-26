@@ -9,7 +9,7 @@ namespace PillPal.WebApi.Controllers;
 [Route("api/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
-public class PaymentsController(IPaymentService paymentService) 
+public class PaymentsController(IPaymentService paymentService, ICustomerPackageService customerPackageService) 
     : ControllerBase
 {
     [Authorize(Policy.Customer)]
@@ -37,6 +37,19 @@ public class PaymentsController(IPaymentService paymentService)
     public async Task<IActionResult> ZaloPayCallbackAsync([FromBody] ZaloPayResponse zaloPayResponse)
     {
         //await paymentService.UpdatePaymentStatusAsync(zaloPayResponse.zpTransToken!);
+
+        return Ok();
+    }
+
+    /// <summary>
+    /// Confirm payment
+    /// </summary>
+    /// <param name="customerPackageId"></param>
+    /// <returns></returns>
+    [HttpGet("packages/payment", Name = "ConfirmPayment")]
+    public async Task<IActionResult> ConfirmPackagePayment([FromQuery] Guid customerPackageId)
+    {
+        await customerPackageService.UpdateConfirmPackagePayment(customerPackageId);
 
         return Ok();
     }
