@@ -22,7 +22,4 @@ public record CustomerPackageDto
 
     /// <example>00000000-0000-0000-0000-000000000000</example>
     public Guid PackageCategoryId { get; init; }
-
-    /// <example>00000000-0000-0000-0000-000000000000</example>
-    public Guid PaymentId { get; init; }
 }

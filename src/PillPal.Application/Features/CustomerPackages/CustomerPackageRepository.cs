@@ -1,12 +1,13 @@
 ﻿namespace PillPal.Application.Features.CustomerPackages;
 
-public class CustomerPackageRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider, IUser user)
+public class CustomerPackageRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider, IUser user, IFirebaseService firebaseService)
     : BaseRepository(context, mapper, serviceProvider), ICustomerPackageService
 {
     public async Task CheckForExpiredPackagesAsync()
     {
         var expiredPackages = await Context.CustomerPackages
             .Where(c => c.EndDate < DateTimeOffset.UtcNow)
+            .Where(c => c.PaymentStatus == (int)PaymentStatusEnums.PAID)
             .ToListAsync();
 
         foreach (var expiredPackage in expiredPackages)
@@ -17,52 +18,31 @@ public class CustomerPackageRepository(IApplicationDbContext context, IMapper ma
         await Context.SaveChangesAsync();
     }
 
-    public async Task<CustomerPackageDto> CreateCustomerPackageAsync(CreateCustomerPackageDto createCustomerPackageDto)
+    public async Task CheckForRenewPackage()
     {
-        await ValidateAsync(createCustomerPackageDto);
+        var renewPackage = await Context.CustomerPackages
+            .Where(c => c.EndDate.Date == DateTimeOffset.UtcNow.Date)
+            .Where(c => c.PaymentStatus == (int)PaymentStatusEnums.PAID)
+            .Where(c => c.Customer!.DeviceToken != null)
+            .Select(c => new
+            {
+                c.PackageCategoryId,
+                c.Customer!.DeviceToken
+            })
+            .ToListAsync();
 
-        var customerId = await Context.Customers
-            .AsNoTracking()
-            .Where(c => c.IdentityUserId == Guid.Parse(user.Id!))
-            .Select(c => c.Id)
-            .FirstOrDefaultAsync();
+        string title = "Gói đăng ký đã hết hạn";
+        string body = "Gói đăng ký của bạn đã hết hạn, vui lòng gia hạn để tiếp tục sử dụng dịch vụ";
 
-        var existingCustomerPackage = await Context.CustomerPackages
-            .AsNoTracking()
-            .Where(c => c.CustomerId == customerId)
-            .FirstOrDefaultAsync(c => !c.IsExpired);
-
-        if (existingCustomerPackage != null)
+        foreach (var item in renewPackage)
         {
-            throw new BadRequestException("Customer already has an active package.");
+            Dictionary<string, string> data = new()
+            {
+                { "PackageCategoryId", item.PackageCategoryId.ToString() }
+            };
+
+            await firebaseService.SendCloudMessaging(title, body, item.DeviceToken!, data);
         }
-
-        //todo: need improvement
-        var package = await Context.PackageCategories
-            .AsNoTracking()
-            .FirstOrDefaultAsync(p => p.Id == createCustomerPackageDto.PackageCategoryId)
-            ?? throw new NotFoundException(nameof(PackageCategories), createCustomerPackageDto.PackageCategoryId);
-
-        var payment = await Context.Payments
-            .AsNoTracking()
-            .FirstOrDefaultAsync(p => p.Id == createCustomerPackageDto.PaymentId)
-            ?? throw new NotFoundException(nameof(Payment), createCustomerPackageDto.PaymentId);
-
-        var customerPackage = Mapper.Map<CustomerPackage>(createCustomerPackageDto);
-
-        customerPackage.Duration = package.PackageDuration;
-        customerPackage.StartDate = DateTimeOffset.UtcNow;
-        customerPackage.EndDate = DateTimeOffset.UtcNow.AddDays(package.PackageDuration);
-        customerPackage.Price = package.Price;
-        customerPackage.CustomerId = customerId;
-        customerPackage.PackageCategoryId = package.Id;
-        customerPackage.PaymentId = payment.Id;
-
-        await Context.CustomerPackages.AddAsync(customerPackage);
-
-        await Context.SaveChangesAsync();
-
-        return Mapper.Map<CustomerPackageDto>(customerPackage);
     }
 
     public async Task<CustomerPackageDto> GetCustomerPackageAsync(Guid id, bool isCustomer)
@@ -74,6 +54,7 @@ public class CustomerPackageRepository(IApplicationDbContext context, IMapper ma
         if (isCustomer)
         {
             customerPackageQueryable = customerPackageQueryable
+                .Where(c => c.PaymentStatus == (int)PaymentStatusEnums.PAID)
                 .Where(c => c.Customer!.IdentityUserId == Guid.Parse(user.Id!));
         }
 
@@ -93,6 +74,7 @@ public class CustomerPackageRepository(IApplicationDbContext context, IMapper ma
         if (isCustomer)
         {
             customerPackagesQueryable = customerPackagesQueryable
+                .Where(c => c.PaymentStatus == (int)PaymentStatusEnums.PAID)
                 .Where(c => c.Customer!.IdentityUserId == Guid.Parse(user.Id!));
         }
 
@@ -100,5 +82,18 @@ public class CustomerPackageRepository(IApplicationDbContext context, IMapper ma
             .ToListAsync();
 
         return Mapper.Map<IEnumerable<CustomerPackageDto>>(customerPackages);
+    }
+
+    public async Task UpdateConfirmPackagePayment(Guid customerPackageId)
+    {
+        var customerPackage = await Context.CustomerPackages
+            .FirstOrDefaultAsync(c => c.Id == customerPackageId)
+            ?? throw new NotFoundException(nameof(CustomerPackage), customerPackageId);
+
+        customerPackage.PaymentStatus = (int)PaymentStatusEnums.PAID;
+
+        Context.CustomerPackages.Update(customerPackage);
+
+        await Context.SaveChangesAsync();
     }
 }

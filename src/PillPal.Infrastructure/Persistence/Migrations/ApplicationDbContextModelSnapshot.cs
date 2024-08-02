@@ -333,6 +333,9 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                     b.Property<DateTimeOffset?>("DeletedAt")
                         .HasColumnType("datetimeoffset");
 
+                    b.Property<string>("DeviceToken")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<TimeOnly>("DinnerTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("time")
@@ -395,8 +398,11 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("PackageCategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PaymentId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("PaymentReference")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -409,8 +415,6 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("PackageCategoryId");
-
-                    b.HasIndex("PaymentId");
 
                     b.ToTable("CustomerPackages");
                 });
@@ -622,23 +626,6 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("PackageCategories");
-                });
-
-            modelBuilder.Entity("PillPal.Core.Models.Payment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("PaymentLogo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PaymentName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Payments");
                 });
 
             modelBuilder.Entity("PillPal.Core.Models.PharmaceuticalCompany", b =>
@@ -949,17 +936,9 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PillPal.Core.Models.Payment", "Payment")
-                        .WithMany("CustomerPackages")
-                        .HasForeignKey("PaymentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Customer");
 
                     b.Navigation("PackageCategory");
-
-                    b.Navigation("Payment");
                 });
 
             modelBuilder.Entity("PillPal.Core.Models.MedicationTake", b =>
@@ -1064,11 +1043,6 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                 });
 
             modelBuilder.Entity("PillPal.Core.Models.PackageCategory", b =>
-                {
-                    b.Navigation("CustomerPackages");
-                });
-
-            modelBuilder.Entity("PillPal.Core.Models.Payment", b =>
                 {
                     b.Navigation("CustomerPackages");
                 });

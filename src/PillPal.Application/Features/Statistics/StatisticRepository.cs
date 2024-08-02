@@ -26,6 +26,7 @@ public class StatisticRepository(IApplicationDbContext context, IServiceProvider
             .Include(cp => cp.PackageCategory)
             .Where(cp => cp.StartDate >= reportTime.StartDate &&
                         cp.StartDate <= reportTime.EndDate)
+            .Where(cp => cp.PaymentStatus == (int)PaymentStatusEnums.PAID)
             .AsNoTracking()
             .ToListAsync();
 
@@ -51,6 +52,7 @@ public class StatisticRepository(IApplicationDbContext context, IServiceProvider
             .Include(cp => cp.PackageCategory)
             .Where(cp => cp.StartDate >= reportTime.StartDate &&
                         cp.StartDate <= reportTime.EndDate)
+            .Where(cp => cp.PaymentStatus == (int)PaymentStatusEnums.PAID)
             .AsNoTracking()
             .ToListAsync();
 
@@ -96,6 +98,7 @@ public class StatisticRepository(IApplicationDbContext context, IServiceProvider
         var topCustomerPackage = await Context.CustomerPackages
             .Where(cp => cp.StartDate >= reportTime.StartDate &&
                         cp.StartDate <= reportTime.EndDate)
+            .Where(cp => cp.PaymentStatus == (int)PaymentStatusEnums.PAID)
             .GroupBy(cp => cp.PackageCategoryId)
             .Select(g => new TopCustomerPackageReport
             {

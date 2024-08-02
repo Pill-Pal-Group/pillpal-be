@@ -41,23 +41,4 @@ public class CustomerPackagesController(ICustomerPackageService customerPackageS
 
         return Ok(customerPackage);
     }
-
-    /// <summary>
-    /// Create a customer package
-    /// </summary>
-    /// <param name="createCustomerPackageDto"></param>
-    /// <remarks>Requires customer policy</remarks>
-    /// <response code="201">Returns the newly created customer package</response>
-    /// <response code="400">If the customer already has an active package</response>
-    /// <response code="422">If validation failure occured</response>
-    [Authorize(Policy.Customer)]
-    [HttpPost("packages", Name = "CreateCustomerPackage")]
-    [ProducesResponseType(typeof(CustomerPackageDto), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
-    public async Task<IActionResult> CreateCustomerPackageAsync(CreateCustomerPackageDto createCustomerPackageDto)
-    {
-        var customerPackage = await customerPackageService.CreateCustomerPackageAsync(createCustomerPackageDto);
-
-        return CreatedAtRoute("GetCustomerPackage", new { packageId = customerPackage.PackageCategoryId }, customerPackage);
-    }
 }

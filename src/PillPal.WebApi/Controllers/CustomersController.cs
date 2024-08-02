@@ -123,4 +123,24 @@ public class CustomersController(ICustomerService customerService, ICustomerPack
 
         return Ok(customerMealTime);
     }
+
+    /// <summary>
+    /// Add or Update customer device token
+    /// </summary>
+    /// <param name="customerDeviceTokenDto"></param>
+    /// <remarks>
+    /// Requires customer policy
+    /// </remarks>
+    /// <response code="204">No content</response>
+    /// <response code="404">If the customer is not found</response>
+    [Authorize(Policy.Customer)]
+    [HttpPut("device-token", Name = "UpdateCustomerDeviceToken")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateCustomerDeviceTokenAsync(CustomerDeviceTokenDto customerDeviceTokenDto)
+    {
+        await customerService.UpdateCustomerDeviceTokenAsync(customerDeviceTokenDto);
+
+        return NoContent();
+    }
 }

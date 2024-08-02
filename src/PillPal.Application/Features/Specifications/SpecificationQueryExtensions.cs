@@ -6,6 +6,14 @@ public record SpecificationQueryParameter : PaginationQueryParameter
     public string? TypeName { get; set; }
 }
 
+public class SpecificationQueryParameterValidator : AbstractValidator<SpecificationQueryParameter>
+{
+    public SpecificationQueryParameterValidator()
+    {
+        Include(new PaginationQueryParameterValidator());
+    }
+}
+
 public static class SpecificationQueryExtensions
 {
     public static IQueryable<Specification> Filter(this IQueryable<Specification> query, SpecificationQueryParameter queryParameter)

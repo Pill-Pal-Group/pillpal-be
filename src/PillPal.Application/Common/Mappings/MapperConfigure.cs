@@ -14,7 +14,6 @@ public partial class MapperConfigure : Profile
         MedicineProfile();
         MedicationTakeProfile();
         NationProfile();
-        PaymentProfile();
         PackageCategoryProfile();
         PharmaceuticalCompanyProfile();
         PrescriptProfile();

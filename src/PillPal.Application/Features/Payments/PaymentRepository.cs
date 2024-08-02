@@ -1,65 +1,113 @@
-﻿namespace PillPal.Application.Features.Payments;
+using PillPal.Application.Common.Interfaces.Payment;
 
-public class PaymentRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider)
-    : BaseRepository(context, mapper, serviceProvider), IPaymentService
+namespace PillPal.Application.Features.Payments;
+
+public class PaymentRepository(IApplicationDbContext context, IServiceProvider serviceProvider, IUser user,
+    IZaloPayService zaloPayService, IVnPayService vnPayService)
+    : BaseRepository(context, serviceProvider), IPaymentService
 {
-    public async Task<IEnumerable<PaymentDto>> CreateBulkPaymentsAsync(IEnumerable<CreatePaymentDto> createPaymentDtos)
+    public async Task<PaymentResponse> CreatePaymentRequestAsync(CustomerPackagePaymentInformation packagePaymentInfo)
     {
-        await ValidateListAsync(createPaymentDtos);
+        await ValidateAsync(packagePaymentInfo);
 
-        var payments = Mapper.Map<IEnumerable<Payment>>(createPaymentDtos);
+        var packageInformation = await GetPackageInformation(packagePaymentInfo.PackageCategoryId);
 
-        await Context.Payments.AddRangeAsync(payments);
+        var paymentRequest = new PaymentRequest
+        {
+            Amount = packageInformation.Price,
+            Description = "Thanh toán gói " + packageInformation.PackageName,
+        };
 
-        await Context.SaveChangesAsync();
+        string paymentRef;
+        Guid id;
 
-        return Mapper.Map<IEnumerable<PaymentDto>>(payments);
+        switch (packagePaymentInfo.PaymentType)
+        {
+            case PaymentEnums.ZALOPAY:
+                paymentRef = DateTime.Now.ToString("yymmdd") + "_" + Guid.NewGuid().ToString();
+                paymentRequest.PaymentReference = paymentRef;
+                id = await CreatePendingCustomerPackageAsync(packageInformation, paymentRef);
+                var zp = zaloPayService.GetPaymentUrl(paymentRequest);
+                return new PaymentResponse
+                {
+                    PaymentUrl = zp.zpMsg,
+                    CustomerPackageId = id,
+                    zp_trans_token = zp.zpTransToken
+                };
+            case PaymentEnums.VNPAY:
+                paymentRef = Guid.NewGuid().ToString();
+                paymentRequest.PaymentReference = paymentRef;
+                id = await CreatePendingCustomerPackageAsync(packageInformation, paymentRef);
+                return new PaymentResponse
+                {
+                    PaymentUrl = vnPayService.GetPaymentUrl(paymentRequest),
+                    CustomerPackageId = id
+                };
+            default:
+                throw new BadRequestException("Invalid payment method.");
+        }
     }
 
-    public async Task<PaymentDto> CreatePaymentAsync(CreatePaymentDto createPaymentDto)
+    private async Task<PackageCategory> GetPackageInformation(Guid packageCategoryId)
     {
-        await ValidateAsync(createPaymentDto);
-
-        var payment = Mapper.Map<Payment>(createPaymentDto);
-
-        await Context.Payments.AddAsync(payment);
-
-        await Context.SaveChangesAsync();
-
-        return Mapper.Map<PaymentDto>(payment);
-    }
-
-    public async Task<PaymentDto> GetPaymentAsync(Guid paymentId)
-    {
-        var payment = await Context.Payments
+        var package = await Context.PackageCategories
             .AsNoTracking()
-            .FirstOrDefaultAsync(p => p.Id == paymentId)
-            ?? throw new NotFoundException(nameof(Payment), paymentId);
+            .FirstOrDefaultAsync(p => p.Id == packageCategoryId)
+            ?? throw new NotFoundException(nameof(PackageCategories), packageCategoryId);
 
-        return Mapper.Map<PaymentDto>(payment);
+        return package;
     }
 
-    public async Task<IEnumerable<PaymentDto>> GetPaymentsAsync()
+    private async Task<Guid> CreatePendingCustomerPackageAsync(PackageCategory packageCategory, string paymentRef)
     {
-        var payments = await Context.Payments
+        var customerId = await Context.Customers
             .AsNoTracking()
-            .ToListAsync();
+            .Where(c => c.IdentityUserId == Guid.Parse(user.Id!))
+            .Select(c => c.Id)
+            .FirstOrDefaultAsync();
 
-        return Mapper.Map<IEnumerable<PaymentDto>>(payments);
-    }
+        var existingCustomerPackage = await Context.CustomerPackages
+            .AsNoTracking()
+            .Where(c => c.CustomerId == customerId)
+            .Where(c => c.PaymentStatus == (int)PaymentStatusEnums.PAID)
+            .FirstOrDefaultAsync(c => !c.IsExpired);
 
-    public async Task<PaymentDto> UpdatePaymentAsync(Guid paymentId, UpdatePaymentDto updatePaymentDto)
-    {
-        await ValidateAsync(updatePaymentDto);
+        if (existingCustomerPackage != null)
+        {
+            throw new BadRequestException("Customer already has an active package.");
+        }
 
-        var payment = await Context.Payments
-            .FirstOrDefaultAsync(p => p.Id == paymentId)
-            ?? throw new NotFoundException(nameof(Payment), paymentId);
+        var customerPackage = new CustomerPackage
+        {
+            Duration = packageCategory.PackageDuration,
+            StartDate = DateTimeOffset.UtcNow,
+            EndDate = DateTimeOffset.UtcNow.AddDays(packageCategory.PackageDuration),
+            Price = packageCategory.Price,
+            CustomerId = customerId,
+            PackageCategoryId = packageCategory.Id,
+            PaymentReference = paymentRef,
+            PaymentStatus = (int)PaymentStatusEnums.UNPAID
+        };
 
-        Mapper.Map(updatePaymentDto, payment);
+        await Context.CustomerPackages.AddAsync(customerPackage);
 
         await Context.SaveChangesAsync();
 
-        return Mapper.Map<PaymentDto>(payment);
+        return customerPackage.Id;
+    }
+
+    public async Task UpdatePaymentStatusAsync(string paymentRef, PaymentStatusEnums paymentStatus)
+    {
+        var customerPackage = await Context.CustomerPackages
+            .FirstOrDefaultAsync(c => c.PaymentReference == paymentRef);
+
+        if (customerPackage == null)
+        {
+            throw new NotFoundException(nameof(CustomerPackage), paymentRef);
+        }
+
+        customerPackage.PaymentStatus = (int)paymentStatus;
+
+        await Context.SaveChangesAsync();
     }
 }

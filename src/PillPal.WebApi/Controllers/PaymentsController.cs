@@ -1,4 +1,7 @@
-﻿using PillPal.Application.Features.Payments;
+using PillPal.Application.Features.Payments;
+using PillPal.Core.Enums;
+using PillPal.Infrastructure.PaymentService.VnPay;
+using PillPal.Infrastructure.PaymentService.ZaloPay;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -6,59 +9,48 @@ namespace PillPal.WebApi.Controllers;
 [Route("api/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
-public class PaymentsController(IPaymentService paymentService)
+public class PaymentsController(IPaymentService paymentService, ICustomerPackageService customerPackageService) 
     : ControllerBase
 {
-    [HttpGet(Name = "GetPayments")]
-    [ProducesResponseType(typeof(IEnumerable<PaymentDto>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetPaymentsAsync()
-    {
-        var payments = await paymentService.GetPaymentsAsync();
-
-        return Ok(payments);
-    }
-
-    [HttpGet("{paymentId:guid}", Name = "GetPaymentById")]
-    [ProducesResponseType(typeof(PaymentDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetPaymentByIdAsync(Guid paymentId)
-    {
-        var payment = await paymentService.GetPaymentAsync(paymentId);
-
-        return Ok(payment);
-    }
-
-    [Authorize(Policy.Admin)]
-    [HttpPost(Name = "CreatePayment")]
-    [ProducesResponseType(typeof(PaymentDto), StatusCodes.Status201Created)]
+    [Authorize(Policy.Customer)]
+    [HttpGet("packages", Name = "CreatePayment")]
+    [ProducesResponseType(typeof(PaymentResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
-    public async Task<IActionResult> CreatePaymentAsync(CreatePaymentDto createPaymentDto)
+    public async Task<IActionResult> CreatePaymentAsync([FromQuery] CustomerPackagePaymentInformation packagePaymentInfo)
     {
-        var payment = await paymentService.CreatePaymentAsync(createPaymentDto);
+        var paymentResponse = await paymentService.CreatePaymentRequestAsync(packagePaymentInfo);
 
-        return CreatedAtRoute("GetPaymentById", new { paymentId = payment.Id }, payment);
+        return Ok(paymentResponse);
     }
 
-    [Authorize(Policy.Admin)]
-    [HttpPost("bulk", Name = "CreateBulkPayments")]
-    [ProducesResponseType(typeof(IEnumerable<PaymentDto>), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
-    public async Task<IActionResult> CreateBulkPaymentsAsync(IEnumerable<CreatePaymentDto> createPaymentDtos)
+    [HttpGet("vnpay/callback", Name = "VnPayCallback")]
+    public async Task<IActionResult> VnPayCallbackAsync([FromQuery] VnPayResponse vnPayResponse)
     {
-        var payments = await paymentService.CreateBulkPaymentsAsync(createPaymentDtos);
+        PaymentStatusEnums paymentStatus = vnPayResponse.Vnp_ResponseCode == "00" ? PaymentStatusEnums.PAID : PaymentStatusEnums.UNPAID;
+        
+        await paymentService.UpdatePaymentStatusAsync(vnPayResponse.Vnp_TxnRef!, paymentStatus);
 
-        return CreatedAtRoute("GetPayments", payments);
+        return Ok();
     }
 
-    [Authorize(Policy.Admin)]
-    [HttpPut("{paymentId:guid}", Name = "UpdatePayment")]
-    [ProducesResponseType(typeof(PaymentDto), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
-    public async Task<IActionResult> UpdatePaymentAsync(Guid paymentId, UpdatePaymentDto updatePaymentDto)
+    [HttpPost("zalopay/callback", Name = "ZaloPayCallback")]
+    public async Task<IActionResult> ZaloPayCallbackAsync([FromBody] ZaloPayResponse zaloPayResponse)
     {
-        var payment = await paymentService.UpdatePaymentAsync(paymentId, updatePaymentDto);
+        //await paymentService.UpdatePaymentStatusAsync(zaloPayResponse.zpTransToken!);
 
-        return Ok(payment);
+        return Ok();
+    }
+
+    /// <summary>
+    /// Confirm payment
+    /// </summary>
+    /// <param name="customerPackageId"></param>
+    /// <returns></returns>
+    [HttpGet("packages/payment", Name = "ConfirmPayment")]
+    public async Task<IActionResult> ConfirmPackagePayment([FromQuery] Guid customerPackageId)
+    {
+        await customerPackageService.UpdateConfirmPackagePayment(customerPackageId);
+
+        return Ok();
     }
 }
