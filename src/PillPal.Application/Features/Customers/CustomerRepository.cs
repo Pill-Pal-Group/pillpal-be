@@ -3,6 +3,36 @@
 public class CustomerRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider, IUser user)
     : BaseRepository(context, mapper, serviceProvider), ICustomerService
 {
+    private const int MaxAllowedPackagesPerCustomerAsGivenTime = 1;
+
+    private async Task<Dictionary<Guid, string?>> GetCurrentCustomerPackageAsync(List<Guid> customerId)
+    {
+        var customerPackage = await Context.CustomerPackages
+            .Where(cp => customerId.Contains(cp.CustomerId)
+                && cp.PaymentStatus == (int)PaymentStatusEnums.PAID
+                && !cp.IsExpired)
+            .Include(cp => cp.PackageCategory)
+            .Select(cp => new
+            {
+                cp.CustomerId,
+                cp.PackageCategory!.PackageName,
+            })
+            .AsNoTracking()
+            .ToListAsync();
+
+        var packageNamesByCustomerId = customerPackage
+            .GroupBy(cp => cp.CustomerId)
+            .ToDictionary(
+                cp => cp.Key,
+                cp => cp.Count() > MaxAllowedPackagesPerCustomerAsGivenTime
+                    // In case of data inconsistency, cause of multiple packages for a customer
+                    // return error as a way to alert that
+                    ? "error" : cp.FirstOrDefault()?.PackageName
+            );
+
+        return packageNamesByCustomerId;
+    }
+
     public async Task<CustomerDto> GetCustomerByIdAsync(Guid customerId)
     {
         var customer = await Context.Customers
@@ -11,7 +41,12 @@ public class CustomerRepository(IApplicationDbContext context, IMapper mapper, I
             .FirstOrDefaultAsync(c => c.Id == customerId)
             ?? throw new NotFoundException(nameof(Customer), customerId);
 
-        return Mapper.Map<CustomerDto>(customer);
+        var customerResponse = Mapper.Map<CustomerDto>(customer);
+
+        customerResponse.CustomerPackage = (await GetCurrentCustomerPackageAsync([customer.Id]))
+            .FirstOrDefault(cp => cp.Key == customer.Id).Value;
+
+        return customerResponse;
     }
 
     public async Task<CustomerDto> GetCustomerInfoAsync()
@@ -22,7 +57,12 @@ public class CustomerRepository(IApplicationDbContext context, IMapper mapper, I
             .FirstOrDefaultAsync(c => c.IdentityUserId == Guid.Parse(user.Id!))
             ?? throw new NotFoundException(nameof(ApplicationUser), user.Id!);
 
-        return Mapper.Map<CustomerDto>(customer);
+        var customerResponse = Mapper.Map<CustomerDto>(customer);
+
+        customerResponse.CustomerPackage = (await GetCurrentCustomerPackageAsync([customer.Id]))
+            .FirstOrDefault(cp => cp.Key == customer.Id).Value;
+
+        return customerResponse;
     }
 
     public async Task<IEnumerable<CustomerDto>> GetCustomersAsync(CustomerQueryParameter queryParameter)
@@ -33,7 +73,18 @@ public class CustomerRepository(IApplicationDbContext context, IMapper mapper, I
             .AsNoTracking()
             .ToListAsync();
 
-        return Mapper.Map<IEnumerable<CustomerDto>>(customers);
+        var customerResponse = Mapper.Map<IEnumerable<CustomerDto>>(customers);
+        var customerCurrentPackages = await GetCurrentCustomerPackageAsync(customers.Select(c => c.Id).ToList());
+
+        foreach (var customer in customerResponse)
+        {
+            if (customerCurrentPackages.TryGetValue(customer.Id, out var customerPackage))
+            {
+                customer.CustomerPackage = customerPackage;
+            }
+        }
+
+        return customerResponse;
     }
 
     public async Task<CustomerDto> UpdateCustomerAsync(UpdateCustomerDto updateCustomerDto)

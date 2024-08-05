@@ -34,5 +34,8 @@ public record CustomerDto
     /// <example>3</example>
     public int LockoutCount { get; init; }
 
+    /// <example>Premium 1 month</example>
+    public string? CustomerPackage { get; set; }
+
     public AccountDto ApplicationUser { get; init; } = default!;
 }
