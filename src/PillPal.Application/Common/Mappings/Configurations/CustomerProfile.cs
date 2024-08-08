@@ -13,6 +13,7 @@ public partial class MapperConfigure : Profile
             .ForMember(c => c.LunchTime, dest => dest.MapFrom(src => src.LunchTime.ToString("HH:mm")))
             .ForMember(c => c.AfternoonTime, dest => dest.MapFrom(src => src.AfternoonTime.ToString("HH:mm")))
             .ForMember(c => c.DinnerTime, dest => dest.MapFrom(src => src.DinnerTime.ToString("HH:mm")))
+            .ForMember(c => c.CustomerPackage, opt => opt.Ignore())
             .ReverseMap();
 
         CreateMap<Customer, UpdateCustomerDto>().ReverseMap();
