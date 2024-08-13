@@ -40,6 +40,7 @@ public class PrescriptRepository(IApplicationDbContext context, IMapper mapper, 
     {
         var prescript = await Context.Prescripts
             .Where(p => !p.IsDeleted)
+            .Where(p => p.Customer!.IdentityUserId == Guid.Parse(user.Id!))
             .Include(p => p.PrescriptDetails)
             .AsNoTracking()
             .FirstOrDefaultAsync(p => p.Id == prescriptId)
@@ -48,17 +49,20 @@ public class PrescriptRepository(IApplicationDbContext context, IMapper mapper, 
         return Mapper.Map<PrescriptDto>(prescript);
     }
 
-    public async Task<IEnumerable<PrescriptDto>> GetPrescriptsAsync(
+    public async Task<PaginationResponse<PrescriptDto>> GetPrescriptsAsync(
         PrescriptQueryParameter queryParameter, PrescriptIncludeParameter includeParameter)
     {
+        await ValidateAsync(queryParameter);
+        
         var prescipts = await Context.Prescripts
             .Where(p => !p.IsDeleted)
+            .Where(p => p.Customer!.IdentityUserId == Guid.Parse(user.Id!))
             .Filter(queryParameter)
             .Include(includeParameter)
             .AsNoTracking()
-            .ToListAsync();
+            .ToPaginationResponseAsync<Prescript, PrescriptDto>(queryParameter, Mapper);
 
-        return Mapper.Map<IEnumerable<PrescriptDto>>(prescipts);
+        return prescipts;
     }
 
     public async Task UpdatePrescriptDetailImageAsync(Guid prescriptDetailId, UpdatePrescriptDetailImageDto updatePrescriptDetailImageDto)

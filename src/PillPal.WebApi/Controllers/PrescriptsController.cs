@@ -15,9 +15,9 @@ public class PrescriptsController(IPrescriptService prescriptService)
     /// </summary>
     /// <param name="queryParameter"></param>
     /// <param name="includeParameter"></param>
-    /// <remarks>Requires authentication</remarks>
+    /// <remarks>Requires customer policy</remarks>
     /// <response code="200">Returns a list of prescripts</response>
-    [Authorize]
+    [Authorize(Policy.Customer)]
     [HttpGet(Name = "GetPrescripts")]
     [ProducesResponseType(typeof(IEnumerable<PrescriptDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPrescriptsAsync(
@@ -33,10 +33,10 @@ public class PrescriptsController(IPrescriptService prescriptService)
     /// Retrieves a prescript by its unique identifier
     /// </summary>
     /// <param name="prescriptId" example="00000000-0000-0000-0000-000000000000"></param>
-    /// <remarks>Requires authentication</remarks>
+    /// <remarks>Requires customer policy</remarks>
     /// <response code="200">Returns a prescript</response>
     /// <response code="404">If the prescript is not found</response>
-    [Authorize]
+    [Authorize(Policy.Customer)]
     [HttpGet("{prescriptId:guid}", Name = "GetPrescriptById")]
     [ProducesResponseType(typeof(PrescriptDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
