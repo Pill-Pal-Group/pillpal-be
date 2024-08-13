@@ -6,6 +6,7 @@ public class Medicine : BaseAuditableEntity
     public string? MedicineName { get; set; }
     public bool RequirePrescript { get; set; }
     public string? Image { get; set; }
+    public string? RegistrationNumber { get; set; }
 
     public Guid SpecificationId { get; set; }
     public virtual Specification? Specification { get; set; }

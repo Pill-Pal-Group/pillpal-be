@@ -69,7 +69,8 @@ public class MedicinesController(IMedicineService medicineService)
     ///         ],
     ///         "medicineName": "Medicine Name",
     ///         "requirePrescript": true,
-    ///         "image": "Image Url"
+    ///         "image": "Image Url",
+    ///         "registrationNumber": "VN-17384-13"
     ///     }
     ///
     /// </remarks>
@@ -147,7 +148,8 @@ public class MedicinesController(IMedicineService medicineService)
     ///         ],
     ///         "medicineName": "Medicine Name",
     ///         "requirePrescript": true,
-    ///         "image": "Image Url"
+    ///         "image": "Image Url",
+    ///         "registrationNumber": "VN-17384-13"
     ///     }
     ///
     /// </remarks>

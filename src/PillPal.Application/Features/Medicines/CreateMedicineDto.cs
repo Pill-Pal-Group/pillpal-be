@@ -8,6 +8,9 @@ public record CreateMedicineDto : MedicineRelationDto
 
     /// <example>https://monke.com/paracetamol.jpg</example>
     public string? Image { get; init; }
+
+    /// <example>VN-17384-13</example>
+    public string? RegistrationNumber { get; init; }
 }
 
 public class CreateMedicineValidator : AbstractValidator<CreateMedicineDto>
@@ -28,5 +31,9 @@ public class CreateMedicineValidator : AbstractValidator<CreateMedicineDto>
         RuleFor(x => x.Image)
             .MaximumLength(500)
             .WithMessage("Image must not exceed 100 characters.");
+
+        RuleFor(x => x.RegistrationNumber)
+            .NotEmpty()
+            .WithMessage("Registration number is required.");
     }
 }
