@@ -13,10 +13,6 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             .Where(m => medicinesToInsert.Select(dto => dto.MedicineName).Contains(m.MedicineName))
             .ToListAsync();
 
-        var existingCategories = await Context.Categories
-            .Where(c => medicinesToInsert.Select(dto => dto.Categories).Contains(c.CategoryName))
-            .ToListAsync();
-
         var existingNations = await Context.Nations
             .Where(n => medicinesToInsert.Select(dto => dto.Nation).Contains(n.NationName))
             .ToListAsync();
@@ -33,8 +29,15 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             .Where(df => medicinesToInsert.Select(dto => dto.DosageForms).Contains(df.FormName))
             .ToListAsync();
 
+        var categoryNames = medicinesToInsert.SelectMany(dto => dto.Categories!).Distinct().ToList();
+        var existingCategories = await Context.Categories
+            .Where(c => categoryNames.Contains(c.CategoryName!))
+            .ToListAsync();
+
+        var activeIngredientNames = medicinesToInsert
+            .SelectMany(dto => dto.ActiveIngredients!).Distinct().ToList();
         var existingActiveIngredients = await Context.ActiveIngredients
-            .Where(ai => medicinesToInsert.Select(dto => dto.ActiveIngredients).Contains(ai.IngredientName))
+            .Where(ai => activeIngredientNames.Contains(ai.IngredientName!))
             .ToListAsync();
 
         var existingSpecifications = await Context.Specifications
@@ -44,13 +47,13 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
 
         var newMedicines = new List<Medicine>();
 
-        var newCategories = new Dictionary<string, Category>();
         var newNations = new Dictionary<string, Nation>();
         var newPharmaceuticalCompanies = new Dictionary<string, PharmaceuticalCompany>();
         var newBrands = new Dictionary<string, Brand>();
         var newDosageForms = new Dictionary<string, DosageForm>();
-        var newActiveIngredients = new Dictionary<string, ActiveIngredient>();
         var newSpecifications = new Dictionary<string, Specification>();
+        var newActiveIngredients = new Dictionary<string, ActiveIngredient>();//
+        var newCategories = new Dictionary<string, Category>();//
 
         foreach (var dto in medicinesToInsert)
         {
@@ -62,9 +65,6 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             var medicine = Mapper.Map<Medicine>(dto);
 
             #region Get or create related entities
-            var category = existingCategories.FirstOrDefault(c => c.CategoryName!.Equals(dto.Categories))
-                ?? newCategories!.GetOrAdd(dto.Categories, new Category { Id = Guid.NewGuid(), CategoryName = dto.Categories });
-
             var nation = existingNations.FirstOrDefault(n => n.NationName == dto.Nation)
                 ?? newNations!.GetOrAdd(dto.Nation, new Nation { Id = Guid.NewGuid(), NationName = dto.Nation });
 
@@ -77,35 +77,63 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             var dosageForm = existingDosageForms.FirstOrDefault(df => df.FormName == dto.DosageForms)
                 ?? newDosageForms!.GetOrAdd(dto.DosageForms, new DosageForm { Id = Guid.NewGuid(), FormName = dto.DosageForms });
 
-            var activeIngredient = existingActiveIngredients.FirstOrDefault(ai => ai.IngredientName == dto.ActiveIngredients)
-                ?? newActiveIngredients!.GetOrAdd(dto.ActiveIngredients, new ActiveIngredient { Id = Guid.NewGuid(), IngredientName = dto.ActiveIngredients });
-
             var specification = existingSpecifications.FirstOrDefault(s => s.TypeName == dto.Specifications)
                 ?? newSpecifications!.GetOrAdd(dto.Specifications, new Specification { Id = Guid.NewGuid(), TypeName = dto.Specifications });
+
+            List<ActiveIngredient> activeIngredients = [];
+            foreach (var activeIngredient in activeIngredientNames)
+            {
+                foreach (var ingredient in dto.ActiveIngredients!)
+                {
+                    if (ingredient == activeIngredient)
+                    {
+                        activeIngredients.Add(existingActiveIngredients.FirstOrDefault(ai => ai.IngredientName == ingredient)
+                            ?? newActiveIngredients!.GetOrAdd(ingredient, new ActiveIngredient { Id = Guid.NewGuid(), IngredientName = ingredient }));
+                    }
+                }
+            }
+
+            List<Category> categories = [];
+            foreach (var categoryName in categoryNames)
+            {
+                foreach (var category in dto.Categories!)
+                {
+                    if (category == categoryName)
+                    {
+                        categories.Add(existingCategories.FirstOrDefault(c => c.CategoryName == category)
+                            ?? newCategories!.GetOrAdd(category, new Category { Id = Guid.NewGuid(), CategoryName = category }));
+                    }
+                }
+            }
             #endregion
 
             #region  Assign related entities
-            medicine.Categories = new List<Category> { category };
-            medicine.PharmaceuticalCompanies = new List<PharmaceuticalCompany> { pharmaceuticalCompany };
-            medicine.DosageForms = new List<DosageForm> { dosageForm };
-            medicine.ActiveIngredients = new List<ActiveIngredient> { activeIngredient };
+            medicine.Categories = categories;
+            medicine.PharmaceuticalCompanies = [ pharmaceuticalCompany ];
+            medicine.DosageForms = [ dosageForm ];
+            medicine.MedicineInBrands = [ new MedicineInBrand { Brand = brand, Price = dto.Price, MedicineUrl = dto.MedicineUrl } ];
+            medicine.ActiveIngredients = activeIngredients;
             medicine.Specification = specification;
-            medicine.MedicineInBrands = new List<MedicineInBrand>
-            {
-                new MedicineInBrand { Brand = brand, Price = dto.Price, MedicineUrl = dto.MedicineUrl }
-            };
             #endregion
 
             newMedicines.Add(medicine);
 
             #region Add newly created entities to the context
-            if (!existingCategories.Contains(category)) Context.Categories.Add(category);
             if (!existingNations.Contains(nation)) Context.Nations.Add(nation);
             if (!existingPharmaceuticalCompanies.Contains(pharmaceuticalCompany)) Context.PharmaceuticalCompanies.Add(pharmaceuticalCompany);
             if (!existingBrands.Contains(brand)) Context.Brands.Add(brand);
             if (!existingDosageForms.Contains(dosageForm)) Context.DosageForms.Add(dosageForm);
-            if (!existingActiveIngredients.Contains(activeIngredient)) Context.ActiveIngredients.Add(activeIngredient);
             if (!existingSpecifications.Contains(specification)) Context.Specifications.Add(specification);
+            
+            foreach (var activeIngredient in newActiveIngredients.Values)
+            {
+                if (!existingActiveIngredients.Contains(activeIngredient)) Context.ActiveIngredients.Add(activeIngredient);
+            }
+
+            foreach (var category in newCategories.Values)
+            {
+                if (!existingCategories.Contains(category)) Context.Categories.Add(category);
+            }
             #endregion
         }
 
@@ -269,14 +297,15 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         await Context.SaveChangesAsync();
     }
 
-    public async Task<FileExecutionResult> ImportMedicinesAsync(Stream file)
+    public async Task<FileExecutionResult> ImportMedicinesAsync(Stream file, 
+        MedicineExcelProperties properties, ExcelPropertyDelimiters delimiter)
     {
         var dataTable = fileReader.ReadExcelFile(file);
 
-        // represents the number of successfully executed rows in excel
+        // represents the number of qualified rows in the excel file
         int exeCount = 0;
 
-        var medicineInsert = new List<CreateMedicineFromExcelDto>();
+        var medicineToInsert = new List<CreateMedicineFromExcelDto>();
 
         foreach (DataRow row in dataTable.Rows)
         {
@@ -289,27 +318,34 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
 
             var medicine = new CreateMedicineFromExcelDto
             {
-                MedicineName = row["Product Name"].ToString(),
-                RequirePrescript = row["Medication requires prescription"].ToString()!.Equals("Có"),
-                Image = row["Image"].ToString(),
-                Specifications = row["Specifications"].ToString(),
-                Categories = row["Category"].ToString(),
-                DosageForms = row["Dosage forms"].ToString(),
-                ActiveIngredients = row["Ingredient"].ToString(),
-                PharmaceuticalCompanies = row["Manufacturer"].ToString(),
-                Brand = row["Brand"].ToString(),
-                BrandLogo = row["Brand Logo"].ToString(),
-                BrandUrl = row["Brand Url"].ToString(),
-                Price = row["Price"].ToString(),
-                MedicineUrl = row["Link"].ToString(),
-                Nation = row["Manufacturing country"].ToString(),
+                MedicineName = row[properties.MedicineName].ToString(),
+                RequirePrescript = row[properties.RequirePrescript].ToString()!.Equals("Có"),
+                Image = row[properties.Image].ToString(),
+                Specifications = row[properties.Specifications].ToString(),
+                DosageForms = row[properties.DosageForms].ToString(),
+                PharmaceuticalCompanies = row[properties.PharmaceuticalCompanies].ToString(),
+                Brand = row[properties.Brand].ToString(),
+                BrandLogo = row[properties.BrandLogo].ToString(),
+                BrandUrl = row[properties.BrandUrl].ToString(),
+                Price = row[properties.Price].ToString(),
+                MedicineUrl = row[properties.MedicineUrl].ToString(),
+                Nation = row[properties.Nation].ToString(),
+                RegistrationNumber = row[properties.RegistrationNumber].ToString(),
+
+                Categories = row[properties.Categories].ToString()?
+                    .Split(delimiter.CategoryDelimeter)
+                    .Select(c => c.Trim()).ToList(),
+                ActiveIngredients = row[properties.ActiveIngredients].ToString()?
+                    .Split(delimiter.IngredientDelimeter)
+                    .Select(ai => ai.Trim()).ToList(),
             };
 
-            medicineInsert.Add(medicine);
+            medicineToInsert.Add(medicine);
             exeCount++;
         }
 
-        var affectedRows = await CreateMedicinesFromExcelBatchAsync(medicineInsert);
+        // actual insertion of rows by affected rows in the database
+        var affectedRows = await CreateMedicinesFromExcelBatchAsync(medicineToInsert);
 
         return new FileExecutionResult
         {
