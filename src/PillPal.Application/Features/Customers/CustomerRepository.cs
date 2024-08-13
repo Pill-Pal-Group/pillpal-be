@@ -109,6 +109,19 @@ public class CustomerRepository(IApplicationDbContext context, IMapper mapper, I
 
     public async Task UpdateCustomerDeviceTokenAsync(CustomerDeviceTokenDto customerDeviceTokenDto)
     {
+        await ValidateAsync(customerDeviceTokenDto);
+
+        // find if the token already have a customer with it
+        var customerWithToken = await Context.Customers
+            .FirstOrDefaultAsync(c => c.DeviceToken == customerDeviceTokenDto.DeviceToken);
+        
+        // if so, delete that token of that customer
+        if (customerWithToken != null)
+        {
+            customerWithToken.DeviceToken = null;
+            Context.Customers.Update(customerWithToken);
+        }
+
         var customer = await Context.Customers
             .FirstOrDefaultAsync(c => c.IdentityUserId == Guid.Parse(user.Id!))
             ?? throw new NotFoundException(nameof(ApplicationUser), user.Id!);
