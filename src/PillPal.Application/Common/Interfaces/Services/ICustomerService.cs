@@ -41,7 +41,7 @@ public interface ICustomerService
     /// <returns>
     /// The task result contains a collection of <see cref="CustomerDto"/> objects.
     /// </returns>
-    Task<IEnumerable<CustomerDto>> GetCustomersAsync(CustomerQueryParameter queryParameter);
+    Task<PaginationResponse<CustomerDto>> GetCustomersAsync(CustomerQueryParameter queryParameter);
 
     /// <summary>
     /// Updates the meal time information for a customer.

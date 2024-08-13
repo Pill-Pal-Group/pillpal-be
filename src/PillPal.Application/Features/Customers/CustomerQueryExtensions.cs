@@ -1,9 +1,17 @@
 ﻿namespace PillPal.Application.Features.Customers;
 
-public record CustomerQueryParameter
+public record CustomerQueryParameter : PaginationQueryParameter
 {
     /// <example>CUS6060-555555</example>
     public string? CustomerCode { get; init; }
+}
+
+public class CustomerQueryParameterValidator : AbstractValidator<CustomerQueryParameter>
+{
+    public CustomerQueryParameterValidator()
+    {
+        Include(new PaginationQueryParameterValidator());
+    }
 }
 
 public static class CustomerQueryExtensions
