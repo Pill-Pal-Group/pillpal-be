@@ -1,9 +1,20 @@
 ﻿namespace PillPal.Application.Features.Prescripts;
 
-public record PrescriptQueryParameter
+public record PrescriptQueryParameter : PaginationQueryParameter
 {
-    /// <example>CUS6060-555555</example>
-    public string? CustomerCode { get; init; }
+    /// <example>Dr. Doof</example>
+    public string? DoctorName { get; init; }
+
+    /// <example>General Hospital</example>
+    public string? HospitalName { get; set; }
+}
+
+public class PrescriptQueryParameterValidator : AbstractValidator<PrescriptQueryParameter>
+{
+    public PrescriptQueryParameterValidator()
+    {
+        Include(new PaginationQueryParameterValidator());
+    }
 }
 
 public record PrescriptIncludeParameter
@@ -16,10 +27,14 @@ public static class PrescriptQueryExtensions
 {
     public static IQueryable<Prescript> Filter(this IQueryable<Prescript> query, PrescriptQueryParameter queryParameter)
     {
-        if (queryParameter.CustomerCode is not null)
+        if (queryParameter.DoctorName is not null)
         {
-            query = query
-                .Where(p => p.Customer!.CustomerCode!.Contains(queryParameter.CustomerCode));
+            query = query.Where(p => p.DoctorName!.Contains(queryParameter.DoctorName));
+        }
+
+        if (queryParameter.HospitalName is not null)
+        {
+            query = query.Where(p => p.HospitalName!.Contains(queryParameter.HospitalName));
         }
 
         return query;
