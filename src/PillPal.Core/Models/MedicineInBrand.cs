@@ -1,6 +1,6 @@
 ﻿namespace PillPal.Core.Models;
 
-public class MedicineInBrand : ISoftDelete
+public class MedicineInBrand : BaseAuditableEntity, ISoftDelete
 {
     public Guid BrandId { get; set; }
     public virtual Brand? Brand { get; set; }
@@ -10,7 +10,4 @@ public class MedicineInBrand : ISoftDelete
 
     public string? Price { get; set; }
     public string? MedicineUrl { get; set; }
-
-    public bool IsDeleted { get; set; }
-    public DateTimeOffset? DeletedAt { get; set; }
 }
