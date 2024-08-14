@@ -3,6 +3,11 @@ namespace PillPal.Infrastructure.Cache;
 public class CacheService(IDistributedCache cache, IOptions<CacheSettings> settings)
     : ICacheService
 {
+    private readonly JsonSerializerOptions jsonSerializerOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+
     public async Task<T?> GetAsync<T>(string key)
     {
         var cacheData = await cache.GetStringAsync(key);
@@ -34,6 +39,6 @@ public class CacheService(IDistributedCache cache, IOptions<CacheSettings> setti
             options.SlidingExpiration = TimeSpan.FromMinutes(settings.Value.SlidingExpiration);
         }
 
-        await cache.SetStringAsync(key, JsonSerializer.Serialize(value), options);
+        await cache.SetStringAsync(key, JsonSerializer.Serialize(value, jsonSerializerOptions), options);
     }
 }
