@@ -78,7 +78,6 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
                     allMedicationTakes.Add(medicationTake);
                 }
             }
-
         }
 
         await Context.MedicationTakes.AddRangeAsync(allMedicationTakes);
@@ -102,6 +101,7 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
         foreach (var prescriptDetail in prescript.PrescriptDetails)
         {
             var medicineName = prescriptDetail.MedicineName;
+            var medicineImage = prescriptDetail.MedicineImage;
 
             var medicationTakesQuery = Context.MedicationTakes
                 .Where(mt => mt.PrescriptDetailId == prescriptDetail.Id && !mt.IsDeleted);
@@ -119,6 +119,7 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
             allMedicationTakes.Add(new MedicationTakesListDto
             {
                 MedicineName = medicineName,
+                MedicineImage = medicineImage,
                 MedicationTakes = Mapper.Map<IEnumerable<MedicationTakesDto>>(medicationTakes)
             });
         }
