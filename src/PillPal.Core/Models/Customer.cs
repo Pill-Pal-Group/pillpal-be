@@ -1,7 +1,8 @@
 ﻿namespace PillPal.Core.Models;
 
-public class Customer : BaseAuditableEntity
+public class Customer : BaseAuditableEntity, IBaseEntity
 {
+    public Guid Id { get; set; }
     public string? CustomerCode { get; set; }
     public DateTimeOffset? Dob { get; set; }
     public string? Address { get; set; }

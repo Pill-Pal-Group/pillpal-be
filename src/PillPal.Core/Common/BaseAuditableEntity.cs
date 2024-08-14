@@ -1,6 +1,6 @@
 ﻿namespace PillPal.Core.Common;
 
-public class BaseAuditableEntity : BaseEntity, ISoftDelete
+public class BaseAuditableEntity : ISoftDelete
 {
     public DateTimeOffset? CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }

@@ -1,7 +1,8 @@
 ﻿namespace PillPal.Core.Models;
 
-public class CustomerPackage : BaseEntity
+public class CustomerPackage : IBaseEntity
 {
+    public Guid Id { get; set; }
     public int Duration { get; set; }
     public DateTimeOffset StartDate { get; set; }
     public DateTimeOffset EndDate { get; set; }

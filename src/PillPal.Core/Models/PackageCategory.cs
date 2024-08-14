@@ -1,7 +1,8 @@
 ﻿namespace PillPal.Core.Models;
 
-public class PackageCategory : BaseAuditableEntity
+public class PackageCategory : BaseAuditableEntity, IBaseEntity
 {
+    public Guid Id { get; set; }
     public string? PackageName { get; set; }
     public string? PackageDescription { get; set; }
     public int PackageDuration { get; set; }
