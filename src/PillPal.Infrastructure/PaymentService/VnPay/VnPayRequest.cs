@@ -7,12 +7,12 @@ public class VnPayRequest
 {
     public SortedList<string, string> requestData = new(new VnPayCompare());
     public VnPayRequest(
-        string version, 
-        string tmnCode, 
+        string version,
+        string tmnCode,
         string ipAddress,
-        decimal amount, 
+        decimal amount,
         string orderInfo,
-        string returnUrl, 
+        string returnUrl,
         string txnRef)
     {
         Vnp_IpAddr = ipAddress;
@@ -27,11 +27,11 @@ public class VnPayRequest
     public string GetLink(string baseUrl, string secretKey)
     {
         MakeRequestData();
-        
+
         StringBuilder data = new();
-        foreach(KeyValuePair<string, string> kv in requestData)
+        foreach (KeyValuePair<string, string> kv in requestData)
         {
-            if(!string.IsNullOrEmpty(kv.Value))
+            if (!string.IsNullOrEmpty(kv.Value))
             {
                 data.Append(WebUtility.UrlEncode(kv.Key) + "=" + WebUtility.UrlEncode(kv.Value) + "&");
             }

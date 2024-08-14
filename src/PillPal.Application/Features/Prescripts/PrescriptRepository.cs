@@ -53,7 +53,7 @@ public class PrescriptRepository(IApplicationDbContext context, IMapper mapper, 
         PrescriptQueryParameter queryParameter, PrescriptIncludeParameter includeParameter)
     {
         await ValidateAsync(queryParameter);
-        
+
         var prescipts = await Context.Prescripts
             .Where(p => !p.IsDeleted)
             .Where(p => p.Customer!.IdentityUserId == Guid.Parse(user.Id!))

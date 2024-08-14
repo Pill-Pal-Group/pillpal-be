@@ -73,7 +73,7 @@ public class StatisticRepository(IApplicationDbContext context, IServiceProvider
         var customerPackagePercents = await GetCustomerPackagePercentAsync(reportTime);
         var totalCustomerRegistration = await GetTotalCustomerRegistrationAsync(reportTime);
         var topCustomerPackage = await GetTopCustomerPackageAsync(reportTime);
-        
+
         var packageReport = await GetCustomerPackageReportAsync(reportTime);
 
         var revenue = packageReport.TotalRevenue;

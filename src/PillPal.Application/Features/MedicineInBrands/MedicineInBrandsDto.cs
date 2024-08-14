@@ -11,4 +11,7 @@ public record MedicineInBrandsDto
 
     /// <example>https://monke.com/paracetamol</example>
     public string? MedicineUrl { get; init; }
+
+    /// <example>2024-07-31T00:00:00+00:00</example>
+    public DateTimeOffset UpdatedAt { get; init; }
 }

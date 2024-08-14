@@ -8,7 +8,7 @@ namespace PillPal.WebApi.Controllers;
 [Produces("application/json")]
 public class StatisticsController(IStatisticService statisticService)
     : ControllerBase
-{   
+{
     /// <summary>
     /// Get customer package percent report from time period
     /// </summary>

@@ -41,7 +41,7 @@ public static class DependencyInjection
         services.AddScoped<ISpecificationService, SpecificationRepository>();
         services.AddScoped<ITermsOfService, TermsOfServiceRepository>();
         services.AddScoped<IStatisticService, StatisticRepository>();
-        
+
         services.AddScoped<IPaymentService, PaymentRepository>();
 
         services.AddAutoMapper(Assembly.GetExecutingAssembly());
