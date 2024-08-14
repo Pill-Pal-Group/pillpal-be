@@ -6,89 +6,126 @@ namespace PillPal.Application.Features.Medicines;
 public class MedicineRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider, IFileReader fileReader)
     : BaseRepository(context, mapper, serviceProvider), IMedicineService
 {
-    public async Task<int> CreateMedicinesFromExcelBatchAsync(List<CreateMedicineFromExcelDto> medicinesToInsert)
+    public async Task<int> CreateMedicinesFromExcelBatchAsync(List<CreateMedicineFromExcelDto> excelMedicineListToInsert)
     {
         #region Query all necessary entities in bulk
-        var existingMedicines = await Context.Medicines
-            .Where(m => medicinesToInsert.Select(dto => dto.MedicineName).Contains(m.MedicineName))
+        var existingMedicinesList = await Context.Medicines
+            .Include(m => m.MedicineInBrands)
+            .ThenInclude(mib => mib.Brand)
+            .Where(m => excelMedicineListToInsert.Select(dto => dto.MedicineName).Contains(m.MedicineName))
             .ToListAsync();
 
-        var existingNations = await Context.Nations
-            .Where(n => medicinesToInsert.Select(dto => dto.Nation).Contains(n.NationName))
+        var existingNationsList = await Context.Nations
+            .Where(n => excelMedicineListToInsert.Select(dto => dto.Nation).Contains(n.NationName))
             .ToListAsync();
 
-        var existingPharmaceuticalCompanies = await Context.PharmaceuticalCompanies
-            .Where(pc => medicinesToInsert.Select(dto => dto.PharmaceuticalCompanies).Contains(pc.CompanyName))
+        var existingPharmaceuticalCompaniesList = await Context.PharmaceuticalCompanies
+            .Where(pc => excelMedicineListToInsert.Select(dto => dto.PharmaceuticalCompanies).Contains(pc.CompanyName))
             .ToListAsync();
 
-        var existingBrands = await Context.Brands
-            .Where(b => medicinesToInsert.Select(dto => dto.Brand).Contains(b.BrandName))
+        var existingBrandsList = await Context.Brands
+            .Where(b => excelMedicineListToInsert.Select(dto => dto.Brand).Contains(b.BrandName))
             .ToListAsync();
 
-        var existingDosageForms = await Context.DosageForms
-            .Where(df => medicinesToInsert.Select(dto => dto.DosageForms).Contains(df.FormName))
+        var existingDosageFormsList = await Context.DosageForms
+            .Where(df => excelMedicineListToInsert.Select(dto => dto.DosageForms).Contains(df.FormName))
             .ToListAsync();
 
-        var categoryNames = medicinesToInsert.SelectMany(dto => dto.Categories!).Distinct().ToList();
-        var existingCategories = await Context.Categories
+        var existingSpecificationsList = await Context.Specifications
+            .Where(s => excelMedicineListToInsert.Select(dto => dto.Specifications).Contains(s.TypeName))
+            .ToListAsync();
+
+        var categoryNames = excelMedicineListToInsert
+            .SelectMany(dto => dto.Categories!).Distinct().ToList();
+        var existingCategoriesList = await Context.Categories
             .Where(c => categoryNames.Contains(c.CategoryName!))
             .ToListAsync();
 
-        var activeIngredientNames = medicinesToInsert
+        var activeIngredientNames = excelMedicineListToInsert
             .SelectMany(dto => dto.ActiveIngredients!).Distinct().ToList();
-        var existingActiveIngredients = await Context.ActiveIngredients
+        var existingActiveIngredientsList = await Context.ActiveIngredients
             .Where(ai => activeIngredientNames.Contains(ai.IngredientName!))
-            .ToListAsync();
-
-        var existingSpecifications = await Context.Specifications
-            .Where(s => medicinesToInsert.Select(dto => dto.Specifications).Contains(s.TypeName))
             .ToListAsync();
         #endregion
 
-        var newMedicines = new List<Medicine>();
+        var newMedicinesList = new List<Medicine>();
 
-        var newNations = new Dictionary<string, Nation>();
-        var newPharmaceuticalCompanies = new Dictionary<string, PharmaceuticalCompany>();
-        var newBrands = new Dictionary<string, Brand>();
-        var newDosageForms = new Dictionary<string, DosageForm>();
-        var newSpecifications = new Dictionary<string, Specification>();
-        var newActiveIngredients = new Dictionary<string, ActiveIngredient>();//
-        var newCategories = new Dictionary<string, Category>();//
+        var newNationsDict = new Dictionary<string, Nation>();
+        var newPharmaceuticalCompaniesDict = new Dictionary<string, PharmaceuticalCompany>();
+        var newBrandsDict = new Dictionary<string, Brand>();
+        var newDosageFormsDict = new Dictionary<string, DosageForm>();
+        var newSpecificationsDict = new Dictionary<string, Specification>();
+        var newActiveIngredientsDict = new Dictionary<string, ActiveIngredient>();
+        var newCategoriesDict = new Dictionary<string, Category>();
 
-        foreach (var dto in medicinesToInsert)
+        foreach (var medicineRow in excelMedicineListToInsert)
         {
-            if (existingMedicines.Any(m => m.MedicineName!.Equals(dto.MedicineName)))
+            #region Handle medicine row that already exists in the database
+            // check if the current medicine row already exists in the database
+            if (existingMedicinesList.Any(m => m.MedicineName!.Equals(medicineRow.MedicineName)))
             {
+                // if exists, check if the brand associated with the medicine row exists in the database
+                // if the brand not exists (means new brand), then add the brand to the database
+                var existingMedicine = existingMedicinesList
+                    .FirstOrDefault(m => m.MedicineName == medicineRow.MedicineName);
+
+                // get the brand associated with the medicine row
+                var existingMedicineInBrand = existingMedicine!.MedicineInBrands
+                    .FirstOrDefault(mib => mib.Brand!.BrandName == medicineRow.Brand);
+
+                if (existingMedicineInBrand == null) // meaning new brand
+                {
+                    var newBrandRow = existingBrandsList.FirstOrDefault(b => b.BrandName == medicineRow.Brand)
+                        ?? newBrandsDict!.GetOrAdd(medicineRow.Brand, new Brand { Id = Guid.NewGuid(), BrandName = medicineRow.Brand, BrandLogo = medicineRow.BrandLogo, BrandUrl = medicineRow.BrandUrl });
+
+                    var medicineInBrand = new MedicineInBrand { Brand = newBrandRow, Price = medicineRow.Price, MedicineUrl = medicineRow.MedicineUrl };
+
+                    existingMedicine.MedicineInBrands.Add(medicineInBrand);
+
+                    // add the brand to the context
+                    if (!existingBrandsList.Contains(newBrandRow)) Context.Brands.Add(newBrandRow);
+                }
+                else
+                {
+                    // incase the brand price has existed, check and update the price
+                    if (existingMedicineInBrand.Price != medicineRow.Price)
+                    {
+                        existingMedicineInBrand.Price = medicineRow.Price;
+                        Context.MedicineInBrands.Update(existingMedicineInBrand);
+                    }
+                }
+                
                 continue;
             }
+            #endregion
 
-            var medicine = Mapper.Map<Medicine>(dto);
+            var medicine = Mapper.Map<Medicine>(medicineRow);
 
             #region Get or create related entities
-            var nation = existingNations.FirstOrDefault(n => n.NationName == dto.Nation)
-                ?? newNations!.GetOrAdd(dto.Nation, new Nation { Id = Guid.NewGuid(), NationName = dto.Nation });
+            var nation = existingNationsList.FirstOrDefault(n => n.NationName == medicineRow.Nation)
+                ?? newNationsDict!.GetOrAdd(medicineRow.Nation, new Nation { Id = Guid.NewGuid(), NationName = medicineRow.Nation });
 
-            var pharmaceuticalCompany = existingPharmaceuticalCompanies.FirstOrDefault(pc => pc.CompanyName == dto.PharmaceuticalCompanies)
-                ?? newPharmaceuticalCompanies!.GetOrAdd(dto.PharmaceuticalCompanies, new PharmaceuticalCompany { Id = Guid.NewGuid(), CompanyName = dto.PharmaceuticalCompanies, Nation = nation });
+            var pharmaceuticalCompany = existingPharmaceuticalCompaniesList.FirstOrDefault(pc => pc.CompanyName == medicineRow.PharmaceuticalCompanies)
+                ?? newPharmaceuticalCompaniesDict!.GetOrAdd(medicineRow.PharmaceuticalCompanies, new PharmaceuticalCompany { Id = Guid.NewGuid(), CompanyName = medicineRow.PharmaceuticalCompanies, Nation = nation });
 
-            var brand = existingBrands.FirstOrDefault(b => b.BrandName == dto.Brand)
-                ?? newBrands!.GetOrAdd(dto.Brand, new Brand { Id = Guid.NewGuid(), BrandName = dto.Brand, BrandLogo = dto.BrandLogo, BrandUrl = dto.BrandUrl });
+            var brand = existingBrandsList.FirstOrDefault(b => b.BrandName == medicineRow.Brand)
+                ?? newBrandsDict!.GetOrAdd(medicineRow.Brand, new Brand { Id = Guid.NewGuid(), BrandName = medicineRow.Brand, BrandLogo = medicineRow.BrandLogo, BrandUrl = medicineRow.BrandUrl });
 
-            var dosageForm = existingDosageForms.FirstOrDefault(df => df.FormName == dto.DosageForms)
-                ?? newDosageForms!.GetOrAdd(dto.DosageForms, new DosageForm { Id = Guid.NewGuid(), FormName = dto.DosageForms });
+            var dosageForm = existingDosageFormsList.FirstOrDefault(df => df.FormName == medicineRow.DosageForms)
+                ?? newDosageFormsDict!.GetOrAdd(medicineRow.DosageForms, new DosageForm { Id = Guid.NewGuid(), FormName = medicineRow.DosageForms });
 
-            var specification = existingSpecifications.FirstOrDefault(s => s.TypeName == dto.Specifications)
-                ?? newSpecifications!.GetOrAdd(dto.Specifications, new Specification { Id = Guid.NewGuid(), TypeName = dto.Specifications });
+            var specification = existingSpecificationsList.FirstOrDefault(s => s.TypeName == medicineRow.Specifications)
+                ?? newSpecificationsDict!.GetOrAdd(medicineRow.Specifications, new Specification { Id = Guid.NewGuid(), TypeName = medicineRow.Specifications });
 
             List<ActiveIngredient> activeIngredients = [];
             foreach (var activeIngredient in activeIngredientNames)
             {
-                foreach (var ingredient in dto.ActiveIngredients!)
+                foreach (var ingredient in medicineRow.ActiveIngredients!)
                 {
                     if (ingredient == activeIngredient)
                     {
-                        activeIngredients.Add(existingActiveIngredients.FirstOrDefault(ai => ai.IngredientName == ingredient)
-                            ?? newActiveIngredients!.GetOrAdd(ingredient, new ActiveIngredient { Id = Guid.NewGuid(), IngredientName = ingredient }));
+                        activeIngredients.Add(existingActiveIngredientsList.FirstOrDefault(ai => ai.IngredientName == ingredient)
+                            ?? newActiveIngredientsDict!.GetOrAdd(ingredient, new ActiveIngredient { Id = Guid.NewGuid(), IngredientName = ingredient }));
                     }
                 }
             }
@@ -96,12 +133,12 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             List<Category> categories = [];
             foreach (var categoryName in categoryNames)
             {
-                foreach (var category in dto.Categories!)
+                foreach (var category in medicineRow.Categories!)
                 {
                     if (category == categoryName)
                     {
-                        categories.Add(existingCategories.FirstOrDefault(c => c.CategoryName == category)
-                            ?? newCategories!.GetOrAdd(category, new Category { Id = Guid.NewGuid(), CategoryName = category }));
+                        categories.Add(existingCategoriesList.FirstOrDefault(c => c.CategoryName == category)
+                            ?? newCategoriesDict!.GetOrAdd(category, new Category { Id = Guid.NewGuid(), CategoryName = category }));
                     }
                 }
             }
@@ -111,34 +148,34 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             medicine.Categories = categories;
             medicine.PharmaceuticalCompanies = [ pharmaceuticalCompany ];
             medicine.DosageForms = [ dosageForm ];
-            medicine.MedicineInBrands = [ new MedicineInBrand { Brand = brand, Price = dto.Price, MedicineUrl = dto.MedicineUrl } ];
+            medicine.MedicineInBrands = [ new MedicineInBrand { Brand = brand, Price = medicineRow.Price, MedicineUrl = medicineRow.MedicineUrl } ];
             medicine.ActiveIngredients = activeIngredients;
             medicine.Specification = specification;
             #endregion
 
-            newMedicines.Add(medicine);
+            newMedicinesList.Add(medicine);
 
             #region Add newly created entities to the context
-            if (!existingNations.Contains(nation)) Context.Nations.Add(nation);
-            if (!existingPharmaceuticalCompanies.Contains(pharmaceuticalCompany)) Context.PharmaceuticalCompanies.Add(pharmaceuticalCompany);
-            if (!existingBrands.Contains(brand)) Context.Brands.Add(brand);
-            if (!existingDosageForms.Contains(dosageForm)) Context.DosageForms.Add(dosageForm);
-            if (!existingSpecifications.Contains(specification)) Context.Specifications.Add(specification);
+            if (!existingNationsList.Contains(nation)) Context.Nations.Add(nation);
+            if (!existingPharmaceuticalCompaniesList.Contains(pharmaceuticalCompany)) Context.PharmaceuticalCompanies.Add(pharmaceuticalCompany);
+            if (!existingBrandsList.Contains(brand)) Context.Brands.Add(brand);
+            if (!existingDosageFormsList.Contains(dosageForm)) Context.DosageForms.Add(dosageForm);
+            if (!existingSpecificationsList.Contains(specification)) Context.Specifications.Add(specification);
             
-            foreach (var activeIngredient in newActiveIngredients.Values)
+            foreach (var activeIngredient in newActiveIngredientsDict.Values)
             {
-                if (!existingActiveIngredients.Contains(activeIngredient)) Context.ActiveIngredients.Add(activeIngredient);
+                if (!existingActiveIngredientsList.Contains(activeIngredient)) Context.ActiveIngredients.Add(activeIngredient);
             }
 
-            foreach (var category in newCategories.Values)
+            foreach (var category in newCategoriesDict.Values)
             {
-                if (!existingCategories.Contains(category)) Context.Categories.Add(category);
+                if (!existingCategoriesList.Contains(category)) Context.Categories.Add(category);
             }
             #endregion
         }
 
         // Add new medicines to the context
-        await Context.Medicines.AddRangeAsync(newMedicines);
+        await Context.Medicines.AddRangeAsync(newMedicinesList);
 
         // Save changes in bulk
         // Returns the number of affected rows
@@ -305,7 +342,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         // represents the number of qualified rows in the excel file
         int exeCount = 0;
 
-        var medicineToInsert = new List<CreateMedicineFromExcelDto>();
+        var excelMedicineListToInsert = new List<CreateMedicineFromExcelDto>();
 
         foreach (DataRow row in dataTable.Rows)
         {
@@ -340,12 +377,12 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
                     .Select(ai => ai.Trim()).ToList(),
             };
 
-            medicineToInsert.Add(medicine);
+            excelMedicineListToInsert.Add(medicine);
             exeCount++;
         }
 
         // actual insertion of rows by affected rows in the database
-        var affectedRows = await CreateMedicinesFromExcelBatchAsync(medicineToInsert);
+        var affectedRows = await CreateMedicinesFromExcelBatchAsync(excelMedicineListToInsert);
 
         return new FileExecutionResult
         {
