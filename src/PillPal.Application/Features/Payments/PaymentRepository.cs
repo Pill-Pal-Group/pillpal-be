@@ -34,15 +34,6 @@ public class PaymentRepository(IApplicationDbContext context, IServiceProvider s
                     CustomerPackageId = id,
                     zp_trans_token = zp.zpTransToken
                 };
-            case PaymentEnums.VNPAY:
-                paymentRef = Guid.NewGuid().ToString();
-                paymentRequest.PaymentReference = paymentRef;
-                id = await CreatePendingCustomerPackageAsync(packageInformation, paymentRef);
-                return new PaymentResponse
-                {
-                    PaymentUrl = vnPayService.GetPaymentUrl(paymentRequest),
-                    CustomerPackageId = id
-                };
             default:
                 throw new BadRequestException("Invalid payment method.");
         }

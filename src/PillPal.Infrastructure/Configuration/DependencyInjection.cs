@@ -5,7 +5,6 @@ using PillPal.Infrastructure.Auth;
 using PillPal.Infrastructure.Cache;
 using PillPal.Infrastructure.File;
 using PillPal.Infrastructure.Identity;
-using PillPal.Infrastructure.PaymentService.VnPay;
 using PillPal.Infrastructure.PaymentService.ZaloPay;
 using PillPal.Infrastructure.Persistence;
 using PillPal.Infrastructure.Persistence.Interceptors;
@@ -71,11 +70,8 @@ public static class DependencyInjection
 
         services.AddScoped<ICacheService, CacheService>();
 
-        services.Configure<VnPayConfiguration>(configuration.GetSection("VnPay"));
-
         services.Configure<ZaloPayConfiguration>(configuration.GetSection("ZaloPay"));
 
-        services.AddScoped<IVnPayService, VnPayService>();
         services.AddScoped<IZaloPayService, ZaloPayService>();
 
         return services;
