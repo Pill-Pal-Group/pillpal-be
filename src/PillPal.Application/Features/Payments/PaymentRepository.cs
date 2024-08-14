@@ -3,7 +3,7 @@ using PillPal.Application.Common.Interfaces.Payment;
 namespace PillPal.Application.Features.Payments;
 
 public class PaymentRepository(IApplicationDbContext context, IServiceProvider serviceProvider, IUser user,
-    IZaloPayService zaloPayService, IVnPayService vnPayService)
+    IZaloPayService zaloPayService)
     : BaseRepository(context, serviceProvider), IPaymentService
 {
     public async Task<PaymentResponse> CreatePaymentRequestAsync(CustomerPackagePaymentInformation packagePaymentInfo)
