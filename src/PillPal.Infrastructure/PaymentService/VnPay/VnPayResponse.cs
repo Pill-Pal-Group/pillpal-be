@@ -18,7 +18,7 @@ public class VnPayResponse
     public string? Vnp_SecureHash { get; set; }
     public int? Vnp_Amount { get; set; }
     public string? Vnp_ResponseCode { get; set; }
-    public string? Vnp_PayDate { get; set;}
+    public string? Vnp_PayDate { get; set; }
 
     public bool IsValidSignature(string secretKey)
     {
@@ -31,7 +31,7 @@ public class VnPayResponse
                 data.Append(WebUtility.UrlEncode(kv.Key) + "=" + WebUtility.UrlEncode(kv.Value) + "&");
             }
         }
-        string checkSum = HashHelper.HmacSHA512(secretKey, 
+        string checkSum = HashHelper.HmacSHA512(secretKey,
             data.ToString().Remove(data.Length - 1, 1));
         return checkSum.Equals(Vnp_SecureHash, StringComparison.InvariantCultureIgnoreCase);
     }

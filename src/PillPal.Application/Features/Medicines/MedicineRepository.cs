@@ -94,7 +94,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
                         Context.MedicineInBrands.Update(existingMedicineInBrand);
                     }
                 }
-                
+
                 continue;
             }
             #endregion
@@ -146,9 +146,9 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
 
             #region  Assign related entities
             medicine.Categories = categories;
-            medicine.PharmaceuticalCompanies = [ pharmaceuticalCompany ];
-            medicine.DosageForms = [ dosageForm ];
-            medicine.MedicineInBrands = [ new MedicineInBrand { Brand = brand, Price = medicineRow.Price, MedicineUrl = medicineRow.MedicineUrl } ];
+            medicine.PharmaceuticalCompanies = [pharmaceuticalCompany];
+            medicine.DosageForms = [dosageForm];
+            medicine.MedicineInBrands = [new MedicineInBrand { Brand = brand, Price = medicineRow.Price, MedicineUrl = medicineRow.MedicineUrl }];
             medicine.ActiveIngredients = activeIngredients;
             medicine.Specification = specification;
             #endregion
@@ -161,7 +161,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             if (!existingBrandsList.Contains(brand)) Context.Brands.Add(brand);
             if (!existingDosageFormsList.Contains(dosageForm)) Context.DosageForms.Add(dosageForm);
             if (!existingSpecificationsList.Contains(specification)) Context.Specifications.Add(specification);
-            
+
             foreach (var activeIngredient in newActiveIngredientsDict.Values)
             {
                 if (!existingActiveIngredientsList.Contains(activeIngredient)) Context.ActiveIngredients.Add(activeIngredient);
@@ -274,7 +274,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         MedicineQueryParameter queryParameter, MedicineIncludeParameter includeParameter)
     {
         await ValidateAsync(queryParameter);
-        
+
         var medicines = await Context.Medicines
             .AsNoTracking()
             .Where(m => !m.IsDeleted)
@@ -334,7 +334,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         await Context.SaveChangesAsync();
     }
 
-    public async Task<FileExecutionResult> ImportMedicinesAsync(Stream file, 
+    public async Task<FileExecutionResult> ImportMedicinesAsync(Stream file,
         MedicineExcelProperties properties, ExcelPropertyDelimiters delimiter)
     {
         var dataTable = fileReader.ReadExcelFile(file);

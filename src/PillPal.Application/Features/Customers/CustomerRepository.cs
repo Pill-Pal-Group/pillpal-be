@@ -116,7 +116,7 @@ public class CustomerRepository(IApplicationDbContext context, IMapper mapper, I
         // find if the token already have a customer with it
         var customerWithToken = await Context.Customers
             .FirstOrDefaultAsync(c => c.DeviceToken == customerDeviceTokenDto.DeviceToken);
-        
+
         // if so, delete that token of that customer
         if (customerWithToken != null)
         {

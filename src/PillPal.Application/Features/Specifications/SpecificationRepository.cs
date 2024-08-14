@@ -31,7 +31,7 @@ public class SpecificationRepository(IApplicationDbContext context, IMapper mapp
     public async Task<PaginationResponse<SpecificationDto>> GetSpecificationsAsync(SpecificationQueryParameter queryParameter)
     {
         await ValidateAsync(queryParameter);
-        
+
         var specifications = await Context.Specifications
             .AsNoTracking()
             .Where(s => !s.IsDeleted)

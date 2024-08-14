@@ -277,7 +277,7 @@ public class MedicinesController(IMedicineService medicineService)
     [ProducesResponseType(typeof(FileExecutionResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> ImportMedicinesAsync([Required] IFormFile file,
-        [FromQuery] MedicineExcelProperties excelProperties, 
+        [FromQuery] MedicineExcelProperties excelProperties,
         [FromQuery] ExcelPropertyDelimiters propertyDelimiter)
     {
         var extension = Path.GetExtension(file.FileName);

@@ -1,14 +1,14 @@
 ﻿using Hangfire;
 using HangfireBasicAuthenticationFilter;
+using PillPal.Application.Common.Interfaces.Payment;
 using PillPal.Infrastructure.Auth;
 using PillPal.Infrastructure.Cache;
 using PillPal.Infrastructure.File;
 using PillPal.Infrastructure.Identity;
-using PillPal.Infrastructure.Persistence;
-using PillPal.Infrastructure.Persistence.Interceptors;
 using PillPal.Infrastructure.PaymentService.VnPay;
 using PillPal.Infrastructure.PaymentService.ZaloPay;
-using PillPal.Application.Common.Interfaces.Payment;
+using PillPal.Infrastructure.Persistence;
+using PillPal.Infrastructure.Persistence.Interceptors;
 
 namespace PillPal.Infrastructure.Configuration;
 
@@ -88,14 +88,14 @@ public static class DependencyInjection
             DarkModeEnabled = false,
             DashboardTitle = "PillPal Hangfire Dashboard",
             DisplayStorageConnectionString = false,
-            Authorization = new[]
-            {
+            Authorization =
+            [
                 new HangfireCustomBasicAuthenticationFilter
                 {
                     User = configuration["Hangfire:User"],
                     Pass = configuration["Hangfire:Pass"]
                 }
-            }
+            ]
         });
 
         RecurringJob.AddOrUpdate<ICustomerPackageService>(

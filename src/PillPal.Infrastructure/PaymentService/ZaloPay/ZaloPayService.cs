@@ -38,7 +38,7 @@ public class ZaloPayService : IZaloPayService
             appTime: DateTime.Now.GetTimeStamp(),
             appTransId: DateTime.Now.ToString("yyMMdd") + "_" + Guid.NewGuid().ToString(),
             bankCode: "zalopayapp",
-        
+
             amount: (long)request.Amount,
             description: request.Description
         );

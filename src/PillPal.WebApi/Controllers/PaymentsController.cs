@@ -9,7 +9,7 @@ namespace PillPal.WebApi.Controllers;
 [Route("api/[controller]")]
 [Consumes("application/json")]
 [Produces("application/json")]
-public class PaymentsController(IPaymentService paymentService, ICustomerPackageService customerPackageService) 
+public class PaymentsController(IPaymentService paymentService, ICustomerPackageService customerPackageService)
     : ControllerBase
 {
     [Authorize(Policy.Customer)]
@@ -27,7 +27,7 @@ public class PaymentsController(IPaymentService paymentService, ICustomerPackage
     public async Task<IActionResult> VnPayCallbackAsync([FromQuery] VnPayResponse vnPayResponse)
     {
         PaymentStatusEnums paymentStatus = vnPayResponse.Vnp_ResponseCode == "00" ? PaymentStatusEnums.PAID : PaymentStatusEnums.UNPAID;
-        
+
         await paymentService.UpdatePaymentStatusAsync(vnPayResponse.Vnp_TxnRef!, paymentStatus);
 
         return Ok();
