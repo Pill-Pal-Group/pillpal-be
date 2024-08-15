@@ -16,6 +16,9 @@ public record MedicineQueryParameter : PaginationQueryParameter
     /// <example>Vaccines</example>
     public string? Category { get; init; }
 
+    /// <example>Pfizer</example>
+    public string? PharmaceuticalCompany { get; set; }
+
     public bool? RequirePrescript { get; init; }
 }
 
@@ -75,6 +78,11 @@ public static class MedicineQueryExtensions
         if (queryParameter.Category is not null)
         {
             query = query.Where(m => m.Categories.Any(c => c.CategoryName!.Contains(queryParameter.Category)));
+        }
+
+        if (queryParameter.PharmaceuticalCompany is not null)
+        {
+            query = query.Where(m => m.PharmaceuticalCompanies.Any(pc => pc.CompanyName!.Contains(queryParameter.PharmaceuticalCompany)));
         }
 
         return query;
