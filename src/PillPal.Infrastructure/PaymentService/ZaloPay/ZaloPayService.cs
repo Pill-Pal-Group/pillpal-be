@@ -33,19 +33,19 @@ public class ZaloPayService : IZaloPayService
     public (string zpMsg, string zpTransToken) GetPaymentUrl(PaymentRequest request)
     {
         var zaloPayRequest = new ZaloPayRequest(
-            appId: Configuration.AppId,
-            appUser: Configuration.AppUser,
+            appId: Configuration.AppId!,
+            appUser: Configuration.AppUser!,
             appTime: DateTime.Now.GetTimeStamp(),
             appTransId: DateTime.Now.ToString("yyMMdd") + "_" + Guid.NewGuid().ToString(),
             bankCode: "zalopayapp",
 
-            amount: (long)request.Amount,
-            description: request.Description
+            amount: (long)request.Amount!,
+            description: request.Description!
         );
 
-        zaloPayRequest.MakeSignature(Configuration.Key1);
+        zaloPayRequest.MakeSignature(Configuration.Key1!);
 
-        (bool createZaloPayLinkResult, string? createZaloPayMessage, string? zpTransToken) = zaloPayRequest.GetLink(Configuration.PaymentUrl);
+        (bool createZaloPayLinkResult, string? createZaloPayMessage, string? zpTransToken) = zaloPayRequest.GetLink(Configuration.PaymentUrl!);
 
         if (createZaloPayLinkResult)
         {

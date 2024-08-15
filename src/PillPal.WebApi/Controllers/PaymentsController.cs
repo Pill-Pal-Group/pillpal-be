@@ -22,14 +22,6 @@ public class PaymentsController(IPaymentService paymentService, ICustomerPackage
         return Ok(paymentResponse);
     }
 
-    [HttpPost("zalopay/callback", Name = "ZaloPayCallback")]
-    public async Task<IActionResult> ZaloPayCallbackAsync([FromBody] ZaloPayResponse zaloPayResponse)
-    {
-        //await paymentService.UpdatePaymentStatusAsync(zaloPayResponse.zpTransToken!);
-
-        return Ok();
-    }
-
     /// <summary>
     /// Confirm payment
     /// </summary>

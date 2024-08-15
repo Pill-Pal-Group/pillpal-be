@@ -20,7 +20,7 @@ public class ZaloPayRequest
     public long AppTime { get; set; }
     public long Amount { get; set; }
     public string AppTransId { get; set; } = string.Empty;
-    public string ReturnUrl { get; }
+    public string ReturnUrl { get; set; } = string.Empty;
     public string EmbedData { get; set; } = string.Empty;
     public string Mac { get; set; } = string.Empty;
     public string BankCode { get; set; } = string.Empty;
@@ -36,16 +36,17 @@ public class ZaloPayRequest
 
     public Dictionary<string, string> GetContent()
     {
-        Dictionary<string, string> keyValuePairs = new();
-
-        keyValuePairs.Add("appid", AppId.ToString());
-        keyValuePairs.Add("appuser", AppUser);
-        keyValuePairs.Add("apptime", AppTime.ToString());
-        keyValuePairs.Add("amount", Amount.ToString());
-        keyValuePairs.Add("apptransid", AppTransId);
-        keyValuePairs.Add("description", Description);
-        keyValuePairs.Add("bankcode", "zalopayapp");
-        keyValuePairs.Add("mac", Mac);
+        var keyValuePairs = new Dictionary<string, string>
+        {
+            { "appid", AppId },
+            { "appuser", AppUser },
+            { "apptime", AppTime.ToString() },
+            { "amount", Amount.ToString() },
+            { "apptransid", AppTransId },
+            { "description", Description },
+            { "bankcode", "zalopayapp" },
+            { "mac", Mac }
+        };
 
         return keyValuePairs;
     }
@@ -65,16 +66,13 @@ public class ZaloPayRequest
                     PropertyNameCaseInsensitive = true
                 });
 
-            System.Console.WriteLine(responseContent);
-            System.Console.WriteLine(responseData);
-
-            if (responseData.returnCode == 1)
+            if (responseData!.returnCode == 1)
             {
-                return (true, responseData.orderUrl, responseData.zpTransToken);
+                return (true, responseData.orderUrl!, responseData.zpTransToken!);
             }
             else
             {
-                return (false, responseData.returnMessage, "");
+                return (false, responseData.returnMessage!, "");
             }
 
         }
