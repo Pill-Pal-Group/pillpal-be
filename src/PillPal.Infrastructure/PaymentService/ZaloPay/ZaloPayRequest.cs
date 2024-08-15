@@ -4,6 +4,16 @@ namespace PillPal.Infrastructure.PaymentService.ZaloPay;
 
 public class ZaloPayRequest
 {
+    public string? AppId { get; set; }
+    public string? AppUser { get; set; }
+    public long AppTime { get; set; }
+    public long Amount { get; set; }
+    public string? AppTransId { get; set; }
+    public string? ReturnUrl { get; set; }
+    public string? EmbedData { get; set; }
+    public string? Mac { get; set; }
+    public string? BankCode { get; set; }
+    public string? Description { get; set; }
     public ZaloPayRequest(string appId, string appUser, long appTime,
         long amount, string appTransId, string bankCode, string description)
     {
@@ -15,21 +25,10 @@ public class ZaloPayRequest
         BankCode = bankCode;
         Description = description;
     }
-    public string AppId { get; set; }
-    public string AppUser { get; set; } = string.Empty;
-    public long AppTime { get; set; }
-    public long Amount { get; set; }
-    public string AppTransId { get; set; } = string.Empty;
-    public string ReturnUrl { get; set; } = string.Empty;
-    public string EmbedData { get; set; } = string.Empty;
-    public string Mac { get; set; } = string.Empty;
-    public string BankCode { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
 
     public void MakeSignature(string key)
     {
-        var data = AppId + "|" + AppTransId + "|" + AppUser + "|" + Amount + "|"
-        + AppTime + "|" + "|";
+        var data = AppId + "|" + AppTransId + "|" + AppUser + "|" + Amount + "|" + AppTime + "|" + "|";
 
         Mac = HashHelper.HmacSHA256(data, key);
     }
@@ -38,20 +37,25 @@ public class ZaloPayRequest
     {
         var keyValuePairs = new Dictionary<string, string>
         {
-            { "appid", AppId },
-            { "appuser", AppUser },
+            { "appid", AppId! },
+            { "appuser", AppUser! },
             { "apptime", AppTime.ToString() },
             { "amount", Amount.ToString() },
-            { "apptransid", AppTransId },
-            { "description", Description },
+            { "apptransid", AppTransId! },
+            { "description", Description! },
             { "bankcode", "zalopayapp" },
-            { "mac", Mac }
+            { "mac", Mac! }
         };
 
         return keyValuePairs;
     }
 
-    public (bool, string, string) GetLink(string paymentUrl)
+    private readonly JsonSerializerOptions _jsonSerializerOptions = new()
+    {
+        PropertyNameCaseInsensitive = true
+    };
+
+    public (string paymentUrl, string zpTransToken) GetLink(string paymentUrl)
     {
         using var client = new HttpClient();
         var content = new FormUrlEncodedContent(GetContent());
@@ -60,25 +64,13 @@ public class ZaloPayRequest
         if (response.IsSuccessStatusCode)
         {
             var responseContent = response.Content.ReadAsStringAsync().Result;
-            var responseData = JsonSerializer
-                .Deserialize<ZaloPayResponse>(responseContent, new JsonSerializerOptions
-                {
-                    PropertyNameCaseInsensitive = true
-                });
+            var responseData = JsonSerializer.Deserialize<ZaloPayResponse>(responseContent, _jsonSerializerOptions);
 
-            if (responseData!.returnCode == 1)
-            {
-                return (true, responseData.orderUrl!, responseData.zpTransToken!);
-            }
-            else
-            {
-                return (false, responseData.returnMessage!, "");
-            }
-
+            return (responseData!.OrderUrl!, responseData.ZpTransToken!);
         }
         else
         {
-            return (false, response.ReasonPhrase ?? string.Empty, "");
+            return (response.ReasonPhrase ?? string.Empty, "");
         }
     }
 }

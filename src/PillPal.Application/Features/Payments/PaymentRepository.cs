@@ -18,24 +18,21 @@ public class PaymentRepository(IApplicationDbContext context, IServiceProvider s
             Description = "Thanh toán gói " + packageInformation.PackageName,
         };
 
-        string paymentRef;
-        Guid id;
+        Guid pendingCustomerPackageId;
 
         switch (packagePaymentInfo.PaymentType)
         {
             case PaymentEnums.ZALOPAY:
-                paymentRef = DateTime.Now.ToString("yymmdd") + "_" + Guid.NewGuid().ToString();
-                paymentRequest.PaymentReference = paymentRef;
-                id = await CreatePendingCustomerPackageAsync(packageInformation, paymentRef);
-                var zp = zaloPayService.GetPaymentUrl(paymentRequest);
+                pendingCustomerPackageId = await CreatePendingCustomerPackageAsync(packageInformation);
+                (string paymentUrl, string zpTransToken) = zaloPayService.GetPaymentUrl(paymentRequest);
                 return new PaymentResponse
                 {
-                    PaymentUrl = zp.zpMsg,
-                    CustomerPackageId = id,
-                    zp_trans_token = zp.zpTransToken
+                    PaymentUrl = paymentUrl,
+                    CustomerPackageId = pendingCustomerPackageId,
+                    ZpTransToken = zpTransToken
                 };
             default:
-                throw new BadRequestException("Invalid payment method.");
+                throw new BadRequestException("Invalid or unsupported payment method.");
         }
     }
 
@@ -49,7 +46,7 @@ public class PaymentRepository(IApplicationDbContext context, IServiceProvider s
         return package;
     }
 
-    private async Task<Guid> CreatePendingCustomerPackageAsync(PackageCategory packageCategory, string paymentRef)
+    private async Task<Guid> CreatePendingCustomerPackageAsync(PackageCategory packageCategory)
     {
         var customerId = await Context.Customers
             .AsNoTracking()
@@ -76,7 +73,6 @@ public class PaymentRepository(IApplicationDbContext context, IServiceProvider s
             Price = packageCategory.Price,
             CustomerId = customerId,
             PackageCategoryId = packageCategory.Id,
-            PaymentReference = paymentRef,
             PaymentStatus = (int)PaymentStatusEnums.UNPAID
         };
 
@@ -85,20 +81,5 @@ public class PaymentRepository(IApplicationDbContext context, IServiceProvider s
         await Context.SaveChangesAsync();
 
         return customerPackage.Id;
-    }
-
-    public async Task UpdatePaymentStatusAsync(string paymentRef, PaymentStatusEnums paymentStatus)
-    {
-        var customerPackage = await Context.CustomerPackages
-            .FirstOrDefaultAsync(c => c.PaymentReference == paymentRef);
-
-        if (customerPackage == null)
-        {
-            throw new NotFoundException(nameof(CustomerPackage), paymentRef);
-        }
-
-        customerPackage.PaymentStatus = (int)paymentStatus;
-
-        await Context.SaveChangesAsync();
     }
 }

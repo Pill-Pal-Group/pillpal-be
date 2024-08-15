@@ -36,11 +36,17 @@ public interface ICustomerPackageService
     Task CheckForExpiredPackagesAsync();
 
     /// <summary>
-    /// To update payment to paid (for demonstration and testing purpose)
+    /// To update payment to paid status
     /// </summary>
     /// <param name="customerPackageId"></param>
-    /// <returns></returns>
+    /// <returns>The task result.</returns>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     Task UpdateConfirmPackagePayment(Guid customerPackageId);
 
+    /// <summary>
+    /// Checks for packages that are about to expire and sends a notification to the customer.
+    /// This method should be called periodically by a background service.
+    /// </summary>
+    /// <returns>The task result.</returns>
     Task CheckForRenewPackage();
 }
