@@ -14,14 +14,6 @@ public class ZaloPayConfiguration
     public string? IpnUrl { get; set; }
 }
 
-public static class DateTimeExtensions
-{
-    public static long GetTimeStamp(this DateTime date)
-    {
-        return (long)(date.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds;
-    }
-}
-
 public class ZaloPayService : IZaloPayService
 {
     private readonly ZaloPayConfiguration Configuration;
@@ -30,12 +22,12 @@ public class ZaloPayService : IZaloPayService
         Configuration = configuration.Value;
     }
 
-    public (string zpMsg, string zpTransToken) GetPaymentUrl(PaymentRequest request)
+    public (string paymentUrl, string zpTransToken) GetPaymentUrl(PaymentRequest request)
     {
         var zaloPayRequest = new ZaloPayRequest(
             appId: Configuration.AppId!,
             appUser: Configuration.AppUser!,
-            appTime: DateTime.Now.GetTimeStamp(),
+            appTime: (long)(DateTime.Now.ToUniversalTime() - new DateTime(1970, 1, 1, 0, 0, 0)).TotalMilliseconds,
             appTransId: DateTime.Now.ToString("yyMMdd") + "_" + Guid.NewGuid().ToString(),
             bankCode: "zalopayapp",
 
@@ -45,15 +37,8 @@ public class ZaloPayService : IZaloPayService
 
         zaloPayRequest.MakeSignature(Configuration.Key1!);
 
-        (bool createZaloPayLinkResult, string? createZaloPayMessage, string? zpTransToken) = zaloPayRequest.GetLink(Configuration.PaymentUrl!);
+        (string? paymentUrl, string? zpTransToken) = zaloPayRequest.GetLink(Configuration.PaymentUrl!);
 
-        if (createZaloPayLinkResult)
-        {
-            return (createZaloPayMessage, zpTransToken);
-        }
-        else
-        {
-            throw new Exception(createZaloPayMessage);
-        }
+        return (paymentUrl, zpTransToken);
     }
 }

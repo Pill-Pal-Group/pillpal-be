@@ -38,12 +38,5 @@
     "PaymentUrl": "PaymentUrl",
     "ReturnUrl": "ReturnUrl",
     "IpnUrl": "IpnUrl"
-  },
-  "MoMo": {
-    "PartnerCode": "MOMO",
-    "AccessKey": "AccessKey",
-    "SecretKey": "SecretKey",
-    "PaymentUrl": "PaymentUrl",
-    "ReturnUrl": "ReturnUrl"
   }
 }

@@ -10,8 +10,6 @@ public class CustomerPackage : IBaseEntity
     public bool IsExpired { get; set; }
     public int PaymentStatus { get; set; }
 
-    public string? PaymentReference { get; set; }
-
     public Guid CustomerId { get; set; }
     public virtual Customer? Customer { get; set; }
 

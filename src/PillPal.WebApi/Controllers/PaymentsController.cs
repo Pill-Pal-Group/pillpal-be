@@ -1,6 +1,4 @@
 using PillPal.Application.Features.Payments;
-using PillPal.Core.Enums;
-using PillPal.Infrastructure.PaymentService.ZaloPay;
 
 namespace PillPal.WebApi.Controllers;
 
@@ -11,6 +9,13 @@ namespace PillPal.WebApi.Controllers;
 public class PaymentsController(IPaymentService paymentService, ICustomerPackageService customerPackageService)
     : ControllerBase
 {
+    /// <summary>
+    /// Create payment request
+    /// </summary>
+    /// <param name="packagePaymentInfo"></param>
+    /// <response code="200">Returns the payment response</response>
+    /// <response code="400">If the payment method is invalid or unsupported</response>
+    /// <response code="422">If the request is invalid</response>
     [Authorize(Policy.Customer)]
     [HttpGet("packages", Name = "CreatePayment")]
     [ProducesResponseType(typeof(PaymentResponse), StatusCodes.Status200OK)]
@@ -26,12 +31,15 @@ public class PaymentsController(IPaymentService paymentService, ICustomerPackage
     /// Confirm payment
     /// </summary>
     /// <param name="customerPackageId"></param>
-    /// <returns></returns>
+    /// <response code="204">If the operation success</response>
+    /// <response code="404">If the customer package is not found</response>
+    [Authorize(Policy.Customer)]
     [HttpGet("packages/payment", Name = "ConfirmPayment")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> ConfirmPackagePayment([FromQuery] Guid customerPackageId)
     {
         await customerPackageService.UpdateConfirmPackagePayment(customerPackageId);
 
-        return Ok();
+        return NoContent();
     }
 }
