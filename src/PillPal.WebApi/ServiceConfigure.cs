@@ -27,6 +27,8 @@ public static class ServiceConfigure
 
         services.AddCorsServices();
 
+        services.AddRateLimiterServices();
+
         return services;
     }
 }

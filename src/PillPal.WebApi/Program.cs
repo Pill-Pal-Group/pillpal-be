@@ -34,6 +34,8 @@ public class Program
 
         app.UseInfrastructureServices(builder.Configuration);
 
+        app.UseRateLimiter();
+
         app.UseCors();
 
         app.UseHttpsRedirection();
