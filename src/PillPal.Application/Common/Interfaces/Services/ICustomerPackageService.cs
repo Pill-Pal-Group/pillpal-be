@@ -49,4 +49,12 @@ public interface ICustomerPackageService
     /// </summary>
     /// <returns>The task result.</returns>
     Task CheckForRenewPackage();
+
+    /// <summary>
+    /// Cleans up the database by removing all unpaid packages.
+    /// Packages subjected to removal are those that have been unpaid for more than 24 hours.
+    /// This method should be called periodically by a background service.
+    /// </summary>
+    /// <returns>The task result.</returns>
+    Task RemoveUnpaidPackagesAsync();
 }
