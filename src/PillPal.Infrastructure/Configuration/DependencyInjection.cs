@@ -113,5 +113,15 @@ public static class DependencyInjection
                 TimeZone = TimeZoneInfo.Local
             }
         );
+
+        RecurringJob.AddOrUpdate<ICustomerPackageService>(
+            "RemoveUnpaidPackages",
+            service => service.RemoveUnpaidPackagesAsync(),
+            Cron.Daily,
+            new RecurringJobOptions
+            {
+                TimeZone = TimeZoneInfo.Local
+            }
+        );
     }
 }
