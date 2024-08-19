@@ -13,7 +13,13 @@ public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMap
 
         await Context.SaveChangesAsync();
 
-        return Mapper.Map<PharmaceuticalCompanyDto>(pharmaceuticalCompany);
+        // todo: need improvement
+        var createdPharmaceuticalCompany = await Context.PharmaceuticalCompanies
+            .Include(b => b.Nation)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(b => b.Id == pharmaceuticalCompany.Id);
+
+        return Mapper.Map<PharmaceuticalCompanyDto>(createdPharmaceuticalCompany);
     }
 
     public async Task DeletePharmaceuticalCompanyAsync(Guid companyId)
@@ -61,6 +67,7 @@ public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMap
 
         var pharmaceuticalCompany = await Context.PharmaceuticalCompanies
             .Where(b => !b.IsDeleted)
+            .Include(b => b.Nation)
             .FirstOrDefaultAsync(b => b.Id == companyId)
             ?? throw new NotFoundException(nameof(PharmaceuticalCompany), companyId);
 
