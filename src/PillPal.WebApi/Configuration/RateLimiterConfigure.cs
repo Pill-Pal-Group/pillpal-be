@@ -4,7 +4,7 @@ namespace PillPal.WebApi.Configuration;
 public static class RateLimiterConfigure
 {
     public const string BucketLimiter = "bucket";
-    public static IServiceCollection AddRateLimiterServices(this IServiceCollection services)
+    public static IServiceCollection AddRateLimiterServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddRateLimiter(options =>
         {
@@ -12,9 +12,9 @@ public static class RateLimiterConfigure
             
             options.AddTokenBucketLimiter(BucketLimiter, options =>
             {
-                options.ReplenishmentPeriod = TimeSpan.FromMinutes(1);
-                options.TokenLimit = 100;
-                options.TokensPerPeriod = 10;
+                options.ReplenishmentPeriod = TimeSpan.FromSeconds(configuration.GetValue<int>("RateLimitSettings:Bucket:ReplenishmentPeriod"));
+                options.TokenLimit = configuration.GetValue<int>("RateLimitSettings:Bucket:TokenLimit");
+                options.TokensPerPeriod = configuration.GetValue<int>("RateLimitSettings:Bucket:TokensPerPeriod");
             });
         });
 
