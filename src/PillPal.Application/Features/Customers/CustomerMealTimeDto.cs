@@ -14,6 +14,6 @@ public record CustomerMealTimeDto
     /// <example>18:00</example>
     public string? DinnerTime { get; init; }
 
-    /// <example>15</example>
+    /// <example>00:15</example>
     public string? MealTimeOffset { get; init; }
 }
