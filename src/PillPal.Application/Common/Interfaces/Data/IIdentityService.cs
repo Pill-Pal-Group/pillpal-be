@@ -55,7 +55,10 @@ public interface IIdentityService
     /// <para>Item1 (ApplicationUser): The user with the given email</para>
     /// <para>Item2 (string): The role of the user</para>
     /// </returns>
-    /// <exception cref="UnauthorizedAccessException">Thrown when the email not found or password is incorrect</exception>
+    /// <exception cref="UnauthorizedAccessException">
+    /// Thrown when the email not found or password is incorrect
+    /// Or the user is locked out
+    /// </exception>
     Task<(ApplicationUser, string role)> LoginAsync(string email, string password);
 
     /// <summary>
@@ -68,6 +71,7 @@ public interface IIdentityService
     /// <para>Item2 (string): The role of the user</para>
     /// <para>Item3 (bool): True if the user is a newly created user, false otherwise</para>
     /// </returns>
+    /// <exception cref="UnauthorizedAccessException">Thrown when the user is locked out</exception>
     Task<(ApplicationUser, string role, bool newUser)> GetUserByEmailAsync(string email);
 
     /// <summary>
