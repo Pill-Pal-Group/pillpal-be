@@ -130,6 +130,9 @@ public class IdentityService : IIdentityService
             newUser = true;
         }
 
+        // check if user is locked
+        await CheckAccountLockoutAsync(user!);
+
         var role = await _userManager.GetRolesAsync(user!)
             .ContinueWith(task => task.Result.FirstOrDefault());
 
@@ -168,12 +171,7 @@ public class IdentityService : IIdentityService
             ?? throw new UnauthorizedAccessException($"User with identifier '{email}' not found");
 
         // check if user is locked
-        if (await _userManager.IsLockedOutAsync(user))
-        {
-            var lockedOutEnd = await _userManager.GetLockoutEndDateAsync(user);
-
-            throw new UnauthorizedAccessException($"User is locked out until {lockedOutEnd.Value.LocalDateTime}");
-        }
+        await CheckAccountLockoutAsync(user);
 
         var result = await _userManager.CheckPasswordAsync(user, password);
 
@@ -199,6 +197,16 @@ public class IdentityService : IIdentityService
             .ContinueWith(task => task.Result.FirstOrDefault());
 
         return (user!, role!);
+    }
+
+    private async Task CheckAccountLockoutAsync(ApplicationUser user)
+    {
+        if (await _userManager.IsLockedOutAsync(user))
+        {
+            var lockedOutEnd = await _userManager.GetLockoutEndDateAsync(user);
+
+            throw new UnauthorizedAccessException($"User is locked out until {lockedOutEnd.Value.LocalDateTime}");
+        }
     }
 
     public async Task UnlockAccountAsync(Guid userId)
