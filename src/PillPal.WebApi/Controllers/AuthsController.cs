@@ -56,7 +56,7 @@ public class AuthsController(IAuthService authService)
     ///
     /// </remarks>
     /// <response code="200">Access token and refresh token</response>
-    /// <response code="401">If the user is not found or password is incorrect</response>
+    /// <response code="401">If the user is not found, email/password is incorrect or is locked</response>
     /// <response code="422">If the input data fail validation</response>
     [HttpPost("login", Name = "Login")]
     [ProducesResponseType(typeof(AccessTokenResponse), StatusCodes.Status200OK)]
@@ -83,6 +83,7 @@ public class AuthsController(IAuthService authService)
     ///
     /// </remarks>
     /// <response code="200">Access token and refresh token</response>
+    /// <response code="401">If the user is locked</response>
     /// <response code="422">If the input data fail validation</response>
     [HttpPost("token-login", Name = "TokenLogin")]
     [ProducesResponseType(typeof(AccessTokenResponse), StatusCodes.Status200OK)]
