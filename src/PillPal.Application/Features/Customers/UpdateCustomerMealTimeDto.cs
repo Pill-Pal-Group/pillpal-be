@@ -27,30 +27,32 @@ public class UpdateCustomerMealTimeValidator : AbstractValidator<UpdateCustomerM
         RuleFor(x => x.BreakfastTime)
             .NotEmpty()
             .Matches(timeFormatRegex)
-            .Must(time => TimeOnly.Parse(time!) >= TimeOnly.Parse("05:00")
-                && TimeOnly.Parse(time!) <= TimeOnly.Parse("09:00"))
-            .WithMessage("Breakfast time must be between 05:00 and 09:00.");
+            .LessThan(x => x.LunchTime)
+            .WithMessage("Breakfast time must be before lunch time.");
 
         RuleFor(x => x.LunchTime)
             .NotEmpty()
             .Matches(timeFormatRegex)
-            .Must(time => TimeOnly.Parse(time!) >= TimeOnly.Parse("10:00")
-                && TimeOnly.Parse(time!) <= TimeOnly.Parse("14:00"))
-            .WithMessage("Lunch time must be between 10:00 and 14:00.");
+            .GreaterThan(x => x.BreakfastTime)
+            .WithMessage("Lunch time must be after breakfast time.")
+            .LessThan(x => x.AfternoonTime)
+            .WithMessage("Lunch time must be before afternoon time.");
 
         RuleFor(x => x.AfternoonTime)
             .NotEmpty()
             .Matches(timeFormatRegex)
-            .Must(time => TimeOnly.Parse(time!) >= TimeOnly.Parse("15:00")
-                && TimeOnly.Parse(time!) <= TimeOnly.Parse("17:00"))
-            .WithMessage("Afternoon time must be between 15:00 and 17:00.");
+            .GreaterThan(x => x.LunchTime)
+            .WithMessage("Afternoon time must be after lunch time.")
+            .LessThan(x => x.DinnerTime)
+            .WithMessage("Afternoon time must be before dinner time.");
 
         RuleFor(x => x.DinnerTime)
             .NotEmpty()
             .Matches(timeFormatRegex)
-            .Must(time => TimeOnly.Parse(time!) >= TimeOnly.Parse("18:00")
-                && TimeOnly.Parse(time!) <= TimeOnly.Parse("21:30"))
-            .WithMessage("Dinner time must be between 18:00 and 21:30.");
+            .GreaterThan(x => x.AfternoonTime)
+            .WithMessage("Dinner time must be after afternoon time.")
+            .Must(time => TimeSpan.Parse(time!) <= TimeSpan.FromHours(24))
+            .WithMessage("Dinner time must be before 23:59.");
 
         RuleFor(x => x.MealTimeOffset)
             .NotEmpty()
