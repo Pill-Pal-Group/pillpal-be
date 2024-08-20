@@ -9,7 +9,7 @@ public static class RateLimiterConfigure
         services.AddRateLimiter(options =>
         {
             options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
-            
+
             options.AddTokenBucketLimiter(BucketLimiter, options =>
             {
                 options.ReplenishmentPeriod = TimeSpan.FromSeconds(configuration.GetValue<int>("RateLimitSettings:Bucket:ReplenishmentPeriod"));
