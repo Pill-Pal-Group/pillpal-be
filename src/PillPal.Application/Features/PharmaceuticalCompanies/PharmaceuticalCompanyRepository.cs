@@ -13,7 +13,6 @@ public class PharmaceuticalCompanyRepository(IApplicationDbContext context, IMap
 
         await Context.SaveChangesAsync();
 
-        // todo: need improvement
         var createdPharmaceuticalCompany = await Context.PharmaceuticalCompanies
             .Include(b => b.Nation)
             .AsNoTracking()
