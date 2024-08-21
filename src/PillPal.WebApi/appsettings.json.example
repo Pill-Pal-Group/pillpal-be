@@ -29,5 +29,14 @@
   "Hangfire": {
     "User": "User",
     "Pass": "Pass"
+  },
+  "ZaloPay": {
+    "AppId": "AppId",
+    "AppUser": "AppUser",
+    "Key1": "Key1",
+    "Key2": "Key2",
+    "PaymentUrl": "PaymentUrl",
+    "ReturnUrl": "ReturnUrl",
+    "IpnUrl": "IpnUrl"
   }
 }

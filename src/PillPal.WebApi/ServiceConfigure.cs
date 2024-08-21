@@ -4,7 +4,7 @@ namespace PillPal.WebApi;
 
 public static class ServiceConfigure
 {
-    public static IServiceCollection AddWebServices(this IServiceCollection services)
+    public static IServiceCollection AddWebServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddScoped<IUser, UserAccessor>();
 
@@ -26,6 +26,8 @@ public static class ServiceConfigure
         services.AddAuthorizationPolicy();
 
         services.AddCorsServices();
+
+        services.AddRateLimiterServices(configuration);
 
         return services;
     }

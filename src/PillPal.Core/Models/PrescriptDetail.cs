@@ -1,7 +1,8 @@
 ﻿namespace PillPal.Core.Models;
 
-public class PrescriptDetail : BaseEntity, ISoftDelete
+public class PrescriptDetail : IBaseEntity, ISoftDelete
 {
+    public Guid Id { get; set; }
     public string? MedicineName { get; set; }
     public string? MedicineImage { get; set; }
     public DateTimeOffset DateStart { get; set; }

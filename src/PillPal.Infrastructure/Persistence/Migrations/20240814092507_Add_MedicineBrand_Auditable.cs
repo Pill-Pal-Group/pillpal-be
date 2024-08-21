@@ -5,45 +5,32 @@
 namespace PillPal.Infrastructure.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class AddAudit_Customer : Migration
+    public partial class Add_MedicineBrand_Auditable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<DateTimeOffset>(
                 name: "CreatedAt",
-                table: "Customers",
+                table: "MedicineInBrands",
                 type: "datetimeoffset",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "CreatedBy",
-                table: "Customers",
+                table: "MedicineInBrands",
                 type: "nvarchar(max)",
                 nullable: true);
 
             migrationBuilder.AddColumn<DateTimeOffset>(
-                name: "DeletedAt",
-                table: "Customers",
-                type: "datetimeoffset",
-                nullable: true);
-
-            migrationBuilder.AddColumn<bool>(
-                name: "IsDeleted",
-                table: "Customers",
-                type: "bit",
-                nullable: false,
-                defaultValue: false);
-
-            migrationBuilder.AddColumn<DateTimeOffset>(
                 name: "UpdatedAt",
-                table: "Customers",
+                table: "MedicineInBrands",
                 type: "datetimeoffset",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "UpdatedBy",
-                table: "Customers",
+                table: "MedicineInBrands",
                 type: "nvarchar(max)",
                 nullable: true);
         }
@@ -53,27 +40,19 @@ namespace PillPal.Infrastructure.Persistence.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "CreatedAt",
-                table: "Customers");
+                table: "MedicineInBrands");
 
             migrationBuilder.DropColumn(
                 name: "CreatedBy",
-                table: "Customers");
-
-            migrationBuilder.DropColumn(
-                name: "DeletedAt",
-                table: "Customers");
-
-            migrationBuilder.DropColumn(
-                name: "IsDeleted",
-                table: "Customers");
+                table: "MedicineInBrands");
 
             migrationBuilder.DropColumn(
                 name: "UpdatedAt",
-                table: "Customers");
+                table: "MedicineInBrands");
 
             migrationBuilder.DropColumn(
                 name: "UpdatedBy",
-                table: "Customers");
+                table: "MedicineInBrands");
         }
     }
 }

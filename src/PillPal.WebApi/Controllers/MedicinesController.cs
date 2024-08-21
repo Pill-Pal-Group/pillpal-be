@@ -69,7 +69,8 @@ public class MedicinesController(IMedicineService medicineService)
     ///         ],
     ///         "medicineName": "Medicine Name",
     ///         "requirePrescript": true,
-    ///         "image": "Image Url"
+    ///         "image": "Image Url",
+    ///         "registrationNumber": "VN-17384-13"
     ///     }
     ///
     /// </remarks>
@@ -147,7 +148,8 @@ public class MedicinesController(IMedicineService medicineService)
     ///         ],
     ///         "medicineName": "Medicine Name",
     ///         "requirePrescript": true,
-    ///         "image": "Image Url"
+    ///         "image": "Image Url",
+    ///         "registrationNumber": "VN-17384-13"
     ///     }
     ///
     /// </remarks>
@@ -240,8 +242,33 @@ public class MedicinesController(IMedicineService medicineService)
     /// <summary>
     /// Import medicines from excel file
     /// </summary>
-    /// <remarks>Requires administrative policy (e.g. Admin, Manager)</remarks>
+    /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
+    /// Excel file format should be as follows:
+    /// | Property Name          | Default Header Name in Excel File |
+    /// |------------------------|-----------------------------------|
+    /// | MedicineName           | Product Name                      |
+    /// | Image                  | Image-src                         |
+    /// | MedicineUrl            | Link                              |
+    /// | Price                  | Price                             |
+    /// | Categories             | Category (delimiter: /)           |
+    /// | DosageForms            | Dosage forms                      |
+    /// | Specifications         | Specifications                    |
+    /// | ActiveIngredients      | Ingredient (delimiter: ,)         |
+    /// | PharmaceuticalCompanies| Pharmaceuticals                   |
+    /// | Nation                 | Nation                            |
+    /// | RegistrationNumber     | Registration number               |
+    /// | RequirePrescript       | Medication requires prescription  |
+    /// | BrandUrl               | Brand Url                         |  
+    /// | Brand                  | Brand                             |
+    /// | BrandLogo              | Brand Logo                        |
+    /// Incase of different naming in excel file,
+    /// properties and corresponding delimiters (if any) can be specified in query parameters
+    /// </remarks>
     /// <param name="file">The excel file to import</param>
+    /// <param name="excelProperties">The properties header name in excel file</param>
+    /// <param name="propertyDelimiter">The delimiter of some props in excel file</param>
     /// <response code="200">Returns the file execution result</response>
     /// <response code="400">If the file format is invalid</response>
     [Authorize(Policy.Administrative)]
@@ -249,7 +276,9 @@ public class MedicinesController(IMedicineService medicineService)
     [HttpPost("import", Name = "ImportMedicines")]
     [ProducesResponseType(typeof(FileExecutionResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> ImportMedicinesAsync([Required] IFormFile file)
+    public async Task<IActionResult> ImportMedicinesAsync([Required] IFormFile file,
+        [FromQuery] MedicineExcelProperties excelProperties,
+        [FromQuery] ExcelPropertyDelimiters propertyDelimiter)
     {
         var extension = Path.GetExtension(file.FileName);
 
@@ -260,7 +289,7 @@ public class MedicinesController(IMedicineService medicineService)
 
         await using var stream = file.OpenReadStream();
 
-        var importedCount = await medicineService.ImportMedicinesAsync(stream);
+        var importedCount = await medicineService.ImportMedicinesAsync(stream, excelProperties, propertyDelimiter);
 
         return Ok(importedCount);
     }

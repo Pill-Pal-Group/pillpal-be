@@ -20,5 +20,8 @@ public record MedicationTakesListDto
     /// <example>Paracetamol</example>
     public string? MedicineName { get; init; }
 
+    /// <example>https://monke.com/med-image.jpg</example>
+    public string? MedicineImage { get; init; }
+
     public IEnumerable<MedicationTakesDto> MedicationTakes { get; init; } = default!;
 }

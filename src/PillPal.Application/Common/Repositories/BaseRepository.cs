@@ -86,7 +86,7 @@ public class BaseRepository
     }
 
     protected static async Task<List<T>> GetEntitiesByIdsAsync<T>(IEnumerable<Guid> ids, DbSet<T> dbSet)
-        where T : BaseEntity
+        where T : class, IBaseEntity
     {
         return await dbSet
             .Where(e => ids.Contains(e.Id))

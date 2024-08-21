@@ -22,6 +22,9 @@ public record MedicineDto
     /// <example>https://monke.com/paracetamol.jpg</example>
     public string? Image { get; init; }
 
+    /// <example>VN-17384-13</example>
+    public string? RegistrationNumber { get; init; }
+
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public SpecificationDto? Specification { get; init; }
 

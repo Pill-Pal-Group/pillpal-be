@@ -65,18 +65,20 @@ public class CustomerRepository(IApplicationDbContext context, IMapper mapper, I
         return customerResponse;
     }
 
-    public async Task<IEnumerable<CustomerDto>> GetCustomersAsync(CustomerQueryParameter queryParameter)
+    public async Task<PaginationResponse<CustomerDto>> GetCustomersAsync(CustomerQueryParameter queryParameter)
     {
-        var customers = await Context.Customers
+        await ValidateAsync(queryParameter);
+
+        var customersPaginatedList = await Context.Customers
             .Include(c => c.IdentityUser)
             .Filter(queryParameter)
             .AsNoTracking()
-            .ToListAsync();
+            .ToPaginationResponseAsync<Customer, CustomerDto>(queryParameter, Mapper);
 
-        var customerResponse = Mapper.Map<IEnumerable<CustomerDto>>(customers);
-        var customerCurrentPackages = await GetCurrentCustomerPackageAsync(customers.Select(c => c.Id).ToList());
+        var customerCurrentPackages = await GetCurrentCustomerPackageAsync(
+            customersPaginatedList.Data.Select(c => c.Id).ToList());
 
-        foreach (var customer in customerResponse)
+        foreach (var customer in customersPaginatedList.Data)
         {
             if (customerCurrentPackages.TryGetValue(customer.Id, out var customerPackage))
             {
@@ -84,7 +86,7 @@ public class CustomerRepository(IApplicationDbContext context, IMapper mapper, I
             }
         }
 
-        return customerResponse;
+        return customersPaginatedList;
     }
 
     public async Task<CustomerDto> UpdateCustomerAsync(UpdateCustomerDto updateCustomerDto)
@@ -109,6 +111,19 @@ public class CustomerRepository(IApplicationDbContext context, IMapper mapper, I
 
     public async Task UpdateCustomerDeviceTokenAsync(CustomerDeviceTokenDto customerDeviceTokenDto)
     {
+        await ValidateAsync(customerDeviceTokenDto);
+
+        // find if the token already have a customer with it
+        var customerWithToken = await Context.Customers
+            .FirstOrDefaultAsync(c => c.DeviceToken == customerDeviceTokenDto.DeviceToken);
+
+        // if so, delete that token of that customer
+        if (customerWithToken != null)
+        {
+            customerWithToken.DeviceToken = null;
+            Context.Customers.Update(customerWithToken);
+        }
+
         var customer = await Context.Customers
             .FirstOrDefaultAsync(c => c.IdentityUserId == Guid.Parse(user.Id!))
             ?? throw new NotFoundException(nameof(ApplicationUser), user.Id!);

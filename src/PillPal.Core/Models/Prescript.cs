@@ -1,7 +1,8 @@
 ﻿namespace PillPal.Core.Models;
 
-public class Prescript : BaseAuditableEntity
+public class Prescript : BaseAuditableEntity, IBaseEntity
 {
+    public Guid Id { get; set; }
     public string? PrescriptImage { get; set; }
     public DateTimeOffset ReceptionDate { get; set; }
     public string? DoctorName { get; set; }

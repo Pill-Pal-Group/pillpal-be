@@ -1,4 +1,3 @@
-using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace PillPal.WebApi;
@@ -21,7 +20,7 @@ public class Program
 
         builder.Services.AddInfrastructureServices(builder.Configuration);
         builder.Services.AddApplicationServices();
-        builder.Services.AddWebServices();
+        builder.Services.AddWebServices(builder.Configuration);
 
         var app = builder.Build();
 
@@ -35,6 +34,8 @@ public class Program
 
         app.UseInfrastructureServices(builder.Configuration);
 
+        app.UseRateLimiter();
+
         app.UseCors();
 
         app.UseHttpsRedirection();
@@ -43,7 +44,7 @@ public class Program
 
         app.UseAuthorization();
 
-        app.MapControllers();
+        app.MapControllers().RequireRateLimiting(RateLimiterConfigure.BucketLimiter);
 
         app.Run();
     }

@@ -1,14 +1,13 @@
 ﻿using Hangfire;
 using HangfireBasicAuthenticationFilter;
+using PillPal.Application.Common.Interfaces.Payment;
 using PillPal.Infrastructure.Auth;
 using PillPal.Infrastructure.Cache;
 using PillPal.Infrastructure.File;
 using PillPal.Infrastructure.Identity;
+using PillPal.Infrastructure.PaymentService.ZaloPay;
 using PillPal.Infrastructure.Persistence;
 using PillPal.Infrastructure.Persistence.Interceptors;
-using PillPal.Infrastructure.PaymentService.VnPay;
-using PillPal.Infrastructure.PaymentService.ZaloPay;
-using PillPal.Application.Common.Interfaces.Payment;
 
 namespace PillPal.Infrastructure.Configuration;
 
@@ -71,11 +70,8 @@ public static class DependencyInjection
 
         services.AddScoped<ICacheService, CacheService>();
 
-        services.Configure<VnPayConfiguration>(configuration.GetSection("VnPay"));
-
         services.Configure<ZaloPayConfiguration>(configuration.GetSection("ZaloPay"));
 
-        services.AddScoped<IVnPayService, VnPayService>();
         services.AddScoped<IZaloPayService, ZaloPayService>();
 
         return services;
@@ -88,14 +84,14 @@ public static class DependencyInjection
             DarkModeEnabled = false,
             DashboardTitle = "PillPal Hangfire Dashboard",
             DisplayStorageConnectionString = false,
-            Authorization = new[]
-            {
+            Authorization =
+            [
                 new HangfireCustomBasicAuthenticationFilter
                 {
                     User = configuration["Hangfire:User"],
                     Pass = configuration["Hangfire:Pass"]
                 }
-            }
+            ]
         });
 
         RecurringJob.AddOrUpdate<ICustomerPackageService>(
@@ -111,6 +107,16 @@ public static class DependencyInjection
         RecurringJob.AddOrUpdate<ICustomerPackageService>(
             "MessageToRenewPackage",
             service => service.CheckForRenewPackage(),
+            Cron.Daily,
+            new RecurringJobOptions
+            {
+                TimeZone = TimeZoneInfo.Local
+            }
+        );
+
+        RecurringJob.AddOrUpdate<ICustomerPackageService>(
+            "RemoveUnpaidPackages",
+            service => service.RemoveUnpaidPackagesAsync(),
             Cron.Daily,
             new RecurringJobOptions
             {

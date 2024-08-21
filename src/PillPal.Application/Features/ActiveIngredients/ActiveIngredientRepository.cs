@@ -55,7 +55,7 @@ public class ActiveIngredientRepository(IApplicationDbContext context, IMapper m
     public async Task<PaginationResponse<ActiveIngredientDto>> GetActiveIngredientsAsync(ActiveIngredientQueryParameter queryParameter)
     {
         await ValidateAsync(queryParameter);
-        
+
         var activeIngredients = await Context.ActiveIngredients
             .AsNoTracking()
             .Where(ai => !ai.IsDeleted)

@@ -45,6 +45,18 @@ public class CustomerPackageRepository(IApplicationDbContext context, IMapper ma
         }
     }
 
+    public async Task RemoveUnpaidPackagesAsync()
+    {
+        var unpaidPackages = await Context.CustomerPackages
+            .Where(c => c.StartDate < DateTimeOffset.UtcNow.AddDays(-1))
+            .Where(c => c.PaymentStatus == (int)PaymentStatusEnums.UNPAID)
+            .ToListAsync();
+
+        Context.CustomerPackages.RemoveRange(unpaidPackages);
+
+        await Context.SaveChangesAsync();
+    }
+
     public async Task<CustomerPackageDto> GetCustomerPackageAsync(Guid id, bool isCustomer)
     {
         var customerPackageQueryable = Context.CustomerPackages

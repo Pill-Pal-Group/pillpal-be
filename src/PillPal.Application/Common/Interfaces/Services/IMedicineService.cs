@@ -98,8 +98,10 @@ public interface IMedicineService
     /// Imports medicines from excel file.
     /// </summary>
     /// <param name="file">The excel file to import.</param>
+    /// <param name="excelProperties">The properties to map the excel columns to the medicine properties.</param>
+    /// <param name="excelPropertyDelimiter">The delimiter for properties with multiple values.</param>
     /// <returns>
     /// The task result contains the <see cref="FileExecutionResult"/> representing the import result.
     /// </returns>
-    Task<FileExecutionResult> ImportMedicinesAsync(Stream file);
+    Task<FileExecutionResult> ImportMedicinesAsync(Stream file, MedicineExcelProperties excelProperties, ExcelPropertyDelimiters excelPropertyDelimiter);
 }

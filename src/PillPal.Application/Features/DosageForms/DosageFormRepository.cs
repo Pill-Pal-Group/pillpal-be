@@ -55,7 +55,7 @@ public class DosageFormRepository(IApplicationDbContext context, IMapper mapper,
     public async Task<PaginationResponse<DosageFormDto>> GetDosageFormsAsync(DosageFormQueryParameter queryParameter)
     {
         await ValidateAsync(queryParameter);
-        
+
         var dosageForms = await Context.DosageForms
             .AsNoTracking()
             .Where(d => !d.IsDeleted)

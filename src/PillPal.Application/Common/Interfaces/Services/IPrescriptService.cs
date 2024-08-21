@@ -11,9 +11,9 @@ public interface IPrescriptService
     /// <param name="queryParameter">The query parameters for filtering.</param>
     /// <param name="includeParameter">The include parameters for related entities.</param>
     /// <returns>
-    /// The task result contains a collection of <see cref="PrescriptDto"/> objects.
+    /// The task result contains a pagination collection of <see cref="PrescriptDto"/> objects.
     /// </returns>
-    Task<IEnumerable<PrescriptDto>> GetPrescriptsAsync(
+    Task<PaginationResponse<PrescriptDto>> GetPrescriptsAsync(
         PrescriptQueryParameter queryParameter, PrescriptIncludeParameter includeParameter);
 
     /// <summary>

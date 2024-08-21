@@ -2,8 +2,8 @@ namespace PillPal.Infrastructure.PaymentService.ZaloPay;
 
 public class ZaloPayResponse
 {
-    public int returnCode { get; set; }
-    public string? returnMessage { get; set; }
-    public string? zpTransToken { get; set; }
-    public string? orderUrl { get; set; }
+    public int ReturnCode { get; set; }
+    public string? ReturnMessage { get; set; }
+    public string? ZpTransToken { get; set; }
+    public string? OrderUrl { get; set; }
 }

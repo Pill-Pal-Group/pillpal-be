@@ -39,6 +39,12 @@ public class CacheAttribute : Attribute, IAsyncActionFilter
             var cacheKey = $"{Key}:{id}";
             await cache.SetAsync(cacheKey, createdResult.Value);
         }
+        else if (executedContext.Result is null)
+        {
+            // incase of known exception, the result will be null
+            // for that case, ignore caching to prevent error
+            return;
+        }
         else
         {
             var cacheKey = $"{Key}:{context.ActionArguments[IdParameterName]}";
