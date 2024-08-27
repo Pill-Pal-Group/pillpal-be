@@ -70,7 +70,7 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
                     var medicationTake = new MedicationTake
                     {
                         DateTake = dateTake,
-                        TimeTake = timeTake.ToShortTimeString(),
+                        TimeTake = timeTake.ToString("HH:mm"),
                         Dose = dose.Value,
                         PrescriptDetailId = prescriptDetail.Id
                     };
