@@ -11,7 +11,7 @@ public record CustomerDto
     public string? CustomerCode { get; init; }
 
     /// <example>2002-01-01</example>
-    public DateTimeOffset? Dob { get; init; }
+    public string? Dob { get; init; }
 
     /// <example>Q9, HCMC, Vietnam</example>
     public string? Address { get; init; }
