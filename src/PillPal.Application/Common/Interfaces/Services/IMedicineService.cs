@@ -37,6 +37,16 @@ public interface IMedicineService
     Task<MedicineDto> CreateMedicineAsync(CreateMedicineDto createMedicineDto);
 
     /// <summary>
+    /// Creates a new medicine with full of its related entities.
+    /// </summary>
+    /// <param name="createFullMedicineDto">The DTO containing the creation data for the medicine.</param>
+    /// <returns>
+    /// The task result contains the created <see cref="MedicineDto"/>.
+    /// </returns>
+    /// <exception cref="ValidationException">Thrown when validation fails for the creation data.</exception>
+    Task<MedicineDto> CreateFullMedicineAsync(CreateFullMedicineDto createFullMedicineDto);
+
+    /// <summary>
     /// Creates batch of medicines from excel file import.
     /// Other entities related to the medicine will be created if not exist.
     /// </summary>
@@ -75,6 +85,18 @@ public interface IMedicineService
     /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
     /// <exception cref="ValidationException">Thrown when validation fails for the update information.</exception>
     Task<MedicineDto> UpdateMedicineAsync(Guid medicineId, UpdateMedicineDto updateMedicineDto);
+
+    /// <summary>
+    /// Updates an existing medicine with full of its related entities.
+    /// </summary>
+    /// <param name="medicineId">The unique identifier for the medicine to update.</param>
+    /// <param name="updateFullMedicineDto">The DTO containing update information for the medicine.</param>
+    /// <returns>
+    /// The task result contains the updated <see cref="MedicineDto"/>.
+    /// </returns>
+    /// <exception cref="NotFoundException">Thrown if the entity is not found.</exception>
+    /// <exception cref="ValidationException">Thrown when validation fails for the update information.</exception>
+    Task<MedicineDto> UpdateFullMedicineAsync(Guid medicineId, UpdateFullMedicineDto updateFullMedicineDto);
 
     /// <summary>
     /// Deletes a medicine by performing a soft delete.

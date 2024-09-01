@@ -3,13 +3,16 @@
 public record UpdateMedicineInBrandsDto
 {
     /// <example>00000000-0000-0000-0000-000000000000</example>
-    public Guid BrandId { get; set; }
+    public Guid BrandId { get; init; }
 
-    /// <example>8.000₫/viên</example>
-    public string? Price { get; set; }
+    /// <example>8000</example>
+    public decimal Price { get; init; }
+
+    /// <example>VND</example>
+    public string? PriceUnit { get; init; }
 
     /// <example>https://monke.com/paracetamol</example>
-    public string? MedicineUrl { get; set; }
+    public string? MedicineUrl { get; init; }
 }
 
 public class UpdateMedicineInBrandsValidator : AbstractValidator<UpdateMedicineInBrandsDto>
