@@ -1,4 +1,4 @@
-using PillPal.Application.Features.MedicineInBrands;
+﻿using PillPal.Application.Features.MedicineInBrands;
 using PillPal.Application.Features.Medicines;
 
 namespace PillPal.WebApi.Controllers;
@@ -88,6 +88,58 @@ public class MedicinesController(IMedicineService medicineService)
     }
 
     /// <summary>
+    /// Create a medicine with full information
+    /// </summary>
+    /// <param name="createFullMedicineDto"></param>
+    /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
+    /// Sample request:
+    /// 
+    ///     POST /api/medicines/full
+    ///     {
+    ///         "specificationId": "6b4aadb0-8189-467a-8aba-6572d3d4b972",
+    ///         "categories": [
+    ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
+    ///         ],
+    ///         "pharmaceuticalCompanys": [
+    ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
+    ///         ],
+    ///         "dosageForms": [
+    ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
+    ///         ],
+    ///         "activeIngredients": [
+    ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
+    ///         ],
+    ///         "medicineName": "Medicine Name",
+    ///         "requirePrescript": true,
+    ///         "image": "Image Url",
+    ///         "registrationNumber": "VN-17384-13",
+    ///         "medicineInBrands": [
+    ///             {
+    ///                 "brandId": "6b4aadb0-8189-467a-8aba-6572d3d4b972",
+    ///                 "price": 8000,
+    ///                 "priceUnit": "VND",
+    ///                 "medicineUrl": "https://monke.com/paracetamol"
+    ///             }
+    ///          ]
+    ///      }
+    ///      
+    /// </remarks>
+    /// <response code="201">Returns the created medicine</response>
+    /// <response code="422">If the input data is invalid</response>
+    [Authorize(Policy.Administrative)]
+    [HttpPost("full", Name = "CreateFullMedicine")]
+    [ProducesResponseType(typeof(MedicineDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+    public async Task<IActionResult> CreateFullMedicineAsync(CreateFullMedicineDto createFullMedicineDto)
+    {
+        var medicine = await medicineService.CreateFullMedicineAsync(createFullMedicineDto);
+
+        return CreatedAtRoute("GetMedicineById", new { medicineId = medicine.Id }, medicine);
+    }
+
+    /// <summary>
     /// Add a medicine to a brand with price
     /// </summary>
     /// <param name="medicineId" example="00000000-0000-0000-0000-000000000000"></param>
@@ -165,6 +217,61 @@ public class MedicinesController(IMedicineService medicineService)
     public async Task<IActionResult> UpdateMedicineAsync(Guid medicineId, UpdateMedicineDto updateMedicineDto)
     {
         var medicine = await medicineService.UpdateMedicineAsync(medicineId, updateMedicineDto);
+
+        return Ok(medicine);
+    }
+
+    /// <summary>
+    /// Update a medicine with full information
+    /// </summary>
+    /// <param name="medicineId" example="00000000-0000-0000-0000-000000000000"></param>
+    /// <param name="updateFullMedicineDto"></param>
+    /// <remarks>
+    /// Requires administrative policy (e.g. Admin, Manager)
+    /// 
+    /// Sample request:
+    /// 
+    ///     PUT /api/medicines/full/{medicineId}
+    ///     {
+    ///         "specificationId": "6b4aadb0-8189-467a-8aba-6572d3d4b972",
+    ///         "categories": [
+    ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
+    ///         ],
+    ///         "pharmaceuticalCompanys": [
+    ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
+    ///         ],
+    ///         "dosageForms": [
+    ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
+    ///         ],
+    ///         "activeIngredients": [
+    ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
+    ///         ],
+    ///         "medicineName": "Medicine Name",
+    ///         "requirePrescript": true,
+    ///         "image": "Image Url",
+    ///         "registrationNumber": "VN-17384-13",
+    ///         "medicineInBrands": [
+    ///             {
+    ///                 "brandId": "6b4aadb0-8189-467a-8aba-6572d3d4b972",
+    ///                 "price": 8000,
+    ///                 "priceUnit": "VND",
+    ///                 "medicineUrl": "https://monke.com/paracetamol"
+    ///             }
+    ///          ]
+    ///      }
+    ///      
+    /// </remarks>
+    /// <response code="200">Returns the updated medicine</response>
+    /// <response code="404">If the medicine is not found</response>
+    /// <response code="422">If the input data is invalid</response>
+    [Authorize(Policy.Administrative)]
+    [HttpPut("full/{medicineId:guid}", Name = "UpdateFullMedicine")]
+    [ProducesResponseType(typeof(MedicineDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status422UnprocessableEntity)]
+    public async Task<IActionResult> UpdateFullMedicineAsync(Guid medicineId, UpdateFullMedicineDto updateFullMedicineDto)
+    {
+        var medicine = await medicineService.UpdateFullMedicineAsync(medicineId, updateFullMedicineDto);
 
         return Ok(medicine);
     }

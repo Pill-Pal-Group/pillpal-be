@@ -6,6 +6,20 @@ namespace PillPal.Application.Features.Medicines;
 public class MedicineRepository(IApplicationDbContext context, IMapper mapper, IServiceProvider serviceProvider, IFileReader fileReader)
     : BaseRepository(context, mapper, serviceProvider), IMedicineService
 {
+    private static (decimal price, string priceUnit) ParsePrice(string priceString)
+    {
+        var priceValue = priceString.Split('đ');
+
+        if (priceValue.Length != 2)
+        {
+            return (0, "N/A");
+        }
+
+        var priceUnit = "đ" + priceValue[1].Trim();
+
+        return (decimal.Parse(priceValue[0].Replace(".", "")), priceUnit);
+    }
+
     public async Task<int> CreateMedicinesFromExcelBatchAsync(List<CreateMedicineFromExcelDto> excelMedicineListToInsert)
     {
         #region Query all necessary entities in bulk
@@ -60,6 +74,9 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
 
         foreach (var medicineRow in excelMedicineListToInsert)
         {
+            // convert the price string to decimal and price unit
+            (decimal price, string priceUnit) = ParsePrice(medicineRow.Price!);
+
             #region Handle medicine row that already exists in the database
             // check if the current medicine row already exists in the database
             if (existingMedicinesList.Any(m => m.MedicineName!.Equals(medicineRow.MedicineName)))
@@ -78,7 +95,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
                     var newBrandRow = existingBrandsList.FirstOrDefault(b => b.BrandName == medicineRow.Brand)
                         ?? newBrandsDict!.GetOrAdd(medicineRow.Brand, new Brand { Id = Guid.NewGuid(), BrandName = medicineRow.Brand, BrandLogo = medicineRow.BrandLogo, BrandUrl = medicineRow.BrandUrl });
 
-                    var medicineInBrand = new MedicineInBrand { Brand = newBrandRow, Price = medicineRow.Price, MedicineUrl = medicineRow.MedicineUrl };
+                    var medicineInBrand = new MedicineInBrand { Brand = newBrandRow, Price = price, PriceUnit = priceUnit, MedicineUrl = medicineRow.MedicineUrl };
 
                     existingMedicine.MedicineInBrands.Add(medicineInBrand);
 
@@ -87,10 +104,11 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
                 }
                 else
                 {
-                    // incase the brand price has existed, check and update the price
-                    if (existingMedicineInBrand.Price != medicineRow.Price)
+                    // incase the brand price has existed, update the price and price unit
+                    if (existingMedicineInBrand.Price != price)
                     {
-                        existingMedicineInBrand.Price = medicineRow.Price;
+                        existingMedicineInBrand.Price = price;
+                        existingMedicineInBrand.PriceUnit = priceUnit;
                         Context.MedicineInBrands.Update(existingMedicineInBrand);
                     }
                 }
@@ -148,7 +166,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             medicine.Categories = categories;
             medicine.PharmaceuticalCompanies = [pharmaceuticalCompany];
             medicine.DosageForms = [dosageForm];
-            medicine.MedicineInBrands = [new MedicineInBrand { Brand = brand, Price = medicineRow.Price, MedicineUrl = medicineRow.MedicineUrl }];
+            medicine.MedicineInBrands = [new MedicineInBrand { Brand = brand, Price = price, PriceUnit = priceUnit, MedicineUrl = medicineRow.MedicineUrl }];
             medicine.ActiveIngredients = activeIngredients;
             medicine.Specification = specification;
             #endregion
@@ -193,6 +211,31 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         var pharmaceuticalCompanies = await GetEntitiesByIdsAsync(createMedicineDto.PharmaceuticalCompanies, Context.PharmaceuticalCompanies);
         var dosageForms = await GetEntitiesByIdsAsync(createMedicineDto.DosageForms, Context.DosageForms);
         var activeIngredients = await GetEntitiesByIdsAsync(createMedicineDto.ActiveIngredients, Context.ActiveIngredients);
+
+        // assign related entities
+        medicine.Categories = categories;
+        medicine.PharmaceuticalCompanies = pharmaceuticalCompanies;
+        medicine.DosageForms = dosageForms;
+        medicine.ActiveIngredients = activeIngredients;
+
+        await Context.Medicines.AddAsync(medicine);
+
+        await Context.SaveChangesAsync();
+
+        return Mapper.Map<MedicineDto>(medicine);
+    }
+
+    public async Task<MedicineDto> CreateFullMedicineAsync(CreateFullMedicineDto createFullMedicineDto)
+    {
+        await ValidateAsync(createFullMedicineDto);
+
+        var medicine = Mapper.Map<Medicine>(createFullMedicineDto);
+
+        // get related entities from list of ids
+        var categories = await GetEntitiesByIdsAsync(createFullMedicineDto.Categories, Context.Categories);
+        var pharmaceuticalCompanies = await GetEntitiesByIdsAsync(createFullMedicineDto.PharmaceuticalCompanies, Context.PharmaceuticalCompanies);
+        var dosageForms = await GetEntitiesByIdsAsync(createFullMedicineDto.DosageForms, Context.DosageForms);
+        var activeIngredients = await GetEntitiesByIdsAsync(createFullMedicineDto.ActiveIngredients, Context.ActiveIngredients);
 
         // assign related entities
         medicine.Categories = categories;
@@ -313,10 +356,49 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         medicine.DosageForms = dosageForms;
         medicine.ActiveIngredients = activeIngredients;
 
-        // manually change entity state to modified so that interceptor detects changes
-        // hence updating the updated at field
-        // not sure if this is needed or not, so currently commented out
-        //Context.Medicines.Update(medicine);
+        await Context.SaveChangesAsync();
+
+        return Mapper.Map<MedicineDto>(medicine);
+    }
+
+    public async Task<MedicineDto> UpdateFullMedicineAsync(Guid medicineId, UpdateFullMedicineDto updateFullMedicineDto)
+    {
+        await ValidateAsync(updateFullMedicineDto);
+
+        var medicine = await Context.Medicines
+            .Where(m => !m.IsDeleted)
+            .Include(m => m.Categories)
+            .Include(m => m.Specification)
+            .Include(m => m.PharmaceuticalCompanies)
+            .Include(m => m.DosageForms)
+            .Include(m => m.ActiveIngredients)
+            .Include(m => m.MedicineInBrands)
+            .AsSplitQuery()
+            .FirstOrDefaultAsync(m => m.Id == medicineId)
+            ?? throw new NotFoundException(nameof(Medicine), medicineId);
+
+        Mapper.Map(updateFullMedicineDto, medicine);
+
+        // get related entities from list of ids
+        var categories = await GetEntitiesByIdsAsync(updateFullMedicineDto.Categories, Context.Categories);
+        var pharmaceuticalCompanies = await GetEntitiesByIdsAsync(updateFullMedicineDto.PharmaceuticalCompanies, Context.PharmaceuticalCompanies);
+        var dosageForms = await GetEntitiesByIdsAsync(updateFullMedicineDto.DosageForms, Context.DosageForms);
+        var activeIngredients = await GetEntitiesByIdsAsync(updateFullMedicineDto.ActiveIngredients, Context.ActiveIngredients);
+
+        // assign related entities
+        medicine.Categories = categories;
+        medicine.PharmaceuticalCompanies = pharmaceuticalCompanies;
+        medicine.DosageForms = dosageForms;
+        medicine.ActiveIngredients = activeIngredients;
+
+        var medicineInBrands = updateFullMedicineDto.MedicineInBrands.Select(mib =>
+        {
+            var medicineInBrand = Mapper.Map<MedicineInBrand>(mib);
+            medicineInBrand.MedicineId = medicineId;
+            return medicineInBrand;
+        });
+
+        medicine.MedicineInBrands = medicineInBrands.ToList();
 
         await Context.SaveChangesAsync();
 

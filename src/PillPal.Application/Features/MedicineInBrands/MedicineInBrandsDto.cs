@@ -4,6 +4,7 @@ namespace PillPal.Application.Features.MedicineInBrands;
 
 public record MedicineInBrandsDto
 {
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public BrandDto? Brand { get; init; }
 
     /// <example>8000</example>
