@@ -8,14 +8,18 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
 {
     private static (decimal price, string priceUnit) ParsePrice(string priceString)
     {
-        var priceValue = priceString.Split('đ');
+        var priceDelimiter = priceString.Contains('đ') ? "đ" : "₫";
+        var defaultPriceCurrency = "đ";
+        var notAvailablePrice = "N/A";
+
+        var priceValue = priceString.Split(priceDelimiter);
 
         if (priceValue.Length != 2)
         {
-            return (0, "N/A");
+            return (0, notAvailablePrice);
         }
 
-        var priceUnit = "đ" + priceValue[1].Trim();
+        var priceUnit = defaultPriceCurrency + priceValue[1];
 
         return (decimal.Parse(priceValue[0].Replace(".", "")), priceUnit);
     }
