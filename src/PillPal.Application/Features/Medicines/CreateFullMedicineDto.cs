@@ -38,7 +38,10 @@ public class CreateFullMedicineValidator : AbstractValidator<CreateFullMedicineD
 
         RuleFor(x => x.RegistrationNumber)
             .NotEmpty()
-            .WithMessage("Registration number is required.");
+            .WithMessage("Registration number is required.")
+            .MustAsync(async (registrationNumber, cancellationToken)
+                => !await context.Medicines.AnyAsync(x => x.RegistrationNumber == registrationNumber, cancellationToken))
+            .WithMessage("Registration number already existed.");
 
         RuleFor(x => x.MedicineInBrands)
             .NotEmpty()

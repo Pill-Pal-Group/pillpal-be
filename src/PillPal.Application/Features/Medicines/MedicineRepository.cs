@@ -82,13 +82,13 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             (decimal price, string priceUnit) = ParsePrice(medicineRow.Price!);
 
             #region Handle medicine row that already exists in the database
-            // check if the current medicine row already exists in the database
-            if (existingMedicinesList.Any(m => m.MedicineName!.Equals(medicineRow.MedicineName)))
+            // check if the current medicine row already exists in the database by registration number
+            if (existingMedicinesList.Any(m => m.RegistrationNumber!.Equals(medicineRow.RegistrationNumber)))
             {
                 // if exists, check if the brand associated with the medicine row exists in the database
                 // if the brand not exists (means new brand), then add the brand to the database
                 var existingMedicine = existingMedicinesList
-                    .FirstOrDefault(m => m.MedicineName == medicineRow.MedicineName);
+                    .FirstOrDefault(m => m.RegistrationNumber == medicineRow.RegistrationNumber);
 
                 // get the brand associated with the medicine row
                 var existingMedicineInBrand = existingMedicine!.MedicineInBrands
