@@ -1,4 +1,4 @@
-﻿using PillPal.Application.Features.MedicineInBrands;
+using PillPal.Application.Features.MedicineInBrands;
 using PillPal.Application.Features.Medicines;
 
 namespace PillPal.WebApi.Controllers;
@@ -100,7 +100,8 @@ public class MedicinesController(IMedicineService medicineService)
     ///     POST /api/medicines/{medicineId}/brands
     ///     {
     ///         "brandId": "6b4aadb0-8189-467a-8aba-6572d3d4b972",
-    ///         "price": 8.000₫/viên,
+    ///         "price": 8000,
+    ///         "priceUnit": "VND",
     ///         "medicineUrl": "https://monke.com/paracetamol"
     ///     }
     ///
@@ -181,7 +182,8 @@ public class MedicinesController(IMedicineService medicineService)
     ///     PUT /api/medicines/{medicineId}/brands
     ///     {
     ///         "brandId": "6b4aadb0-8189-467a-8aba-6572d3d4b972",
-    ///         "price": 8.000₫/viên,
+    ///         "price": 8000,
+    ///         "priceUnit": "VND",
     ///         "medicineUrl": "https://monke.com/paracetamol"
     ///     }
     ///
