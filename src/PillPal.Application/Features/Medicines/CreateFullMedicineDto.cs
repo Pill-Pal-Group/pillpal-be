@@ -1,6 +1,8 @@
-﻿namespace PillPal.Application.Features.Medicines;
+using PillPal.Application.Features.MedicineInBrands;
 
-public record CreateMedicineDto : MedicineRelationDto
+namespace PillPal.Application.Features.Medicines;
+
+public record CreateFullMedicineDto : MedicineRelationDto
 {
     /// <example>Sedanxio</example>
     public string? MedicineName { get; init; }
@@ -11,11 +13,13 @@ public record CreateMedicineDto : MedicineRelationDto
 
     /// <example>VN-17384-13</example>
     public string? RegistrationNumber { get; init; }
+
+    public IEnumerable<CreateMedicineInBrandsDto> MedicineInBrands { get; init; } = default!;
 }
 
-public class CreateMedicineValidator : AbstractValidator<CreateMedicineDto>
+public class CreateFullMedicineValidator : AbstractValidator<CreateFullMedicineDto>
 {
-    public CreateMedicineValidator(IApplicationDbContext context)
+    public CreateFullMedicineValidator(IApplicationDbContext context)
     {
         Include(new MedicineRelationValidator(context));
 
@@ -38,5 +42,11 @@ public class CreateMedicineValidator : AbstractValidator<CreateMedicineDto>
             .MustAsync(async (registrationNumber, cancellationToken)
                 => !await context.Medicines.AnyAsync(x => x.RegistrationNumber == registrationNumber, cancellationToken))
             .WithMessage("Registration number already existed.");
+
+        RuleFor(x => x.MedicineInBrands)
+            .NotEmpty()
+            .WithMessage("Brands are required.")
+            .ForEach(rule => rule
+                .SetValidator(new CreateMedicineInBrandsValidator(context)));
     }
 }

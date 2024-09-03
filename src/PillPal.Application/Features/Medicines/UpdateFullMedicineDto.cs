@@ -1,6 +1,8 @@
-﻿namespace PillPal.Application.Features.Medicines;
+using PillPal.Application.Features.MedicineInBrands;
 
-public record UpdateMedicineDto : MedicineRelationDto
+namespace PillPal.Application.Features.Medicines;
+
+public record UpdateFullMedicineDto : MedicineRelationDto
 {
     /// <example>Paracetamol</example>
     public string? MedicineName { get; init; }
@@ -8,11 +10,13 @@ public record UpdateMedicineDto : MedicineRelationDto
 
     /// <example>https://monke.com/paracetamol.jpg</example>
     public string? Image { get; init; }
+    
+    public IEnumerable<UpdateMedicineInBrandsDto> MedicineInBrands { get; init; } = default!;
 }
 
-public class UpdateMedicineValidator : AbstractValidator<UpdateMedicineDto>
+public class UpdateFullMedicineValidator : AbstractValidator<UpdateFullMedicineDto>
 {
-    public UpdateMedicineValidator(IApplicationDbContext context)
+    public UpdateFullMedicineValidator(IApplicationDbContext context)
     {
         Include(new MedicineRelationValidator(context));
 
@@ -28,5 +32,11 @@ public class UpdateMedicineValidator : AbstractValidator<UpdateMedicineDto>
         RuleFor(x => x.Image)
             .MaximumLength(500)
             .WithMessage("Image must not exceed 100 characters.");
+
+        RuleFor(x => x.MedicineInBrands)
+            .NotEmpty()
+            .WithMessage("Brands are required.")
+            .ForEach(rule => rule
+                .SetValidator(new UpdateMedicineInBrandsValidator(context)));
     }
 }

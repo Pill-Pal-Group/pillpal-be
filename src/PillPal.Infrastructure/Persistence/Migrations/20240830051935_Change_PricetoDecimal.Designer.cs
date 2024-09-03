@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PillPal.Infrastructure.Persistence;
 
@@ -11,9 +12,11 @@ using PillPal.Infrastructure.Persistence;
 namespace PillPal.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240830051935_Change_PricetoDecimal")]
+    partial class Change_PricetoDecimal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -507,7 +510,7 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RegistrationNumber")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("RequirePrescript")
                         .HasColumnType("bit");
@@ -522,10 +525,6 @@ namespace PillPal.Infrastructure.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("RegistrationNumber")
-                        .IsUnique()
-                        .HasFilter("[RegistrationNumber] IS NOT NULL");
 
                     b.HasIndex("SpecificationId");
 

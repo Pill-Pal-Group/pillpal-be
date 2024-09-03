@@ -3,13 +3,16 @@
 public record CreateMedicineInBrandsDto
 {
     /// <example>00000000-0000-0000-0000-000000000000</example>
-    public Guid BrandId { get; set; }
+    public Guid BrandId { get; init; }
 
-    /// <example>8.000₫/viên</example>
-    public string? Price { get; set; }
+    /// <example>8000</example>
+    public decimal Price { get; init; }
+
+    /// <example>VND</example>
+    public string? PriceUnit { get; init; }
 
     /// <example>https://monke.com/paracetamol</example>
-    public string? MedicineUrl { get; set; }
+    public string? MedicineUrl { get; init; }
 }
 
 public class CreateMedicineInBrandsValidator : AbstractValidator<CreateMedicineInBrandsDto>
@@ -23,7 +26,8 @@ public class CreateMedicineInBrandsValidator : AbstractValidator<CreateMedicineI
         RuleFor(x => x.BrandId)
             .NotEmpty()
             .WithMessage("Brand is required.")
-            .MustAsync((id, cancellationToken) => _context.Brands.AnyAsync(b => b.Id == id, cancellationToken))
+            .MustAsync(async (id, cancellationToken) 
+                => await _context.Brands.AnyAsync(b => b.Id == id, cancellationToken))
             .WithMessage("Brand does not exist.");
 
         RuleFor(x => x.Price)

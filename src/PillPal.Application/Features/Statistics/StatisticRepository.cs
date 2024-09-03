@@ -106,7 +106,7 @@ public class StatisticRepository(IApplicationDbContext context, IServiceProvider
                 TotalCustomer = g.Count(),
                 TotalRevenue = g.Sum(cp => cp.Price)
             })
-            .OrderByDescending(g => g.TotalRevenue)
+            .OrderByDescending(g => g.TotalCustomer)
             .AsNoTracking()
             .FirstOrDefaultAsync();
 

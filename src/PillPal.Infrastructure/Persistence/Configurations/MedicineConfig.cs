@@ -6,5 +6,6 @@ public class MedicineConfig : IEntityTypeConfiguration<Medicine>
     {
         builder.HasKey(m => m.Id);
         builder.Property(m => m.Id).ValueGeneratedOnAdd();
+        builder.HasIndex(m => m.RegistrationNumber).IsUnique();
     }
 }

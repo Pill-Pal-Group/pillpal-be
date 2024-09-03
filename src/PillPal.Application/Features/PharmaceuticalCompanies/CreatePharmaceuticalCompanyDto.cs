@@ -11,13 +11,16 @@ public record CreatePharmaceuticalCompanyDto
 
 public class CreatePharmaceuticalCompanyValidator : AbstractValidator<CreatePharmaceuticalCompanyDto>
 {
-    public CreatePharmaceuticalCompanyValidator()
+    public CreatePharmaceuticalCompanyValidator(IApplicationDbContext context)
     {
         RuleFor(x => x.CompanyName)
             .NotEmpty()
             .MaximumLength(200);
 
         RuleFor(x => x.NationId)
-            .NotEmpty();
+            .NotEmpty()
+            .MustAsync(async (id, cancellationToken)
+                => await context.Nations.AnyAsync(x => x.Id == id, cancellationToken))
+            .WithMessage("Nation not found.");
     }
 }
