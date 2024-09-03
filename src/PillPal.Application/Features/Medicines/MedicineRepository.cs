@@ -376,8 +376,6 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             .Include(m => m.PharmaceuticalCompanies)
             .Include(m => m.DosageForms)
             .Include(m => m.ActiveIngredients)
-            .Include(m => m.MedicineInBrands)
-            .AsSplitQuery()
             .FirstOrDefaultAsync(m => m.Id == medicineId)
             ?? throw new NotFoundException(nameof(Medicine), medicineId);
 
@@ -395,14 +393,24 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         medicine.DosageForms = dosageForms;
         medicine.ActiveIngredients = activeIngredients;
 
-        var medicineInBrands = updateFullMedicineDto.MedicineInBrands.Select(mib =>
+        // map and update the medicine in brands
+        foreach (var medicineInBrandDto in updateFullMedicineDto.MedicineInBrands)
         {
-            var medicineInBrand = Mapper.Map<MedicineInBrand>(mib);
-            medicineInBrand.MedicineId = medicineId;
-            return medicineInBrand;
-        });
-
-        medicine.MedicineInBrands = medicineInBrands.ToList();
+            var medicineInBrand = await Context.MedicineInBrands
+                .FirstOrDefaultAsync(mib => mib.MedicineId == medicineId && mib.BrandId == medicineInBrandDto.BrandId);
+            
+            if (medicineInBrand == null)
+            {
+                var newMedicineInBrand = Mapper.Map<MedicineInBrand>(medicineInBrandDto);
+                newMedicineInBrand.MedicineId = medicineId;
+                Context.MedicineInBrands.Add(newMedicineInBrand);
+            }
+            else
+            {
+                Mapper.Map(medicineInBrandDto, medicineInBrand);
+                Context.MedicineInBrands.Update(medicineInBrand);
+            }
+        }
 
         await Context.SaveChangesAsync();
 
