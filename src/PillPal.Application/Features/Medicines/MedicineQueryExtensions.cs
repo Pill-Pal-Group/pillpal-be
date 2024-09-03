@@ -7,16 +7,19 @@ public record MedicineQueryParameter : PaginationQueryParameter
     /// <example>MED6060-555555</example>
     public string? MedicineCode { get; init; }
 
+    /// <example>VN-17384-13</example>
+    public string? RegistrationNumber { get; set; }
+
     /// <example>00000000-0000-0000-0000-000000000000</example>
     public Guid? Brand { get; init; }
 
-    /// <example>Paracetamol</example>
+    /// <example>Sedanxio</example>
     public string? MedicineName { get; init; }
 
-    /// <example>Vaccines</example>
+    /// <example>Ethanol-based</example>
     public string? Category { get; init; }
 
-    /// <example>Pfizer</example>
+    /// <example>Tilman S.A.</example>
     public string? PharmaceuticalCompany { get; set; }
 
     public bool? RequirePrescript { get; init; }
@@ -55,6 +58,11 @@ public static class MedicineQueryExtensions
 {
     public static IQueryable<Medicine> Filter(this IQueryable<Medicine> query, MedicineQueryParameter queryParameter)
     {
+        if (queryParameter.RegistrationNumber is not null)
+        {
+            query = query.Where(m => m.RegistrationNumber!.Contains(queryParameter.RegistrationNumber));
+        }
+        
         if (queryParameter.MedicineName is not null)
         {
             query = query.Where(m => m.MedicineName!.Contains(queryParameter.MedicineName));

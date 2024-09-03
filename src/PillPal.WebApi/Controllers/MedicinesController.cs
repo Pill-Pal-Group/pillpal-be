@@ -58,7 +58,7 @@ public class MedicinesController(IMedicineService medicineService)
     ///         "categories": [
     ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
     ///         ],
-    ///         "pharmaceuticalCompanys": [
+    ///         "pharmaceuticalCompanies": [
     ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
     ///         ],
     ///         "dosageForms": [
@@ -67,9 +67,9 @@ public class MedicinesController(IMedicineService medicineService)
     ///         "activeIngredients": [
     ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
     ///         ],
-    ///         "medicineName": "Medicine Name",
+    ///         "medicineName": "Sedanxio",
     ///         "requirePrescript": true,
-    ///         "image": "Image Url",
+    ///         "image": "https://monke.com/sedanxio-image.jpg",
     ///         "registrationNumber": "VN-17384-13"
     ///     }
     ///
@@ -102,7 +102,7 @@ public class MedicinesController(IMedicineService medicineService)
     ///         "categories": [
     ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
     ///         ],
-    ///         "pharmaceuticalCompanys": [
+    ///         "pharmaceuticalCompanies": [
     ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
     ///         ],
     ///         "dosageForms": [
@@ -111,16 +111,16 @@ public class MedicinesController(IMedicineService medicineService)
     ///         "activeIngredients": [
     ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
     ///         ],
-    ///         "medicineName": "Medicine Name",
+    ///         "medicineName": "Sedanxio",
     ///         "requirePrescript": true,
-    ///         "image": "Image Url",
+    ///         "image": "https://monke.com/sedanxio-image.jpg",
     ///         "registrationNumber": "VN-17384-13",
     ///         "medicineInBrands": [
     ///             {
     ///                 "brandId": "6b4aadb0-8189-467a-8aba-6572d3d4b972",
     ///                 "price": 8000,
     ///                 "priceUnit": "VND",
-    ///                 "medicineUrl": "https://monke.com/paracetamol"
+    ///                 "medicineUrl": "https://monke.com/sedanxio.jpg"
     ///             }
     ///          ]
     ///      }
@@ -190,7 +190,7 @@ public class MedicinesController(IMedicineService medicineService)
     ///         "categories": [
     ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
     ///         ],
-    ///         "pharmaceuticalCompanys": [
+    ///         "pharmaceuticalCompanies": [
     ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
     ///         ],
     ///         "dosageForms": [
@@ -199,10 +199,9 @@ public class MedicinesController(IMedicineService medicineService)
     ///         "activeIngredients": [
     ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
     ///         ],
-    ///         "medicineName": "Medicine Name",
+    ///         "medicineName": "Sedanxio",
     ///         "requirePrescript": true,
-    ///         "image": "Image Url",
-    ///         "registrationNumber": "VN-17384-13"
+    ///         "image": "https://monke.com/sedanxio-image.jpg"
     ///     }
     ///
     /// </remarks>
@@ -237,7 +236,7 @@ public class MedicinesController(IMedicineService medicineService)
     ///         "categories": [
     ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
     ///         ],
-    ///         "pharmaceuticalCompanys": [
+    ///         "pharmaceuticalCompanies": [
     ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
     ///         ],
     ///         "dosageForms": [
@@ -246,16 +245,15 @@ public class MedicinesController(IMedicineService medicineService)
     ///         "activeIngredients": [
     ///             "6b4aadb0-8189-467a-8aba-6572d3d4b972"
     ///         ],
-    ///         "medicineName": "Medicine Name",
+    ///         "medicineName": "Sedanxio",
     ///         "requirePrescript": true,
-    ///         "image": "Image Url",
-    ///         "registrationNumber": "VN-17384-13",
+    ///         "image": "https://monke.com/sedanxio-image.jpg",
     ///         "medicineInBrands": [
     ///             {
     ///                 "brandId": "6b4aadb0-8189-467a-8aba-6572d3d4b972",
     ///                 "price": 8000,
     ///                 "priceUnit": "VND",
-    ///                 "medicineUrl": "https://monke.com/paracetamol"
+    ///                 "medicineUrl": "https://monke.com/sedanxio.jpg"
     ///             }
     ///          ]
     ///      }

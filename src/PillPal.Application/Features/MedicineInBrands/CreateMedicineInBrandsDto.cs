@@ -26,7 +26,8 @@ public class CreateMedicineInBrandsValidator : AbstractValidator<CreateMedicineI
         RuleFor(x => x.BrandId)
             .NotEmpty()
             .WithMessage("Brand is required.")
-            .MustAsync((id, cancellationToken) => _context.Brands.AnyAsync(b => b.Id == id, cancellationToken))
+            .MustAsync(async (id, cancellationToken) 
+                => await _context.Brands.AnyAsync(b => b.Id == id, cancellationToken))
             .WithMessage("Brand does not exist.");
 
         RuleFor(x => x.Price)

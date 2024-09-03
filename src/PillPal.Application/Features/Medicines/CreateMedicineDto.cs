@@ -2,11 +2,11 @@
 
 public record CreateMedicineDto : MedicineRelationDto
 {
-    /// <example>Paracetamol</example>
+    /// <example>Sedanxio</example>
     public string? MedicineName { get; init; }
     public bool RequirePrescript { get; init; }
 
-    /// <example>https://monke.com/paracetamol.jpg</example>
+    /// <example>https://monke.com/sedanxio.jpg</example>
     public string? Image { get; init; }
 
     /// <example>VN-17384-13</example>
@@ -34,6 +34,9 @@ public class CreateMedicineValidator : AbstractValidator<CreateMedicineDto>
 
         RuleFor(x => x.RegistrationNumber)
             .NotEmpty()
-            .WithMessage("Registration number is required.");
+            .WithMessage("Registration number is required.")
+            .MustAsync(async (registrationNumber, cancellationToken)
+                => !await context.Medicines.AnyAsync(x => x.RegistrationNumber == registrationNumber, cancellationToken))
+            .WithMessage("Registration number already existed.");
     }
 }
