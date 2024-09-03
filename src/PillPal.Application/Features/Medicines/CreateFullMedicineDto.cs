@@ -4,11 +4,11 @@ namespace PillPal.Application.Features.Medicines;
 
 public record CreateFullMedicineDto : MedicineRelationDto
 {
-    /// <example>Paracetamol</example>
+    /// <example>Sedanxio</example>
     public string? MedicineName { get; init; }
     public bool RequirePrescript { get; init; }
 
-    /// <example>https://monke.com/paracetamol.jpg</example>
+    /// <example>https://monke.com/sedanxio.jpg</example>
     public string? Image { get; init; }
 
     /// <example>VN-17384-13</example>
