@@ -1,10 +1,35 @@
-﻿# PillPal - Backend WebAPI
+# PillPal - Backend WebAPI
 
 <a name="top">
+
+<div align="center">
+  <img width="20%" src="./res/pillpal-logo.png" alt="logo"/>
+</div>
 
 <div align="left">
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-GPL-yellow.svg" alt="gpl-license"/></a>
 </div>
+
+<div align="left">
+  <a href="https://sonarcloud.io/summary/new_code?id=Pill-Pal-Group_pillpal-be"><img src="https://sonarcloud.io/api/project_badges/measure?project=Pill-Pal-Group_pillpal-be&metric=reliability_rating" alt="reliability"/></a>
+  <a href="https://sonarcloud.io/summary/new_code?id=Pill-Pal-Group_pillpal-be"><img src="https://sonarcloud.io/api/project_badges/measure?project=Pill-Pal-Group_pillpal-be&metric=security_rating" alt="security" /></a>
+  <a href="https://sonarcloud.io/summary/new_code?id=Pill-Pal-Group_pillpal-be"><img src="https://sonarcloud.io/api/project_badges/measure?project=Pill-Pal-Group_pillpal-be&metric=sqale_rating" alt="maintainability" /></a>
+</div>
+
+<div align="left">
+  <a href="https://sonarcloud.io/summary/new_code?id=Pill-Pal-Group_pillpal-be"><img src="https://sonarcloud.io/api/project_badges/measure?project=Pill-Pal-Group_pillpal-be&metric=vulnerabilities" alt="vulnerabilities" /></a>
+  <a href="https://sonarcloud.io/summary/new_code?id=Pill-Pal-Group_pillpal-be"><img src="https://sonarcloud.io/api/project_badges/measure?project=Pill-Pal-Group_pillpal-be&metric=code_smells" alt="code-smells" /></a>
+  <a href="https://sonarcloud.io/summary/new_code?id=Pill-Pal-Group_pillpal-be"><img src="https://sonarcloud.io/api/project_badges/measure?project=Pill-Pal-Group_pillpal-be&metric=duplicated_lines_density" alt="duplicate-lines" /></a>
+  <a href="https://sonarcloud.io/summary/new_code?id=Pill-Pal-Group_pillpal-be"><img src="https://sonarcloud.io/api/project_badges/measure?project=Pill-Pal-Group_pillpal-be&metric=ncloc" alt="loc" /></a>
+</div>
+
+<div align="left">
+  <img src="https://img.shields.io/github/languages/top/Pill-Pal-Group/pillpal-be" alt="language"/>
+  <img src="https://github.com/Pill-Pal-Group/pillpal-be/actions/workflows/staging-deploy.yml/badge.svg?branch=stage" alt="actions-status" />
+  <a href="https://sonarcloud.io/summary/new_code?id=Pill-Pal-Group_pillpal-be"><img src="https://sonarcloud.io/api/project_badges/measure?project=Pill-Pal-Group_pillpal-be&metric=alert_status" alt="quality-gate" /></a>
+</div>
+
+<br/>
 
 <div align="left">
   <a href="https://dotnet.microsoft.com"><img src="https://img.shields.io/badge/.NET%208.0-512BD4?logo=dotnet&logoColor=white" alt="dotnet"/></a>
@@ -43,17 +68,17 @@ Backend API for PillPal project. Built with the latest .NET 8.0 with Entity Fram
 ## System Overview
 
 <div align="center">
-  <img src="./res/be-system.png" alt="system-design"/>
+  <img width="90%" src="./res/be-system.png" alt="system-design"/>
   <p>Backend Architecture Design</p>
 </div>
 </br>
 <div align="center">
-  <img src="./res/be-package.png" alt="package-design"/>
+  <img width="90%" src="./res/be-package.png" alt="package-design"/>
   <p>Backend Package Design</p>
 </div>
 </br>
 <div align="center">
-  <img src="./res/logical-erd.png" alt="logical-db"/>
+  <img width="90%" src="./res/logical-erd.png" alt="logical-db"/>
   <p>Logical Database Design</p>
 </div>
 
