@@ -3,20 +3,25 @@
 <a name="top">
 
 <div align="left">
-    <a href="./LICENSE"><img src="https://img.shields.io/badge/License-GPL-yellow.svg" alt="gpl-license"/></a>
+  <a href="./LICENSE"><img src="https://img.shields.io/badge/License-GPL-yellow.svg" alt="gpl-license"/></a>
 </div>
 
 <div align="left">
-    <a href="https://dotnet.microsoft.com"><img src="https://img.shields.io/badge/.NET%208.0-512BD4?style=flat&logo=dotnet&logoColor=white" alt="dotnet"/></a>
-    <a href="https://www.nuget.org/"><img src="https://img.shields.io/badge/NuGet-004880?style=flat&logo=nuget&logoColor=white" alt="nuget"/></a>
-    <a href="https://www.microsoft.com/sql-server"><img src="https://img.shields.io/badge/SQL_Server-CC2927?style=flat&logo=microsoft%20sql%20server" alt="sqlserver"/></a>
-    <a href="https://redis.io/"><img src="https://img.shields.io/badge/Redis-%23DD0031.svg?&style=flat&logo=redis&logoColor=white" alt="redis"/></a>
-    <a href="https://cloud.google.com/"><img src="https://img.shields.io/badge/Google_Cloud-4285F4?style=flat&logo=google-cloud&logoColor=white" alt="google-cloud"/></a>
-    <a href="https://firebase.google.com/"><img src="https://img.shields.io/badge/Firebase-ffca28?style=flat&logo=firebase&logoColor=black" alt="firebase"/></a>
-    <a href="https://sonarcloud.io/"><img src="https://img.shields.io/badge/SonarCloud-F3702A?style=flat&logo=sonarcloud&logoColor=white" alt="sonar"/></a>
-    <a href="https://swagger.io/"><img src="https://img.shields.io/badge/Swagger-85EA2D?style=flat&logo=swagger&logoColor=black" alt="swagger"/></a>
-    <a href="https://www.openapis.org/"><img src="https://img.shields.io/badge/OpenAPI-6BA539?style=flat&logo=openapiinitiative&logoColor=white" alt="openapi"/></a>
-    <a href="https://jwt.io/"><img src="https://img.shields.io/badge/JSON%20Web%20Tokens-000000?style=flat&logo=jsonwebtokens&logoColor=white" alt="jwt"/></a>
+  <a href="https://dotnet.microsoft.com"><img src="https://img.shields.io/badge/.NET%208.0-512BD4?logo=dotnet&logoColor=white" alt="dotnet"/></a>
+  <a href="https://www.nuget.org/"><img src="https://img.shields.io/badge/NuGet-004880?logo=nuget&logoColor=white" alt="nuget"/></a>
+  <a href="https://www.microsoft.com/sql-server"><img src="https://img.shields.io/badge/SQL_Server-CC2927?logo=microsoft%20sql%20server" alt="sqlserver"/></a>
+  <a href="https://redis.io/"><img src="https://img.shields.io/badge/Redis-%23DD0031.svg?&logo=redis&logoColor=white" alt="redis"/></a>
+  <a href="https://hangfire.io/"><img src="https://img.shields.io/badge/Hangfire-2B4A7B?logo=hexo&logoColor=white" alt="hangfire"/></a>
+  <a href="https://www.zalopay.vn/"><img src="https://img.shields.io/badge/ZaloPay-00C300?logo=zalopay&logoColor=white" alt="zalopay"/></a>
+  <a href="https://www.docker.com/"><img src="https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white" alt="docker"/></a>
+  <a href="https://www.nginx.com/"><img src="https://img.shields.io/badge/Nginx-269539?logo=nginx&logoColor=white" alt="nginx"/></a>
+  <a href="https://render.com/"><img src="https://img.shields.io/badge/Render-000000?logo=render&logoColor=white" alt="render"/></a>
+  <a href="https://cloud.google.com/"><img src="https://img.shields.io/badge/Google_Cloud-4285F4?logo=google-cloud&logoColor=white" alt="google-cloud"/></a>
+  <a href="https://firebase.google.com/"><img src="https://img.shields.io/badge/Firebase-ffca28?logo=firebase&logoColor=black" alt="firebase"/></a>
+  <a href="https://sonarcloud.io/"><img src="https://img.shields.io/badge/SonarCloud-F3702A?logo=sonarcloud&logoColor=white" alt="sonar"/></a>
+  <a href="https://swagger.io/"><img src="https://img.shields.io/badge/Swagger-85EA2D?logo=swagger&logoColor=black" alt="swagger"/></a>
+  <a href="https://www.openapis.org/"><img src="https://img.shields.io/badge/OpenAPI-6BA539?logo=openapiinitiative&logoColor=white" alt="openapi"/></a>
+  <a href="https://jwt.io/"><img src="https://img.shields.io/badge/JSON%20Web%20Tokens-000000?logo=jsonwebtokens&logoColor=white" alt="jwt"/></a>
 </div>
 
 <details>
@@ -38,18 +43,18 @@ Backend API for PillPal project. Built with the latest .NET 8.0 with Entity Fram
 ## System Overview
 
 <div align="center">
-    <img src="./res/be-system.png" alt="system-design"/>
-    <p>Backend Architecture Design</p>
+  <img src="./res/be-system.png" alt="system-design"/>
+  <p>Backend Architecture Design</p>
 </div>
-
+</br>
 <div align="center">
-    <img src="./res/be-package.png" alt="package-design"/>
-    <p>Backend Package Design</p>
+  <img src="./res/be-package.png" alt="package-design"/>
+  <p>Backend Package Design</p>
 </div>
-
+</br>
 <div align="center">
-    <img src="./res/logical-erd.png" alt="logical-db"/>
-    <p>Logical Database Design</p>
+  <img src="./res/logical-erd.png" alt="logical-db"/>
+  <p>Logical Database Design</p>
 </div>
 
 <p align="right"><a href="#top">[back to top]</a></p>
@@ -60,13 +65,13 @@ Make sure you have the **.NET 8.0 SDK** installed on your machine. If not, you c
 
 1. Clone the repository
 
-```console
+```sh
 git clone https://github.com/Pill-Pal-Group/pillpal-be.git
 ```
 
 2. Navigate to the project directory
 
-```console
+```sh
 cd pillpal-be/src
 ```
 
@@ -122,7 +127,7 @@ Both file are located in the `src/PillPal.WebApi` directory and should look like
 
 4. Migrate the database
 
-```console
+```sh
 dotnet ef database update --project PillPal.Infrastructure --startup-project PillPal.WebApi
 ```
 
@@ -130,13 +135,13 @@ dotnet ef database update --project PillPal.Infrastructure --startup-project Pil
 
 For straightforward execution, run the following command:
 
-```console
+```sh
 dotnet run --project PillPal.WebApi
 ```
 
 Or for more flexible options while running the project, you can use the following command:
 
-```console
+```sh
 dotnet watch run --project PillPal.WebApi
 ```
 
