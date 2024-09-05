@@ -65,13 +65,13 @@ Make sure you have the **.NET 8.0 SDK** installed on your machine. If not, you c
 
 1. Clone the repository
 
-```console
+```sh
 git clone https://github.com/Pill-Pal-Group/pillpal-be.git
 ```
 
 2. Navigate to the project directory
 
-```console
+```sh
 cd pillpal-be/src
 ```
 
