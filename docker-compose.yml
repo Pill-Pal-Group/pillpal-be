@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  pillpal.webapi:
+    image: ${DOCKER_REGISTRY-}pillpalwebapi
+    build:
+      context: .
+      dockerfile: Dockerfile

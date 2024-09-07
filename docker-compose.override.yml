@@ -1,0 +1,38 @@
+version: '3.4'
+
+services:
+  pillpal.webapi:
+    environment:
+      - ASPNETCORE_HTTP_PORTS=8080
+      - ASPNETCORE_HTTPS_PORTS=8081
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - FirebaseSettings__ProjectId=${FirebaseSettings__ProjectId}
+      - FirebaseSettings__SecretKey=${FirebaseSettings__SecretKey}
+      - JwtSettings__SecretKey=${JwtSettings__SecretKey}
+      - JwtSettings__Issuer=${JwtSettings__Issuer}
+      - JwtSettings__Audience=${JwtSettings__Audience}
+      - JwtSettings__Expires=${JwtSettings__Expires}
+      - JwtSettings__RefreshExpires=${JwtSettings__RefreshExpires}
+      - CacheSettings__SlidingExpiration=${CacheSettings__SlidingExpiration}
+      - CacheSettings__AbsoluteExpiration=${CacheSettings__AbsoluteExpiration}
+      - ConnectionStrings__REDIS=${ConnectionStrings__REDIS}
+      - ConnectionStrings__PILLPAL_DB=${ConnectionStrings__PILLPAL_DB}
+      - ConnectionStrings__HANGFIRE_DB=${ConnectionStrings__HANGFIRE_DB}
+      - Hangfire__User=${Hangfire__User}
+      - Hangfire__Pass=${Hangfire__Pass}
+      - RateLimitSettings__Bucket__TokenLimit=${RateLimitSettings__Bucket__TokenLimit}
+      - RateLimitSettings__Bucket__TokenPerPeriod=${RateLimitSettings__Bucket__TokenPerPeriod}
+      - RateLimitSettings__Bucket__ReplenishmentPeriod=${RateLimitSettings__Bucket__ReplenishmentPeriod}
+      - ZaloPay__AppId=${ZaloPay__AppId}
+      - ZaloPay__AppUser=${ZaloPay__AppUser}
+      - ZaloPay__Key1=${ZaloPay__Key1}
+      - ZaloPay__Key2=${ZaloPay__Key2}
+      - ZaloPay__PaymentUrl=${ZaloPay__PaymentUrl}
+      - ZaloPay__ReturnUrl=${ZaloPay__ReturnUrl}
+      - ZaloPay__IpnUrl=${ZaloPay__IpnUrl}
+    ports:
+      - "8080"
+      - "8081"
+    volumes:
+      -${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      -${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
