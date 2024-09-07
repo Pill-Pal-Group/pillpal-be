@@ -21,7 +21,7 @@ services:
       - Hangfire__User=${Hangfire__User}
       - Hangfire__Pass=${Hangfire__Pass}
       - RateLimitSettings__Bucket__TokenLimit=${RateLimitSettings__Bucket__TokenLimit}
-      - RateLimitSettings__Bucket__TokenPerPeriod=${RateLimitSettings__Bucket__TokenPerPeriod}
+      - RateLimitSettings__Bucket__TokensPerPeriod=${RateLimitSettings__Bucket__TokensPerPeriod}
       - RateLimitSettings__Bucket__ReplenishmentPeriod=${RateLimitSettings__Bucket__ReplenishmentPeriod}
       - ZaloPay__AppId=${ZaloPay__AppId}
       - ZaloPay__AppUser=${ZaloPay__AppUser}

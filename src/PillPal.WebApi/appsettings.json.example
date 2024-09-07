@@ -38,5 +38,11 @@
     "PaymentUrl": "PaymentUrl",
     "ReturnUrl": "ReturnUrl",
     "IpnUrl": "IpnUrl"
-  }
+  },
+  "SwaggerServers": [
+    {
+      "Url": "Server Url",
+      "Description": "Server Description"
+    }
+  ]
 }

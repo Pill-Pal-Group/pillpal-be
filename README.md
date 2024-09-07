@@ -90,13 +90,13 @@ Make sure you have the **.NET 8.0 SDK** installed on your machine. If not, you c
 
 1. Clone the repository
 
-```sh
+```bash
 git clone https://github.com/Pill-Pal-Group/pillpal-be.git
 ```
 
 2. Navigate to the project directory
 
-```sh
+```bash
 cd pillpal-be/src
 ```
 
@@ -146,13 +146,21 @@ Both file are located in the `src/PillPal.WebApi` directory and should look like
     "PaymentUrl": "PaymentUrl",
     "ReturnUrl": "ReturnUrl",
     "IpnUrl": "IpnUrl"
-  }
+  },
+  "SwaggerServers": [ // Optional
+    {
+      "Url": "Server Url",
+      "Description": "Server Description"
+    }
+  ]
 }
 ```
 
+> **Note**: SwaggerServers is an optional field. Provide if you already deployed to a server.
+
 4. Migrate the database
 
-```sh
+```bash
 dotnet ef database update --project PillPal.Infrastructure --startup-project PillPal.WebApi
 ```
 
@@ -160,13 +168,13 @@ dotnet ef database update --project PillPal.Infrastructure --startup-project Pil
 
 For straightforward execution, run the following command:
 
-```sh
+```bash
 dotnet run --project PillPal.WebApi
 ```
 
 Or for more flexible options while running the project, you can use the following command:
 
-```sh
+```bash
 dotnet watch run --project PillPal.WebApi
 ```
 

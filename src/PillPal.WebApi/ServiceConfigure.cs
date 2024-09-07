@@ -19,7 +19,7 @@ public static class ServiceConfigure
 
         services.AddExceptionHandler<GlobalExceptionHandler>();
 
-        services.AddSwaggerDoc();
+        services.AddSwaggerDoc(configuration);
 
         services.AddJwtAuth();
 

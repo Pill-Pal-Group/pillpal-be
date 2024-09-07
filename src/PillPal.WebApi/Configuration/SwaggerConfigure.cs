@@ -1,4 +1,4 @@
-using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
+﻿using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -6,7 +6,7 @@ namespace PillPal.WebApi.Configuration;
 
 public static class SwaggerConfigure
 {
-    public static IServiceCollection AddSwaggerDoc(this IServiceCollection services)
+    public static IServiceCollection AddSwaggerDoc(this IServiceCollection services, IConfiguration configuration)
     {
         string? environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
 
@@ -78,12 +78,15 @@ public static class SwaggerConfigure
                     Description = "Local server - https"
                 });
             }
-
-            config.AddServer(new OpenApiServer
+            
+            var swaggerServers = configuration.GetSection("SwaggerServers").Get<List<OpenApiServer>>();
+            if (swaggerServers != null)
             {
-                Url = "https://pp-devtest2.azurewebsites.net",
-                Description = "Staging server"
-            });
+                foreach (var server in swaggerServers)
+                {
+                    config.AddServer(server);
+                }
+            }
 
         })
         .AddFluentValidationRulesToSwagger();
