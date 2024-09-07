@@ -147,7 +147,7 @@ Both file are located in the `src/PillPal.WebApi` directory and should look like
     "ReturnUrl": "ReturnUrl",
     "IpnUrl": "IpnUrl"
   },
-  "SwaggerServers": [ // Optional
+  "SwaggerServers": [
     {
       "Url": "Server Url",
       "Description": "Server Description"
