@@ -51,12 +51,12 @@ public class AccountRepository(
         await Context.SaveChangesAsync();
     }
 
-    public async Task UnlockAccountAsync(Guid id)
+    public async Task UnlockAccountAsync(Guid customerId)
     {
         var customerAccount = await Context.Customers
             .Include(c => c.IdentityUser)
-            .FirstOrDefaultAsync(c => c.Id == id)
-            ?? throw new NotFoundException(nameof(Customer), id);
+            .FirstOrDefaultAsync(c => c.Id == customerId)
+            ?? throw new NotFoundException(nameof(Customer), customerId);
 
         await identityService.UnlockAccountAsync(customerAccount.IdentityUser!.Id);
 

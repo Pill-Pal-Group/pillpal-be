@@ -4,15 +4,16 @@ namespace PillPal.Application.Common.Mappings;
 
 public partial class MapperConfigure : Profile
 {
+    private const string HoursFormat = "HH:mm";
     void CustomerProfile()
     {
         CreateMap<Customer, CustomerDto>()
             .ForMember(c => c.ApplicationUser, dest => dest.MapFrom(src => src.IdentityUser))
             .ForMember(c => c.MealTimeOffset, dest => dest.MapFrom(src => $"{src.MealTimeOffset.Hours:D2}:{src.MealTimeOffset.Minutes:D2}"))
-            .ForMember(c => c.BreakfastTime, dest => dest.MapFrom(src => src.BreakfastTime.ToString("HH:mm")))
-            .ForMember(c => c.LunchTime, dest => dest.MapFrom(src => src.LunchTime.ToString("HH:mm")))
-            .ForMember(c => c.AfternoonTime, dest => dest.MapFrom(src => src.AfternoonTime.ToString("HH:mm")))
-            .ForMember(c => c.DinnerTime, dest => dest.MapFrom(src => src.DinnerTime.ToString("HH:mm")))
+            .ForMember(c => c.BreakfastTime, dest => dest.MapFrom(src => src.BreakfastTime.ToString(HoursFormat)))
+            .ForMember(c => c.LunchTime, dest => dest.MapFrom(src => src.LunchTime.ToString(HoursFormat)))
+            .ForMember(c => c.AfternoonTime, dest => dest.MapFrom(src => src.AfternoonTime.ToString(HoursFormat)))
+            .ForMember(c => c.DinnerTime, dest => dest.MapFrom(src => src.DinnerTime.ToString(HoursFormat)))
             .ForMember(c => c.Dob, dest => dest.MapFrom(src => src.Dob.HasValue ? src.Dob.Value.Date.ToShortDateString() : null))
             .ForMember(c => c.CustomerPackage, opt => opt.Ignore())
             .ReverseMap();
@@ -21,10 +22,10 @@ public partial class MapperConfigure : Profile
 
         CreateMap<Customer, CustomerMealTimeDto>()
             .ForMember(c => c.MealTimeOffset, dest => dest.MapFrom(src => $"{src.MealTimeOffset.Hours:D2}:{src.MealTimeOffset.Minutes:D2}"))
-            .ForMember(c => c.BreakfastTime, dest => dest.MapFrom(src => src.BreakfastTime.ToString("HH:mm")))
-            .ForMember(c => c.LunchTime, dest => dest.MapFrom(src => src.LunchTime.ToString("HH:mm")))
-            .ForMember(c => c.AfternoonTime, dest => dest.MapFrom(src => src.AfternoonTime.ToString("HH:mm")))
-            .ForMember(c => c.DinnerTime, dest => dest.MapFrom(src => src.DinnerTime.ToString("HH:mm")))
+            .ForMember(c => c.BreakfastTime, dest => dest.MapFrom(src => src.BreakfastTime.ToString(HoursFormat)))
+            .ForMember(c => c.LunchTime, dest => dest.MapFrom(src => src.LunchTime.ToString(HoursFormat)))
+            .ForMember(c => c.AfternoonTime, dest => dest.MapFrom(src => src.AfternoonTime.ToString(HoursFormat)))
+            .ForMember(c => c.DinnerTime, dest => dest.MapFrom(src => src.DinnerTime.ToString(HoursFormat)))
             .ReverseMap();
 
         CreateMap<UpdateCustomerMealTimeDto, Customer>()

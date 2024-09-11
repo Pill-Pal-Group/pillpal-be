@@ -87,6 +87,19 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
         return Mapper.Map<IEnumerable<MedicationTakesDto>>(allMedicationTakes);
     }
 
+    public async Task<MedicationTakesDto> CreateMedicationTakeAsync(CreateMedicationTakesDto createMedicationTakesDto)
+    {
+        await ValidateAsync(createMedicationTakesDto);
+
+        var medicationTake = Mapper.Map<MedicationTake>(createMedicationTakesDto);
+
+        await Context.MedicationTakes.AddAsync(medicationTake);
+
+        await Context.SaveChangesAsync();
+
+        return Mapper.Map<MedicationTakesDto>(medicationTake);
+    }
+
     public async Task<IEnumerable<MedicationTakesListDto>> GetMedicationTakesAsync(Guid prescriptId, DateTimeOffset? dateTake)
     {
         var prescript = await Context.Prescripts
@@ -137,24 +150,6 @@ public class MedicationTakeRepository(IApplicationDbContext context, IMapper map
         Context.MedicationTakes.Remove(medicationTake);
 
         await Context.SaveChangesAsync();
-    }
-
-    public async Task<MedicationTakesDto> CreateMedicationTakeAsync(CreateMedicationTakesDto createMedicationTakesDto)
-    {
-        await ValidateAsync(createMedicationTakesDto);
-
-        var prescriptDetail = await Context.PrescriptDetails
-            .AsNoTracking()
-            .FirstOrDefaultAsync(pd => pd.Id == createMedicationTakesDto.PrescriptDetailId)
-            ?? throw new NotFoundException(nameof(PrescriptDetail), createMedicationTakesDto.PrescriptDetailId);
-
-        var medicationTake = Mapper.Map<MedicationTake>(createMedicationTakesDto);
-
-        await Context.MedicationTakes.AddAsync(medicationTake);
-
-        await Context.SaveChangesAsync();
-
-        return Mapper.Map<MedicationTakesDto>(medicationTake);
     }
 
     public async Task<MedicationTakesDto> GetIndividualMedicationTakesAsync(Guid medicationTakeId)

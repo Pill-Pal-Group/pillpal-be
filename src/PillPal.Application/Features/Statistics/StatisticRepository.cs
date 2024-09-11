@@ -6,15 +6,13 @@ public class StatisticRepository(IApplicationDbContext context, IServiceProvider
     /// <summary>
     /// Incase the start date or end date is null, set them to current date
     /// </summary>
-    private static ReportTimeRequest HandleReportTime(ReportTimeRequest reportTime)
+    private static void HandleReportTime(ReportTimeRequest reportTime)
     {
         if (reportTime.StartDate == null || reportTime.EndDate == null)
         {
             reportTime.StartDate = DateTime.Now;
             reportTime.EndDate = DateTime.Now;
         }
-
-        return reportTime;
     }
 
     public async Task<IEnumerable<CustomerPackagePercentReport>> GetCustomerPackagePercentAsync(ReportTimeRequest reportTime)
