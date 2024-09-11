@@ -17,21 +17,22 @@ public record CreateMedicationTakesDto
 
 public class CreateMedicationTakesValidator : AbstractValidator<CreateMedicationTakesDto>
 {
+    private const string PropertyRequired = "{PropertyName} is required.";
     public CreateMedicationTakesValidator()
     {
         RuleFor(x => x.DateTake)
-            .NotEmpty().WithMessage("{PropertyName} is required.");
+            .NotEmpty().WithMessage(PropertyRequired);
 
         RuleFor(x => x.TimeTake)
-            .NotEmpty().WithMessage("{PropertyName} is required.")
+            .NotEmpty().WithMessage(PropertyRequired)
             .Matches(@"^(?:[01]\d|2[0123]):(?:[012345]\d)$")
             .WithMessage("{PropertyName} must be in HH:mm format.");
 
         RuleFor(x => x.Dose)
-            .NotEmpty().WithMessage("{PropertyName} is required.")
+            .NotEmpty().WithMessage(PropertyRequired)
             .GreaterThan(0).WithMessage("{PropertyName} must be greater than 0.");
 
         RuleFor(x => x.PrescriptDetailId)
-            .NotEmpty().WithMessage("{PropertyName} is required.");
+            .NotEmpty().WithMessage(PropertyRequired);
     }
 }

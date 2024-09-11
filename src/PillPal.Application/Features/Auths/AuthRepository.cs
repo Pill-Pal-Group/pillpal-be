@@ -27,9 +27,9 @@ public class AuthRepository(
     {
         await ValidateAsync(request);
 
-        var user = await identityService.LoginAsync(request.Email!, request.Password!);
+        var authenticatedUser = await identityService.LoginAsync(request.Email!, request.Password!);
 
-        var (accessToken, expired) = jwtService.GenerateJwtToken(user.Item1, user.role);
+        var (accessToken, expired) = jwtService.GenerateJwtToken(authenticatedUser.user, authenticatedUser.role);
 
         var refreshToken = jwtService.GenerateRefreshToken(accessToken);
 
@@ -46,20 +46,20 @@ public class AuthRepository(
     {
         await ValidateAsync(refreshToken);
 
-        var tokenValidate = jwtService.ValidateRefreshToken(refreshToken.ExpiredToken!, refreshToken.RefreshToken!);
+        var (isTokenValid, tokenValidationMessage) = jwtService.ValidateRefreshToken(refreshToken.ExpiredToken!, refreshToken.RefreshToken!);
 
-        if (!tokenValidate.isValid)
+        if (!isTokenValid)
         {
-            throw new UnauthorizedAccessException(tokenValidate.message);
+            throw new UnauthorizedAccessException(tokenValidationMessage);
         }
 
         var claimsPrincipal = jwtService.GetPrincipalFromExpiredToken(refreshToken.ExpiredToken!);
 
         var email = claimsPrincipal.FindFirst(ClaimTypes.Email)?.Value;
 
-        var user = await identityService.GetUserByEmailAsync(email!);
+        var retrievedUser = await identityService.GetUserByEmailAsync(email!);
 
-        var (accessToken, expired) = jwtService.GenerateJwtToken(user.Item1, user.role);
+        var (accessToken, expired) = jwtService.GenerateJwtToken(retrievedUser.user, retrievedUser.role);
 
         var newRefreshToken = jwtService.GenerateRefreshToken(accessToken);
 
@@ -94,13 +94,13 @@ public class AuthRepository(
 
         var email = await firebaseService.GetEmailFromTokenAsync(request.Token!);
 
-        var user = await identityService.GetUserByEmailAsync(email);
+        var userByEmail = await identityService.GetUserByEmailAsync(email);
 
-        if (user.newUser)
+        if (userByEmail.newUser)
         {
             Customer customer = new()
             {
-                IdentityUserId = user.Item1.Id,
+                IdentityUserId = userByEmail.user.Id,
             };
 
             await Context.Customers.AddAsync(customer);
@@ -108,7 +108,7 @@ public class AuthRepository(
             await Context.SaveChangesAsync();
         }
 
-        var (accessToken, expired) = jwtService.GenerateJwtToken(user.Item1, user.role);
+        var (accessToken, expired) = jwtService.GenerateJwtToken(userByEmail.user, userByEmail.role);
 
         var refreshToken = jwtService.GenerateRefreshToken(accessToken);
 

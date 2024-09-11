@@ -30,7 +30,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         var existingMedicinesList = await Context.Medicines
             .Include(m => m.MedicineInBrands)
             .ThenInclude(mib => mib.Brand)
-            .Where(m => excelMedicineListToInsert.Select(dto => dto.MedicineName).Contains(m.MedicineName))
+            .Where(m => excelMedicineListToInsert.Select(dto => dto.RegistrationNumber).Contains(m.RegistrationNumber))
             .ToListAsync();
 
         var existingNationsList = await Context.Nations
@@ -429,7 +429,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
     }
 
     public async Task<FileExecutionResult> ImportMedicinesAsync(Stream file,
-        MedicineExcelProperties properties, ExcelPropertyDelimiters delimiter)
+        MedicineExcelProperties excelProperties, ExcelPropertyDelimiters excelPropertyDelimiters)
     {
         var dataTable = fileReader.ReadExcelFile(file);
 
@@ -449,31 +449,37 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
 
             var medicine = new CreateMedicineFromExcelDto
             {
-                MedicineName = row[properties.MedicineName].ToString(),
-                RequirePrescript = row[properties.RequirePrescript].ToString()!.Equals("Có"),
-                Image = row[properties.Image].ToString(),
-                Specifications = row[properties.Specifications].ToString(),
-                DosageForms = row[properties.DosageForms].ToString(),
-                PharmaceuticalCompanies = row[properties.PharmaceuticalCompanies].ToString(),
-                Brand = row[properties.Brand].ToString(),
-                BrandLogo = row[properties.BrandLogo].ToString(),
-                BrandUrl = row[properties.BrandUrl].ToString(),
-                Price = row[properties.Price].ToString(),
-                MedicineUrl = row[properties.MedicineUrl].ToString(),
-                Nation = row[properties.Nation].ToString(),
-                RegistrationNumber = row[properties.RegistrationNumber].ToString(),
+                MedicineName = row[excelProperties.MedicineName].ToString(),
+                RequirePrescript = row[excelProperties.RequirePrescript].ToString()!.Equals("Có"),
+                Image = row[excelProperties.Image].ToString(),
+                Specifications = row[excelProperties.Specifications].ToString(),
+                DosageForms = row[excelProperties.DosageForms].ToString(),
+                PharmaceuticalCompanies = row[excelProperties.PharmaceuticalCompanies].ToString(),
+                Brand = row[excelProperties.Brand].ToString(),
+                BrandLogo = row[excelProperties.BrandLogo].ToString(),
+                BrandUrl = row[excelProperties.BrandUrl].ToString(),
+                Price = row[excelProperties.Price].ToString(),
+                MedicineUrl = row[excelProperties.MedicineUrl].ToString(),
+                Nation = row[excelProperties.Nation].ToString(),
+                RegistrationNumber = row[excelProperties.RegistrationNumber].ToString(),
 
-                Categories = row[properties.Categories].ToString()?
-                    .Split(delimiter.CategoryDelimeter)
+                Categories = row[excelProperties.Categories].ToString()?
+                    .Split(excelPropertyDelimiters.CategoryDelimeter)
                     .Select(c => c.Trim()).ToList(),
-                ActiveIngredients = row[properties.ActiveIngredients].ToString()?
-                    .Split(delimiter.IngredientDelimeter)
+                ActiveIngredients = row[excelProperties.ActiveIngredients].ToString()?
+                    .Split(excelPropertyDelimiters.IngredientDelimeter)
                     .Select(ai => ai.Trim()).ToList(),
             };
 
             excelMedicineListToInsert.Add(medicine);
             exeCount++;
         }
+
+        // filter out the medicine rows that is duplicated by registration number
+        excelMedicineListToInsert = excelMedicineListToInsert
+            .GroupBy(m => m.RegistrationNumber)
+            .Select(g => g.First())
+            .ToList();
 
         // actual insertion of rows by affected rows in the database
         var affectedRows = await CreateMedicinesFromExcelBatchAsync(excelMedicineListToInsert);

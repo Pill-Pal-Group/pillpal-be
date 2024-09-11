@@ -109,7 +109,7 @@ public class IdentityService : IIdentityService
         return await _userManager.GetUsersInRoleAsync(role);
     }
 
-    public async Task<(ApplicationUser, string role, bool newUser)> GetUserByEmailAsync(string email)
+    public async Task<(ApplicationUser user, string role, bool newUser)> GetUserByEmailAsync(string email)
     {
         var user = await _userManager.FindByEmailAsync(email);
 
@@ -165,7 +165,7 @@ public class IdentityService : IIdentityService
         await _userManager.SetLockoutEndDateAsync(user!, lockoutEnd);
     }
 
-    public async Task<(ApplicationUser, string role)> LoginAsync(string email, string password)
+    public async Task<(ApplicationUser user, string role)> LoginAsync(string email, string password)
     {
         var user = await _userManager.FindByEmailAsync(email)
             ?? throw new UnauthorizedAccessException($"User with identifier '{email}' not found");

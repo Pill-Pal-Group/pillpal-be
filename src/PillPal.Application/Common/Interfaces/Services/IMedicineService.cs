@@ -50,11 +50,11 @@ public interface IMedicineService
     /// Creates batch of medicines from excel file import.
     /// Other entities related to the medicine will be created if not exist.
     /// </summary>
-    /// <param name="createMedicineFromExcelDtos">The DTOs containing the creation data for the medicines.</param>
+    /// <param name="excelMedicineListToInsert">The list of DTOs containing the creation data for the medicines.</param>
     /// <returns>
     /// The task result contains the number of rows affected.
     /// </returns>
-    Task<int> CreateMedicinesFromExcelBatchAsync(List<CreateMedicineFromExcelDto> createMedicineFromExcelDtos);
+    Task<int> CreateMedicinesFromExcelBatchAsync(List<CreateMedicineFromExcelDto> excelMedicineListToInsert);
 
     /// <summary>
     /// Adds brand to medicine with price.
@@ -121,9 +121,9 @@ public interface IMedicineService
     /// </summary>
     /// <param name="file">The excel file to import.</param>
     /// <param name="excelProperties">The properties to map the excel columns to the medicine properties.</param>
-    /// <param name="excelPropertyDelimiter">The delimiter for properties with multiple values.</param>
+    /// <param name="excelPropertyDelimiters">The delimiter for properties with multiple values.</param>
     /// <returns>
     /// The task result contains the <see cref="FileExecutionResult"/> representing the import result.
     /// </returns>
-    Task<FileExecutionResult> ImportMedicinesAsync(Stream file, MedicineExcelProperties excelProperties, ExcelPropertyDelimiters excelPropertyDelimiter);
+    Task<FileExecutionResult> ImportMedicinesAsync(Stream file, MedicineExcelProperties excelProperties, ExcelPropertyDelimiters excelPropertyDelimiters);
 }
