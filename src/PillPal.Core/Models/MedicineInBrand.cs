@@ -1,6 +1,6 @@
 ﻿namespace PillPal.Core.Models;
 
-public class MedicineInBrand : BaseAuditableEntity, ISoftDelete
+public class MedicineInBrand : BaseAuditableEntity
 {
     public Guid BrandId { get; set; }
     public virtual Brand? Brand { get; set; }
