@@ -30,7 +30,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         var existingMedicinesList = await Context.Medicines
             .Include(m => m.MedicineInBrands)
             .ThenInclude(mib => mib.Brand)
-            .Where(m => excelMedicineListToInsert.Select(dto => dto.MedicineName).Contains(m.MedicineName))
+            .Where(m => excelMedicineListToInsert.Select(dto => dto.RegistrationNumber).Contains(m.RegistrationNumber))
             .ToListAsync();
 
         var existingNationsList = await Context.Nations
@@ -474,6 +474,12 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             excelMedicineListToInsert.Add(medicine);
             exeCount++;
         }
+
+        // filter out the medicine rows that is duplicated by registration number
+        excelMedicineListToInsert = excelMedicineListToInsert
+            .GroupBy(m => m.RegistrationNumber)
+            .Select(g => g.First())
+            .ToList();
 
         // actual insertion of rows by affected rows in the database
         var affectedRows = await CreateMedicinesFromExcelBatchAsync(excelMedicineListToInsert);
