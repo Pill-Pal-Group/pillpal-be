@@ -22,7 +22,8 @@ public class UpdateCustomerMealTimeValidator : AbstractValidator<UpdateCustomerM
 {
     public UpdateCustomerMealTimeValidator()
     {
-        var timeFormatRegex = new Regex(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$");
+        var timeFormatRegex = new Regex(@"^([0-1]?[0-9]|2[0-3]):[0-5][0-9](:[0-5][0-9])?$", 
+            RegexOptions.NonBacktracking, TimeSpan.FromMilliseconds(250));
 
         RuleFor(x => x.BreakfastTime)
             .NotEmpty()
