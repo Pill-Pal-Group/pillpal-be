@@ -140,6 +140,19 @@ public class MedicinesController(IMedicineService medicineService)
     }
 
     /// <summary>
+    /// Get medicine price units
+    /// </summary>
+    /// <response code="200">Returns the list of medicine price units</response>
+    [HttpGet("price-units", Name = "GetMedicinePriceUnits")]
+    [ProducesResponseType(typeof(MedicinePriceUnitsDto), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetMedicinePriceUnitsAsync()
+    {
+        var priceUnits = await medicineService.GetMedicinePriceUnitsAsync();
+
+        return Ok(priceUnits);
+    }
+
+    /// <summary>
     /// Add a medicine to a brand with price
     /// </summary>
     /// <param name="medicineId" example="00000000-0000-0000-0000-000000000000"></param>
