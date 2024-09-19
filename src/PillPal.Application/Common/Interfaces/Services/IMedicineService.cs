@@ -57,6 +57,14 @@ public interface IMedicineService
     Task<int> CreateMedicinesFromExcelBatchAsync(List<CreateMedicineFromExcelDto> excelMedicineListToInsert);
 
     /// <summary>
+    /// Retrieves currently available price units for medicines.
+    /// </summary>
+    /// <returns>
+    /// The task result contains the <see cref="MedicinePriceUnitsDto"/> representing the list of available price units.
+    /// </returns>
+    Task<MedicinePriceUnitsDto> GetMedicinePriceUnitsAsync();
+
+    /// <summary>
     /// Adds brand to medicine with price.
     /// </summary>
     /// <param name="medicineId">The unique identifier for the medicine.</param>
