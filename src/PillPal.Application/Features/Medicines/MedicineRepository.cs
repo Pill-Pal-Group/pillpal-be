@@ -306,6 +306,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             .Include(m => m.Specification)
             .Include(m => m.Categories)
             .Include(m => m.PharmaceuticalCompanies)
+            .ThenInclude(pc => pc.Nation)
             .Include(m => m.DosageForms)
             .Include(m => m.ActiveIngredients)
             .Include(m => m.MedicineInBrands.Where(mib => !mib.IsDeleted))
