@@ -21,27 +21,26 @@ public record CreatePrescriptDto
 
 public class CreatePrescriptValidator : AbstractValidator<CreatePrescriptDto>
 {
-    private const string PropertyRequired = "{PropertyName} is required.";
     public CreatePrescriptValidator()
     {
         RuleFor(p => p.PrescriptImage)
-            .NotEmpty().WithMessage(PropertyRequired)
-            .MaximumLength(500).WithMessage("{PropertyName} must not exceed 500 characters.");
+            .NotEmpty()
+            .MaximumLength(500);
 
         RuleFor(p => p.ReceptionDate)
-            .NotEmpty().WithMessage(PropertyRequired)
-            .LessThan(DateTimeOffset.Now).WithMessage("{PropertyName} must be before {ComparisonValue}.");
+            .NotEmpty()
+            .LessThan(DateTimeOffset.Now);
 
         RuleFor(p => p.DoctorName)
-            .NotEmpty().WithMessage(PropertyRequired)
-            .MaximumLength(100).WithMessage("{PropertyName} must not exceed 100 characters.");
+            .NotEmpty()
+            .MaximumLength(100);
 
         RuleFor(p => p.HospitalName)
-            .NotEmpty().WithMessage(PropertyRequired)
-            .MaximumLength(100).WithMessage("{PropertyName} must not exceed 100 characters.");
+            .NotEmpty()
+            .MaximumLength(100);
 
         RuleFor(p => p.PrescriptDetails)
-            .NotEmpty().WithMessage(PropertyRequired)
+            .NotEmpty()
             .Must(p => p.Any()).WithMessage("{PropertyName} must have at least one item.")
             .ForEach(p => p.SetValidator(new CreatePrescriptDetailValidator()));
     }

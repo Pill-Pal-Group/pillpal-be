@@ -13,9 +13,10 @@ public class CustomerPackagePaymentInformationValidator : AbstractValidator<Cust
     public CustomerPackagePaymentInformationValidator()
     {
         RuleFor(v => v.PackageCategoryId)
-            .NotEmpty().WithMessage("PackageId is required.");
+            .NotEmpty();
 
         RuleFor(v => v.PaymentType)
-            .IsInEnum().WithMessage("PaymentType is not valid or not supported.");
+            .IsInEnum()
+            .WithMessage("PaymentType is not valid or not supported.");
     }
 }

@@ -10,7 +10,6 @@ public class UpdateCustomerDeviceTokenValidator : AbstractValidator<CustomerDevi
     public UpdateCustomerDeviceTokenValidator()
     {
         RuleFor(x => x.DeviceToken)
-            .NotEmpty()
-            .WithMessage("Device token is required.");
+            .NotEmpty();
     }
 }
