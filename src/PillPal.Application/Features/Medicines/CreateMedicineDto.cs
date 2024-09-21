@@ -21,20 +21,16 @@ public class CreateMedicineValidator : AbstractValidator<CreateMedicineDto>
 
         RuleFor(x => x.MedicineName)
             .NotEmpty()
-            .MaximumLength(100)
-            .WithMessage("Medicine name must not exceed 100 characters.");
+            .MaximumLength(200);
 
         RuleFor(x => x.RequirePrescript)
-            .NotNull()
-            .WithMessage("Require prescript is required.");
+            .NotNull();
 
         RuleFor(x => x.Image)
-            .MaximumLength(500)
-            .WithMessage("Image must not exceed 100 characters.");
+            .MaximumLength(500);
 
         RuleFor(x => x.RegistrationNumber)
             .NotEmpty()
-            .WithMessage("Registration number is required.")
             .MustAsync(async (registrationNumber, cancellationToken)
                 => !await context.Medicines.AnyAsync(x => x.RegistrationNumber == registrationNumber, cancellationToken))
             .WithMessage("Registration number already existed.");

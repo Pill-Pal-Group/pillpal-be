@@ -17,23 +17,22 @@ public record UpdatePackageCategoryDto
 
 public class UpdatePackageCategoryValidator : AbstractValidator<UpdatePackageCategoryDto>
 {
-    private const string PropertyRequired = "{PropertyName} is required.";
     public UpdatePackageCategoryValidator()
     {
         RuleFor(x => x.PackageName)
-            .NotEmpty().WithMessage(PropertyRequired)
-            .MaximumLength(50).WithMessage("{PropertyName} must not exceed 50 characters.");
+            .NotEmpty()
+            .MaximumLength(50);
 
         RuleFor(x => x.PackageDescription)
-            .NotEmpty().WithMessage(PropertyRequired)
-            .MaximumLength(200).WithMessage("{PropertyName} must not exceed 200 characters.");
+            .NotEmpty()
+            .MaximumLength(200);
 
         RuleFor(x => x.PackageDuration)
-            .NotEmpty().WithMessage(PropertyRequired)
-            .GreaterThan(0).WithMessage("{PropertyName} must be greater than 0.");
+            .NotEmpty()
+            .GreaterThan(0);
 
         RuleFor(x => x.Price)
-            .NotEmpty().WithMessage(PropertyRequired)
-            .GreaterThan(0).WithMessage("{PropertyName} must be greater than 0.");
+            .NotEmpty()
+            .GreaterThan(0);
     }
 }

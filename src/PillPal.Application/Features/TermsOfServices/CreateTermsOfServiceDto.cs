@@ -14,10 +14,10 @@ public class CreateTermsOfServiceValidator : AbstractValidator<CreateTermsOfServ
     public CreateTermsOfServiceValidator()
     {
         RuleFor(x => x.Title)
-            .NotEmpty().WithMessage("Title is required.")
-            .MaximumLength(500).WithMessage("Title must not exceed 500 characters.");
+            .NotEmpty()
+            .MaximumLength(500);
 
         RuleFor(x => x.Content)
-            .NotEmpty().WithMessage("Content is required.");
+            .NotEmpty();
     }
 }
