@@ -20,7 +20,6 @@ public class MedicineRelationValidator : AbstractValidator<MedicineRelationDto>
 
         RuleFor(x => x.Categories)
             .NotEmpty()
-            .WithMessage("Categories are required.")
             .ForEach(rule => rule
                 .MustAsync(async (id, cancellationToken) 
                     => await _context.Categories.AnyAsync(c => c.Id == id && !c.IsDeleted, cancellationToken))
@@ -28,14 +27,12 @@ public class MedicineRelationValidator : AbstractValidator<MedicineRelationDto>
 
         RuleFor(x => x.SpecificationId)
             .NotEmpty()
-            .WithMessage("Specification is required.")
             .MustAsync(async (id, cancellationToken) 
                 => await _context.Specifications.AnyAsync(s => s.Id == id, cancellationToken))
             .WithMessage("Specification does not exist.");
 
         RuleFor(x => x.PharmaceuticalCompanies)
             .NotEmpty()
-            .WithMessage("Pharmaceutical companies are required.")
             .ForEach(rule => rule
                 .MustAsync(async (id, cancellationToken) 
                     => await _context.PharmaceuticalCompanies.AnyAsync(pc => pc.Id == id && !pc.IsDeleted, cancellationToken))
@@ -43,7 +40,6 @@ public class MedicineRelationValidator : AbstractValidator<MedicineRelationDto>
 
         RuleFor(x => x.DosageForms)
             .NotEmpty()
-            .WithMessage("Dosage forms are required.")
             .ForEach(rule => rule
                 .MustAsync(async (id, cancellationToken) 
                     => await _context.DosageForms.AnyAsync(df => df.Id == id, cancellationToken))
@@ -51,7 +47,6 @@ public class MedicineRelationValidator : AbstractValidator<MedicineRelationDto>
 
         RuleFor(x => x.ActiveIngredients)
             .NotEmpty()
-            .WithMessage("Active ingredients are required.")
             .ForEach(rule => rule
                 .MustAsync(async (id, cancellationToken) 
                     => await _context.ActiveIngredients.AnyAsync(ai => ai.Id == id && !ai.IsDeleted, cancellationToken))

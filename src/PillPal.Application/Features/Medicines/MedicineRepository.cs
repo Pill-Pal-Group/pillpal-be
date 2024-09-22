@@ -9,19 +9,20 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
     private static (decimal price, string priceUnit) ParsePrice(string priceString)
     {
         var priceDelimiter = priceString.Contains('đ') ? "đ" : "₫";
-        var defaultPriceCurrency = "đ";
         var notAvailablePrice = "N/A";
 
-        var priceValue = priceString.Split(priceDelimiter);
+        var priceCombination = priceString.Split(priceDelimiter, 
+            StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-        if (priceValue.Length != 2)
+        if (priceCombination.Length != 2)
         {
             return (0, notAvailablePrice);
         }
 
-        var priceUnit = defaultPriceCurrency + priceValue[1];
+        var priceValue = priceCombination[0].Replace(".", "");
+        var priceUnit = priceCombination[1].Replace("/", "").Trim().ToLower();
 
-        return (decimal.Parse(priceValue[0].Replace(".", "")), priceUnit);
+        return (decimal.Parse(priceValue), priceUnit);
     }
 
     public async Task<int> CreateMedicinesFromExcelBatchAsync(List<CreateMedicineFromExcelDto> excelMedicineListToInsert)
@@ -254,6 +255,22 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         return Mapper.Map<MedicineDto>(medicine);
     }
 
+    public async Task<MedicinePriceUnitsDto> GetMedicinePriceUnitsAsync()
+    {
+        var priceUnits = await Context.MedicineInBrands
+            .Select(mib => mib.PriceUnit!)
+            .Distinct()
+            .Where(u => !string.IsNullOrWhiteSpace(u))
+            .AsNoTracking()
+            .ToListAsync();
+
+        return new MedicinePriceUnitsDto 
+        {
+            TotalCount = priceUnits.Count,
+            PriceUnits = priceUnits 
+        };
+    }
+
     public async Task CreateMedicineInBrandAsync(Guid medicineId, CreateMedicineInBrandsDto createMedicineInBrandDto)
     {
         await ValidateAsync(createMedicineInBrandDto);
@@ -306,6 +323,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             .Include(m => m.Specification)
             .Include(m => m.Categories)
             .Include(m => m.PharmaceuticalCompanies)
+            .ThenInclude(pc => pc.Nation)
             .Include(m => m.DosageForms)
             .Include(m => m.ActiveIngredients)
             .Include(m => m.MedicineInBrands.Where(mib => !mib.IsDeleted))

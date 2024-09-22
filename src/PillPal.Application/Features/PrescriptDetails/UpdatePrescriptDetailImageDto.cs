@@ -11,6 +11,6 @@ public class UpdatePrescriptDetailImageValidator : AbstractValidator<UpdatePresc
     public UpdatePrescriptDetailImageValidator()
     {
         RuleFor(p => p.MedicineImage)
-            .MaximumLength(500).WithMessage("{PropertyName} must not exceed 500 characters.");
+            .MaximumLength(500);
     }
 }

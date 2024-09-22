@@ -35,43 +35,43 @@ public record CreatePrescriptDetailDto
 
 public class CreatePrescriptDetailValidator : AbstractValidator<CreatePrescriptDetailDto>
 {
-    private const string PropertyRequired = "{PropertyName} is required.";
-    private const string PropertyEqualOrGreaterThanZero = "{PropertyName} must be greater than or equal to 0.";
     public CreatePrescriptDetailValidator()
     {
         RuleFor(p => p.MedicineName)
-            .NotEmpty().WithMessage(PropertyRequired)
-            .MaximumLength(100).WithMessage("{PropertyName} must not exceed 100 characters.");
+            .NotEmpty()
+            .MaximumLength(200);
 
         RuleFor(p => p.MedicineImage)
-            .MaximumLength(500).WithMessage("{PropertyName} must not exceed 500 characters.");
+            .MaximumLength(500);
 
         RuleFor(p => p.DateStart)
-            .NotEmpty().WithMessage(PropertyRequired)
-            .LessThan(p => p.DateEnd).WithMessage("{PropertyName} must be before {ComparisonValue}.");
+            .NotEmpty()
+            .LessThan(p => p.DateEnd)
+            .WithMessage("{PropertyName} must be less than DateEnd.");
 
         RuleFor(p => p.DateEnd)
-            .NotEmpty().WithMessage(PropertyRequired)
-            .GreaterThan(p => p.DateStart).WithMessage("{PropertyName} must be after {ComparisonValue}.");
+            .NotEmpty()
+            .GreaterThan(p => p.DateStart)
+            .WithMessage("{PropertyName} must be greater than DateStart.");
 
         RuleFor(p => p.TotalDose)
-            .NotEmpty().WithMessage(PropertyRequired)
-            .GreaterThan(0).WithMessage("{PropertyName} must be greater than 0.");
+            .NotEmpty()
+            .GreaterThan(0);
 
         RuleFor(p => p.MorningDose)
-            .GreaterThanOrEqualTo(0).WithMessage(PropertyEqualOrGreaterThanZero);
+            .GreaterThanOrEqualTo(0);
 
         RuleFor(p => p.NoonDose)
-            .GreaterThanOrEqualTo(0).WithMessage(PropertyEqualOrGreaterThanZero);
+            .GreaterThanOrEqualTo(0);
 
         RuleFor(p => p.AfternoonDose)
-            .GreaterThanOrEqualTo(0).WithMessage(PropertyEqualOrGreaterThanZero);
+            .GreaterThanOrEqualTo(0);
 
         RuleFor(p => p.NightDose)
-            .GreaterThanOrEqualTo(0).WithMessage(PropertyEqualOrGreaterThanZero);
+            .GreaterThanOrEqualTo(0);
 
         RuleFor(p => p.DosageInstruction)
-            .NotEmpty().WithMessage(PropertyRequired)
+            .NotEmpty()
             .IsEnumName(typeof(DosageInstructionEnums))
             .WithMessage("{PropertyName} is not valid. Valid values are: Aftermeal, Beforemeal.");
     }

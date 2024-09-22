@@ -110,7 +110,9 @@ public static class MedicineQueryExtensions
 
         if (includeParameter.IncludePharmaceuticalCompanies)
         {
-            query = query.Include(m => m.PharmaceuticalCompanies);
+            query = query
+                .Include(m => m.PharmaceuticalCompanies)
+                .ThenInclude(m => m.Nation);
         }
 
         if (includeParameter.IncludeDosageForms)

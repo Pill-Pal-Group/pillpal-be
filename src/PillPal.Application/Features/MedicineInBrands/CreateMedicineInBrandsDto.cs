@@ -25,17 +25,14 @@ public class CreateMedicineInBrandsValidator : AbstractValidator<CreateMedicineI
 
         RuleFor(x => x.BrandId)
             .NotEmpty()
-            .WithMessage("Brand is required.")
             .MustAsync(async (id, cancellationToken) 
                 => await _context.Brands.AnyAsync(b => b.Id == id, cancellationToken))
             .WithMessage("Brand does not exist.");
 
         RuleFor(x => x.Price)
-            .NotEmpty()
-            .WithMessage("Price is required.");
+            .NotEmpty();
 
         RuleFor(x => x.MedicineUrl)
-            .MaximumLength(500)
-            .WithMessage("Medicine url must not exceed 500 characters.");
+            .MaximumLength(500);
     }
 }
