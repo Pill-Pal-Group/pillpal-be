@@ -393,6 +393,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             .Include(m => m.Specification)
             .Include(m => m.PharmaceuticalCompanies)
             .Include(m => m.DosageForms)
+            .Include(m => m.MedicineInBrands)
             .Include(m => m.ActiveIngredients)
             .FirstOrDefaultAsync(m => m.Id == medicineId)
             ?? throw new NotFoundException(nameof(Medicine), medicineId);
