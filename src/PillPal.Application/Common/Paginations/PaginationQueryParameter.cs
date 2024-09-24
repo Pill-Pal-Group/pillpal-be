@@ -14,11 +14,9 @@ public class PaginationQueryParameterValidator : AbstractValidator<PaginationQue
     public PaginationQueryParameterValidator()
     {
         RuleFor(x => x.Page)
-            .GreaterThan(0)
-            .WithMessage("{PropertyName} must be greater than 0");
+            .GreaterThan(0);
 
         RuleFor(x => x.PageSize)
-            .GreaterThan(0)
-            .WithMessage("{PropertyName} must be greater than 0");
+            .GreaterThan(0);
     }
 }
