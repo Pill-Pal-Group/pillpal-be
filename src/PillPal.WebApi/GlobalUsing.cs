@@ -14,7 +14,6 @@ global using PillPal.Application.Common.Repositories;
 global using PillPal.Application.Configuration;
 global using PillPal.Core.Constant;
 global using PillPal.Core.Models;
-global using PillPal.Infrastructure.Configuration;
 global using PillPal.WebApi.Common;
 global using PillPal.WebApi.Configuration;
 global using System.ComponentModel.DataAnnotations;

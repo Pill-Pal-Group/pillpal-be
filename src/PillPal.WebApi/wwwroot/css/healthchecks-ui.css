@@ -1,0 +1,8 @@
+:root {
+    --primaryColor: #12c5a3;
+    --secondaryColor: #b9f2e3;
+    --bgMenuActive: #0f987f;
+    --bgButton: #fb8887;
+    --logoImageUrl: url('https://raw.githubusercontent.com/Pill-Pal-Group/pillpal-be/refs/heads/main/res/pillpal-logo.png');
+    --bgAside: var(--primaryColor);
+}

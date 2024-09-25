@@ -1,3 +1,4 @@
+using PillPal.Infrastructure.Configuration;
 using System.Text.Json.Serialization;
 
 namespace PillPal.WebApi;
@@ -35,6 +36,8 @@ public class Program
         app.UseInfrastructureServices(builder.Configuration);
 
         app.UseRateLimiter();
+
+        app.UseHealthChecksServices();
 
         app.UseCors();
 
