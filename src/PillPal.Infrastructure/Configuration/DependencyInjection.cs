@@ -1,5 +1,6 @@
 ﻿using Hangfire;
 using HangfireBasicAuthenticationFilter;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using PillPal.Application.Common.Interfaces.Payment;
 using PillPal.Infrastructure.Auth;
 using PillPal.Infrastructure.Cache;
@@ -21,7 +22,6 @@ public static class DependencyInjection
         services.AddDbContext<ApplicationDbContext>((service, options) =>
         {
             options.AddInterceptors(service.GetServices<ISaveChangesInterceptor>());
-
             options.UseSqlServer(configuration.GetConnectionString("PILLPAL_DB"));
         });
 
@@ -45,18 +45,15 @@ public static class DependencyInjection
         services.AddTransient<IIdentityService, IdentityService>();
 
         services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
-
         services.AddTransient<IJwtService, JwtService>();
 
         services.Configure<FirebaseSettings>(configuration.GetSection("FirebaseSettings"));
-
         services.AddSingleton<IFirebaseService, FirebaseService>();
 
         services.AddHangfire(config =>
         {
             config.UseSqlServerStorage(configuration.GetConnectionString("HANGFIRE_DB"));
         });
-
         services.AddHangfireServer();
 
         services.AddScoped<IFileReader, FileReader>();
@@ -67,12 +64,35 @@ public static class DependencyInjection
         });
 
         services.Configure<CacheSettings>(configuration.GetSection("CacheSettings"));
-
         services.AddScoped<ICacheService, CacheService>();
 
         services.Configure<ZaloPayConfiguration>(configuration.GetSection("ZaloPay"));
-
         services.AddScoped<IZaloPayService, ZaloPayService>();
+
+        services.AddHealthChecks()
+            .AddDbContextCheck<ApplicationDbContext>(
+                name: "PillPal EF Core DbContext",
+                failureStatus: HealthStatus.Unhealthy,
+                tags: ["db", "sql", "sqlserver", "efcore"])
+            .AddSqlServer(
+                configuration.GetConnectionString("PILLPAL_DB")!,
+                name: "PillPal Database",
+                failureStatus: HealthStatus.Unhealthy,
+                tags: ["db", "sql", "sqlserver"])
+            .AddRedis(
+                configuration.GetConnectionString("REDIS")!,
+                name: "PillPal Redis",
+                failureStatus: HealthStatus.Unhealthy,
+                tags: ["redis", "cache"])
+            .AddHangfire(
+                setup =>
+                {
+                    setup.MinimumAvailableServers = 1;
+                    setup.MaximumJobsFailed = 5;
+                },
+                name: "PillPal Hangfire",
+                failureStatus: HealthStatus.Unhealthy,
+                tags: ["hangfire", "cron"]);
 
         return services;
     }

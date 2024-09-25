@@ -2,7 +2,6 @@ services:
   pillpal.webapi:
     environment:
       - ASPNETCORE_HTTP_PORTS=8080
-      - ASPNETCORE_HTTPS_PORTS=8081
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
       - FirebaseSettings__ProjectId=${FirebaseSettings__ProjectId}
       - FirebaseSettings__ServiceKey=${FirebaseSettings__ServiceKey}
@@ -30,7 +29,6 @@ services:
       - ZaloPay__IpnUrl=${ZaloPay__IpnUrl}
     ports:
       - "8080:8080"
-      - "443:443"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
