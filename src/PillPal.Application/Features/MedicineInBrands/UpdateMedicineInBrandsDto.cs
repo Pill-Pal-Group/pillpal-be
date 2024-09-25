@@ -30,7 +30,10 @@ public class UpdateMedicineInBrandsValidator : AbstractValidator<UpdateMedicineI
             .WithMessage("Brand does not exist.");
 
         RuleFor(x => x.Price)
-            .NotEmpty();
+            .GreaterThanOrEqualTo(0);
+
+        RuleFor(x => x.PriceUnit)
+            .MaximumLength(20);
 
         RuleFor(x => x.MedicineUrl)
             .MaximumLength(500);

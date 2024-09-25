@@ -61,7 +61,11 @@
 
 ## Introduction
 
-Backend API for PillPal project. Built with the latest .NET 8.0 with Entity Framework Core. The source code is structured following the Clean Architecture with the Repository Pattern and was meticulously well-documented with Swagger and OpenAPI.
+Backend API for PillPal project. Built with the latest **.NET 8.0** with Entity Framework Core.
+
+The source code is structured following the Clean Architecture with the Repository Pattern and was meticulously well-documented with Swagger and OpenAPI.
+
+For a detailed look at how the API is documented, visit the Swagger UI [here](https://ppapi.pages.dev).
 
 <p align="right"><a href="#top">[back to top]</a></p>
 
@@ -156,7 +160,7 @@ Both file are located in the `src/PillPal.WebApi` directory and should look like
 }
 ```
 
-> **Note**: SwaggerServers is an optional field. Provide if you already deployed to a server.
+> **Note**: SwaggerServers is an optional field. Provide if deploying to multiple environments.
 
 4. Migrate the database
 

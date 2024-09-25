@@ -294,6 +294,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
         await ValidateAsync(updateMedicineInBrandDto);
 
         var medicineInBrand = await Context.MedicineInBrands
+            .Where(mib => !mib.IsDeleted)
             .FirstOrDefaultAsync(mib => mib.MedicineId == medicineId && mib.BrandId == updateMedicineInBrandDto.BrandId)
             ?? throw new NotFoundException(nameof(MedicineInBrand), medicineId);
 
@@ -393,6 +394,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             .Include(m => m.Specification)
             .Include(m => m.PharmaceuticalCompanies)
             .Include(m => m.DosageForms)
+            .Include(m => m.MedicineInBrands)
             .Include(m => m.ActiveIngredients)
             .FirstOrDefaultAsync(m => m.Id == medicineId)
             ?? throw new NotFoundException(nameof(Medicine), medicineId);
@@ -426,6 +428,7 @@ public class MedicineRepository(IApplicationDbContext context, IMapper mapper, I
             else
             {
                 Mapper.Map(medicineInBrandDto, medicineInBrand);
+                medicineInBrand.IsDeleted = false;
                 Context.MedicineInBrands.Update(medicineInBrand);
             }
         }
