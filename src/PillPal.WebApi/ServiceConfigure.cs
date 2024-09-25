@@ -29,7 +29,7 @@ public static class ServiceConfigure
 
         services.AddRateLimiterServices(configuration);
 
-        services.AddHealthChecksServices();
+        services.AddHealthChecksServices(configuration);
 
         return services;
     }

@@ -3,6 +3,7 @@ services:
     environment:
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+      - SERVER_URL=${SERVER_URL}
       - FirebaseSettings__ProjectId=${FirebaseSettings__ProjectId}
       - FirebaseSettings__ServiceKey=${FirebaseSettings__ServiceKey}
       - JwtSettings__SecretKey=${JwtSettings__SecretKey}
@@ -28,7 +29,7 @@ services:
       - ZaloPay__ReturnUrl=${ZaloPay__ReturnUrl}
       - ZaloPay__IpnUrl=${ZaloPay__IpnUrl}
     ports:
-      - "8080:8080"
+      - "80:8080"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro

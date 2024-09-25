@@ -5,11 +5,13 @@ namespace PillPal.WebApi.Configuration;
 
 public static class HealthChecksConfigure
 {
-    public static IServiceCollection AddHealthChecksServices(this IServiceCollection services)
+    public static IServiceCollection AddHealthChecksServices(this IServiceCollection services, IConfiguration configuration)
     {
+        var serverUrl = configuration["SERVER_URL"] ?? "";
+
         services.AddHealthChecksUI(options =>
         {
-            options.AddHealthCheckEndpoint("PillPal API", "/api/healthz");
+            options.AddHealthCheckEndpoint("PillPal API", $"{serverUrl}/api/healthz");
         })
         .AddInMemoryStorage();
 
